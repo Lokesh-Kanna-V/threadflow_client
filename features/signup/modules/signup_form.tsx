@@ -1,8 +1,12 @@
 "use client";
 
 //? React and Next Imports
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
+
+//? Service Imports
+import { createCompany } from "../services/create_company_api";
+import { createUser } from "../services/create_user_api";
 
 export default function SignUpForm() {
   const [pageNumber, setPageNumber] = useState(1);
@@ -21,14 +25,15 @@ export default function SignUpForm() {
     address_line_1: "",
     address_line_2: "",
     city: "",
-    state: " ",
+    state: "",
   });
   const [userData, setUserData] = useState({
     name: "",
+    company_id: "",
     email: "",
     password: "",
     phone: "",
-    roll: "",
+    role: "Admin",
   });
 
   const handleCompamyDataChange = (field: string, value: string) => {
@@ -45,15 +50,57 @@ export default function SignUpForm() {
     }));
   };
 
-  const handleSignup = () => {
-    console.log({ termsAccepted });
+  const handleSignup = async () => {
     if (!termsAccepted) {
       setShowAlert({
         status: "error",
         message: "Please Accept Terms And Conditions",
       });
+      return;
     }
+
+    const companyResponse = await createCompany({ companyData });
+
+    if (!companyResponse.success || !companyResponse.data?.data?.id) {
+      setShowAlert({
+        status: "error",
+        message: companyResponse.error || "Company creation failed",
+      });
+      return;
+    }
+
+    const companyId = companyResponse.data.data.id;
+
+    const userResponse = await createUser({
+      userData: {
+        ...userData,
+        company_id: companyId,
+        is_active: true,
+      },
+    });
+
+    if (!userResponse.success) {
+      setShowAlert({
+        status: "error",
+        message: userResponse.error || "User creation failed",
+      });
+      return;
+    }
+
+    setShowAlert({
+      status: "success",
+      message: "Account created successfully",
+    });
   };
+
+  useEffect(() => {
+    setTimeout(() => {
+      setShowAlert({
+        status: "",
+        message: "",
+      });
+    }, 5000);
+  }, [showAlert]);
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
@@ -90,6 +137,7 @@ export default function SignUpForm() {
                   <input
                     name="company_name"
                     id="company_name"
+                    value={companyData.name}
                     onChange={(e) => {
                       handleCompamyDataChange("name", e.target.value);
                     }}
@@ -109,6 +157,7 @@ export default function SignUpForm() {
                   <select
                     name="company_type"
                     id="company_type"
+                    value={companyData.type}
                     onChange={(e) => {
                       handleCompamyDataChange("type", e.target.value);
                     }}
@@ -119,9 +168,9 @@ export default function SignUpForm() {
                dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   >
                     <option value="">Choose a Type</option>
-                    <option value="factory">Factory</option>
-                    <option value="exporter">Exporter</option>
-                    <option value="jobwork">Job-Work</option>
+                    <option value="Factory">Factory</option>
+                    <option value="Exporter">Exporter</option>
+                    <option value="Job-Work">Job-Work</option>
                   </select>
                 </div>
                 {/* //? GST */}
@@ -135,6 +184,7 @@ export default function SignUpForm() {
                   <input
                     name="gst"
                     id="gst"
+                    value={companyData.gst}
                     placeholder="Company GST"
                     onChange={(e) => {
                       handleCompamyDataChange("gst", e.target.value);
@@ -155,6 +205,7 @@ export default function SignUpForm() {
                     type="email"
                     name="company_email"
                     id="company_email"
+                    value={companyData.email}
                     onChange={(e) => {
                       handleCompamyDataChange("email", e.target.value);
                     }}
@@ -174,6 +225,7 @@ export default function SignUpForm() {
                   <input
                     name="company_phone"
                     id="company_phone"
+                    value={companyData.phone}
                     onChange={(e) => {
                       handleCompamyDataChange("phone", e.target.value);
                     }}
@@ -197,6 +249,7 @@ export default function SignUpForm() {
                   <input
                     name="address_line_1"
                     id="address_line_1"
+                    value={companyData.address_line_1}
                     onChange={(e) => {
                       handleCompamyDataChange("address_line_1", e.target.value);
                     }}
@@ -217,29 +270,11 @@ export default function SignUpForm() {
                     name="address_line_2"
                     id="address_line_2"
                     placeholder="Address Line 2"
+                    value={companyData.address_line_2}
                     onChange={(e) => {
-                      handleCompamyDataChange("type", e.target.value);
+                      handleCompamyDataChange("address_line_2", e.target.value);
                     }}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                    required
-                  />
-                </div>
-                {/* //? City */}
-                <div>
-                  <label
-                    htmlFor="city"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    City *
-                  </label>
-                  <input
-                    name="city"
-                    id="city"
-                    onChange={(e) => {
-                      handleCompamyDataChange("type", e.target.value);
-                    }}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                    placeholder="Select City"
                     required
                   />
                 </div>
@@ -254,11 +289,32 @@ export default function SignUpForm() {
                   <input
                     name="state"
                     id="state"
+                    value={companyData.state}
                     onChange={(e) => {
-                      handleCompamyDataChange("type", e.target.value);
+                      handleCompamyDataChange("state", e.target.value);
                     }}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     placeholder="Select State"
+                    required
+                  />
+                </div>
+                {/* //? City */}
+                <div>
+                  <label
+                    htmlFor="city"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    City *
+                  </label>
+                  <input
+                    name="city"
+                    id="city"
+                    value={companyData.city}
+                    onChange={(e) => {
+                      handleCompamyDataChange("city", e.target.value);
+                    }}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    placeholder="Select City"
                     required
                   />
                 </div>
@@ -276,6 +332,7 @@ export default function SignUpForm() {
                   <input
                     name="user_name"
                     id="user_name"
+                    value={userData.name}
                     onChange={(e) => {
                       handleUserDataChange("name", e.target.value);
                     }}
@@ -296,6 +353,7 @@ export default function SignUpForm() {
                     type="user_email"
                     name="user_email"
                     id="user_email"
+                    value={userData.email}
                     onChange={(e) => {
                       handleUserDataChange("email", e.target.value);
                     }}
@@ -315,6 +373,7 @@ export default function SignUpForm() {
                   <input
                     name="user_phone"
                     id="user_phone"
+                    value={userData.phone}
                     onChange={(e) => {
                       handleUserDataChange("phone", e.target.value);
                     }}
@@ -335,10 +394,11 @@ export default function SignUpForm() {
                     type="password"
                     name="password"
                     id="password"
+                    value={userData.password}
                     onChange={(e) => {
                       handleUserDataChange("password", e.target.value);
                     }}
-                    placeholder="Company GST"
+                    placeholder="*******"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     required
                   />
