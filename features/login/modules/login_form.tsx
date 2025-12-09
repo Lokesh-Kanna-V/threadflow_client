@@ -1,9 +1,16 @@
 "use client";
 
 //? React & Next Import
+import { useState } from "react";
 import Image from "next/image";
 
+//? Service Imports
+import { UserLogin } from "../services/login_api";
+
 export default function LoginForm() {
+  // const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -26,6 +33,25 @@ export default function LoginForm() {
               Sign in to your account
             </h1>
             <form className="space-y-4 md:space-y-6" action="#">
+              {/* <div>
+                <label
+                  htmlFor="phone"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Phone Number
+                </label>
+                <input
+                  type="phone"
+                  name="phone"
+                  id="phone"
+                  onChange={(e) => {
+                    setPhone(e.target.value);
+                  }}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  placeholder="Enter Phone Number"
+                  required
+                />
+              </div> */}
               <div>
                 <label
                   htmlFor="email"
@@ -37,8 +63,11 @@ export default function LoginForm() {
                   type="email"
                   name="email"
                   id="email"
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                  }}
                   className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                  placeholder="name@company.com"
+                  placeholder="Enter your email"
                   required
                 />
               </div>
@@ -54,6 +83,9 @@ export default function LoginForm() {
                   name="password"
                   id="password"
                   placeholder="••••••••"
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                  }}
                   className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   required
                 />
@@ -66,7 +98,6 @@ export default function LoginForm() {
                       aria-describedby="remember"
                       type="checkbox"
                       className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
-                      required
                     />
                   </div>
                   <div className="ml-3 text-sm">
@@ -87,6 +118,10 @@ export default function LoginForm() {
               </div>
               <button
                 type="submit"
+                onClick={(e) => {
+                  e.preventDefault();
+                  UserLogin({ email, password });
+                }}
                 className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
               >
                 Sign in
