@@ -1,16 +1,37 @@
 "use client";
 
 //? React & Next Import
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 
 //? Service Imports
 import { UserLogin } from "../services/login_api";
 
+//? Shared UI Import
+import LoadingSpinner from "@/shared/ui/spinner";
+
+//? NPM UI Imports
+import { X, Check } from "lucide-react";
+
 export default function LoginForm() {
+  const [loading, setLoading] = useState(false);
+  const [showAlert, setShowAlert] = useState({
+    status: "",
+    message: "",
+  });
   // const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    setTimeout(() => {
+      setShowAlert({
+        status: "",
+        message: "",
+      });
+    }, 5000);
+  }, [showAlert]);
+
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -116,15 +137,44 @@ export default function LoginForm() {
                   Forgot password?
                 </a>
               </div>
+              {showAlert.status === "error" && (
+                <div className="p-2 flex justify-center items-center border-red-900 rounded-xl">
+                  <X className="text-red-500" />
+                  <div className="ms-3 text-sm font-normal">
+                    {showAlert.message}
+                  </div>
+                </div>
+              )}
               <button
                 type="submit"
                 onClick={(e) => {
                   e.preventDefault();
-                  UserLogin({ email, password });
+
+                  UserLogin({ email, password, setLoading, setShowAlert });
                 }}
-                className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                className={
+                  `w-full text-white ` +
+                  (showAlert.status == "error"
+                    ? "bg-red-900 dark:bg-red-900 focus:ring-red-300 dark:focus:ring-red-800 hover:bg-red-900 dark:hover:bg-red-900 "
+                    : "bg-primary-600 dark:bg-primary-600 focus:ring-primary-300 dark:focus:ring-primary-800 hover:bg-primary-700 dark:hover:bg-primary-700 ") +
+                  " focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                }
               >
-                Sign in
+                {loading ? (
+                  <div className="flex justify-center items-center">
+                    <LoadingSpinner />{" "}
+                  </div>
+                ) : showAlert.status == "success" ? (
+                  <div className="flex justify-center items-center">
+                    <Check />
+                  </div>
+                ) : showAlert.status == "error" ? (
+                  <div className="flex justify-center items-center">
+                    <X />
+                  </div>
+                ) : (
+                  "Sign in"
+                )}
               </button>
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                 Don’t have an account yet?{" "}
