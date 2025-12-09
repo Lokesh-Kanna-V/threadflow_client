@@ -8,6 +8,9 @@ import Image from "next/image";
 import { createCompany } from "../services/create_company_api";
 import { createUser } from "../services/create_user_api";
 
+//? UI NPM Imports
+import { X, Check } from "lucide-react";
+
 export default function SignUpForm() {
   const [pageNumber, setPageNumber] = useState(1);
   const [termsAccepted, setTermsAccepted] = useState(false);
@@ -457,11 +460,15 @@ export default function SignUpForm() {
             </p>
 
             {showAlert.status ? (
-              <div
-                className="p-3 text-center mb-4 text-sm bg-red-900 rounded-xl"
-                role="alert"
-              >
-                {showAlert.message}
+              <div className="p-2 flex justify-center items-center bg-red-900 rounded-xl">
+                {showAlert.status == "success" ? (
+                  <Check className="text-emerald-700" />
+                ) : (
+                  <X className="text-red-500" />
+                )}
+                <div className="ms-3 text-sm font-normal">
+                  {showAlert.message}
+                </div>
               </div>
             ) : (
               ""
