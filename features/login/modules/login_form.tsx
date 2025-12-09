@@ -18,7 +18,7 @@ export default function LoginForm() {
             height={100}
             width={100}
           />
-          Flowbite
+          ThreadFlow Sync
         </a>
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -37,7 +37,7 @@ export default function LoginForm() {
                   type="email"
                   name="email"
                   id="email"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   placeholder="name@company.com"
                   required
                 />
@@ -94,7 +94,7 @@ export default function LoginForm() {
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                 Don’t have an account yet?{" "}
                 <a
-                  href="#"
+                  href="/signup"
                   className="font-medium text-primary-600 hover:underline dark:text-primary-500"
                 >
                   Sign up
@@ -104,6 +104,9 @@ export default function LoginForm() {
           </div>
         </div>
       </div>
+      <p className="text-xs text-center md:text-right pb-2 md:pr-5 ">
+        Powered By Gamma Grid
+      </p>
     </section>
   );
 }
