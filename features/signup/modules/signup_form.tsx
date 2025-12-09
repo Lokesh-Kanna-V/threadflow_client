@@ -6,6 +6,54 @@ import Image from "next/image";
 
 export default function SignUpForm() {
   const [pageNumber, setPageNumber] = useState(1);
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [showAlert, setShowAlert] = useState({
+    status: "",
+    message: "",
+  });
+  const [companyData, setCompanyData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    gst: "",
+    logo_url: "",
+    type: "",
+    address_line_1: "",
+    address_line_2: "",
+    city: "",
+    state: " ",
+  });
+  const [userData, setUserData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    phone: "",
+    roll: "",
+  });
+
+  const handleCompamyDataChange = (field: string, value: string) => {
+    setCompanyData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const handleUserDataChange = (field: string, value: string) => {
+    setUserData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const handleSignup = () => {
+    console.log({ termsAccepted });
+    if (!termsAccepted) {
+      setShowAlert({
+        status: "error",
+        message: "Please Accept Terms And Conditions",
+      });
+    }
+  };
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
@@ -42,10 +90,39 @@ export default function SignUpForm() {
                   <input
                     name="company_name"
                     id="company_name"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    onChange={(e) => {
+                      handleCompamyDataChange("name", e.target.value);
+                    }}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     placeholder="Your Company Name"
                     required
                   />
+                </div>
+                {/* //? Company Type */}
+                <div>
+                  <label
+                    htmlFor="countries"
+                    className="block mb-2.5 text-sm font-medium text-heading"
+                  >
+                    Company Type
+                  </label>
+                  <select
+                    name="company_type"
+                    id="company_type"
+                    onChange={(e) => {
+                      handleCompamyDataChange("type", e.target.value);
+                    }}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
+               focus:ring-primary-600 focus:border-primary-600 
+               block w-full p-2.5 
+               dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
+               dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  >
+                    <option value="">Choose a Type</option>
+                    <option value="factory">Factory</option>
+                    <option value="exporter">Exporter</option>
+                    <option value="jobwork">Job-Work</option>
+                  </select>
                 </div>
                 {/* //? GST */}
                 <div>
@@ -59,23 +136,29 @@ export default function SignUpForm() {
                     name="gst"
                     id="gst"
                     placeholder="Company GST"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    onChange={(e) => {
+                      handleCompamyDataChange("gst", e.target.value);
+                    }}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     required
                   />
                 </div>
                 {/* //? Company Email */}
                 <div>
                   <label
-                    htmlFor="email"
+                    htmlFor="company_email"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Email
                   </label>
                   <input
                     type="email"
-                    name="email"
-                    id="email"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    name="company_email"
+                    id="company_email"
+                    onChange={(e) => {
+                      handleCompamyDataChange("email", e.target.value);
+                    }}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     placeholder="email@company.com"
                     required
                   />
@@ -83,15 +166,18 @@ export default function SignUpForm() {
                 {/* //? Company Phone Number */}
                 <div>
                   <label
-                    htmlFor="phone"
+                    htmlFor="company_phone"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Phone Number *
                   </label>
                   <input
-                    name="phone"
-                    id="phone"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    name="company_phone"
+                    id="company_phone"
+                    onChange={(e) => {
+                      handleCompamyDataChange("phone", e.target.value);
+                    }}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     placeholder="Company Phone Number"
                     required
                   />
@@ -103,7 +189,7 @@ export default function SignUpForm() {
                 {/* //? Address Line 1 */}
                 <div>
                   <label
-                    htmlFor="company_name"
+                    htmlFor="address_line_1"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Address Line 1 *
@@ -111,8 +197,11 @@ export default function SignUpForm() {
                   <input
                     name="address_line_1"
                     id="address_line_1"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="Your Company Name"
+                    onChange={(e) => {
+                      handleCompamyDataChange("address_line_1", e.target.value);
+                    }}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    placeholder="Address line 1"
                     required
                   />
                 </div>
@@ -127,8 +216,11 @@ export default function SignUpForm() {
                   <input
                     name="address_line_2"
                     id="address_line_2"
-                    placeholder="Company GST"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Address Line 2"
+                    onChange={(e) => {
+                      handleCompamyDataChange("type", e.target.value);
+                    }}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     required
                   />
                 </div>
@@ -143,7 +235,10 @@ export default function SignUpForm() {
                   <input
                     name="city"
                     id="city"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    onChange={(e) => {
+                      handleCompamyDataChange("type", e.target.value);
+                    }}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     placeholder="Select City"
                     required
                   />
@@ -159,7 +254,10 @@ export default function SignUpForm() {
                   <input
                     name="state"
                     id="state"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    onChange={(e) => {
+                      handleCompamyDataChange("type", e.target.value);
+                    }}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     placeholder="Select State"
                     required
                   />
@@ -178,7 +276,10 @@ export default function SignUpForm() {
                   <input
                     name="user_name"
                     id="user_name"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    onChange={(e) => {
+                      handleUserDataChange("name", e.target.value);
+                    }}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     placeholder="Your Company Name"
                     required
                   />
@@ -195,7 +296,10 @@ export default function SignUpForm() {
                     type="user_email"
                     name="user_email"
                     id="user_email"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    onChange={(e) => {
+                      handleUserDataChange("email", e.target.value);
+                    }}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     placeholder="email@company.com"
                     required
                   />
@@ -211,7 +315,10 @@ export default function SignUpForm() {
                   <input
                     name="user_phone"
                     id="user_phone"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    onChange={(e) => {
+                      handleUserDataChange("phone", e.target.value);
+                    }}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     placeholder="Company Phone Number"
                     required
                   />
@@ -228,8 +335,11 @@ export default function SignUpForm() {
                     type="password"
                     name="password"
                     id="password"
+                    onChange={(e) => {
+                      handleUserDataChange("password", e.target.value);
+                    }}
                     placeholder="Company GST"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     required
                   />
                 </div>
@@ -245,6 +355,13 @@ export default function SignUpForm() {
                     id="terms"
                     aria-describedby="terms"
                     type="checkbox"
+                    onChange={() => {
+                      setTermsAccepted(!termsAccepted);
+                      setShowAlert({
+                        status: "",
+                        message: "",
+                      });
+                    }}
                     className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
                     required
                   />
@@ -279,6 +396,17 @@ export default function SignUpForm() {
               </a>
             </p>
 
+            {showAlert.status ? (
+              <div
+                className="p-3 text-center mb-4 text-sm bg-red-900 rounded-xl"
+                role="alert"
+              >
+                {showAlert.message}
+              </div>
+            ) : (
+              ""
+            )}
+
             {/* //? Button Section */}
             <div className="flex gap-5">
               {pageNumber > 1 ? (
@@ -304,6 +432,8 @@ export default function SignUpForm() {
 
                   if (pageNumber < 3) {
                     setPageNumber(pageNumber + 1);
+                  } else {
+                    handleSignup();
                   }
                 }}
                 className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
@@ -314,6 +444,7 @@ export default function SignUpForm() {
           </div>
         </div>
       </div>
+
       <p className="text-xs text-center pb-1">Powered By Gamma Grid</p>
     </section>
   );
