@@ -3,6 +3,7 @@
 //? React & Next Import
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 //? Service Imports
 import { UserLogin } from "../services/login_api";
@@ -14,6 +15,8 @@ import LoadingSpinner from "@/shared/ui/spinner";
 import { X, Check } from "lucide-react";
 
 export default function LoginForm() {
+  const router = useRouter();
+
   const [loading, setLoading] = useState(false);
   const [showAlert, setShowAlert] = useState({
     status: "",
@@ -147,10 +150,19 @@ export default function LoginForm() {
               )}
               <button
                 type="submit"
-                onClick={(e) => {
+                onClick={async (e) => {
                   e.preventDefault();
 
-                  UserLogin({ email, password, setLoading, setShowAlert });
+                  let loginRes = await UserLogin({
+                    email,
+                    password,
+                    setLoading,
+                    setShowAlert,
+                  });
+
+                  if (loginRes.data.success) {
+                    router.push("/app");
+                  }
                 }}
                 className={
                   `w-full text-white ` +
