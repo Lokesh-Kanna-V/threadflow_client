@@ -11,8 +11,10 @@ import {
   ListIcon,
 } from "@phosphor-icons/react";
 
+//? Specification Imports
+import { iconSpecifications } from "@/shared/local_db/general_specifications";
+
 export default function ThreadFlow() {
-  const iconColour = "#047857";
   return (
     <div className="antialiased bg-gray-50 dark:bg-gray-900">
       <nav className="bg-white border-b border-gray-200 px-4 py-2.5 dark:bg-gray-800 dark:border-gray-700 fixed left-0 right-0 top-0 z-50">
@@ -24,7 +26,11 @@ export default function ThreadFlow() {
               aria-controls="drawer-navigation"
               className="p-2 mr-2 text-gray-600 rounded-lg cursor-pointer md:hidden hover:text-gray-900 hover:bg-gray-100 focus:bg-gray-100 dark:focus:bg-gray-700 focus:ring-2 focus:ring-gray-100 dark:focus:ring-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
             >
-              <ListIcon size={25} color={iconColour} weight="duotone" />
+              <ListIcon
+                size={iconSpecifications.size}
+                color={iconSpecifications.colour}
+                weight={iconSpecifications.weight as any}
+              />
               <span className="sr-only">Toggle sidebar</span>
             </button>
             <a
@@ -51,9 +57,9 @@ export default function ThreadFlow() {
               <span className="sr-only">View notifications</span>
               {/* //? Bell icon */}
               <BellSimpleRingingIcon
-                size={25}
-                color={iconColour}
-                weight="duotone"
+                size={iconSpecifications.size}
+                color={iconSpecifications.colour}
+                weight={iconSpecifications.weight as any}
               />
             </button>
             {/* //? Dropdown menu */}
@@ -158,9 +164,9 @@ export default function ThreadFlow() {
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          fill-rule="evenodd"
+                          fillRule="evenodd"
                           d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-                          clip-rule="evenodd"
+                          clipRule="evenodd"
                         ></path>
                       </svg>
                     </div>
@@ -200,9 +206,9 @@ export default function ThreadFlow() {
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          fill-rule="evenodd"
+                          fillRule="evenodd"
                           d="M18 13V5a2 2 0 00-2-2H4a2 2 0 00-2 2v8a2 2 0 002 2h3l3 3 3-3h3a2 2 0 002-2zM5 7a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1zm1 3a1 1 0 100 2h3a1 1 0 100-2H6z"
-                          clip-rule="evenodd"
+                          clipRule="evenodd"
                         ></path>
                       </svg>
                     </div>
@@ -273,9 +279,9 @@ export default function ThreadFlow() {
                   >
                     <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
                     <path
-                      fill-rule="evenodd"
+                      fillRule="evenodd"
                       d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-                      clip-rule="evenodd"
+                      clipRule="evenodd"
                     ></path>
                   </svg>
                   View all
@@ -363,7 +369,11 @@ export default function ThreadFlow() {
                 href="#"
                 className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
               >
-                <LayoutIcon size={25} color={iconColour} weight="duotone" />
+                <LayoutIcon
+                  size={iconSpecifications.size}
+                  color={iconSpecifications.colour}
+                  weight={iconSpecifications.weight as any}
+                />
                 <span className="ml-3">Dashboard</span>
               </a>
             </li>
@@ -372,7 +382,11 @@ export default function ThreadFlow() {
                 href="#"
                 className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
               >
-                <ListPlusIcon size={25} color={iconColour} weight="duotone" />
+                <ListPlusIcon
+                  size={iconSpecifications.size}
+                  color={iconSpecifications.colour}
+                  weight={iconSpecifications.weight as any}
+                />
                 <span className="ml-3">Order List</span>
               </a>
             </li>
