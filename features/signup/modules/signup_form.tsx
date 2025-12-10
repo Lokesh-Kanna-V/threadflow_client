@@ -11,6 +11,12 @@ import { createUser } from "../services/create_user_api";
 //? UI NPM Imports
 import { X, Check } from "lucide-react";
 
+//? Data Imports
+import {
+  countryStateCityData,
+  CountryStateCityData,
+} from "@/shared/local_db/countryStateCityData";
+
 export default function SignUpForm() {
   const [pageNumber, setPageNumber] = useState(1);
   const [termsAccepted, setTermsAccepted] = useState(false);
@@ -284,42 +290,65 @@ export default function SignUpForm() {
                 {/* //? State */}
                 <div>
                   <label
-                    htmlFor="state"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    htmlFor="countries"
+                    className="block mb-2.5 text-sm font-medium text-heading"
                   >
-                    State *
+                    State*
                   </label>
-                  <input
-                    name="state"
-                    id="state"
+                  <select
+                    name="company_state"
+                    id="company_state"
                     value={companyData.state}
                     onChange={(e) => {
                       handleCompamyDataChange("state", e.target.value);
                     }}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                    placeholder="Select State"
-                    required
-                  />
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
+               focus:ring-primary-600 focus:border-primary-600 
+               block w-full p-2.5 
+               dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
+               dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  >
+                    <option value="">Select State</option>
+                    {Object.keys(countryStateCityData["India"] || {}).map(
+                      (state) => (
+                        <option key={state} value={state}>
+                          {state}
+                        </option>
+                      )
+                    )}
+                  </select>
                 </div>
+
                 {/* //? City */}
                 <div>
                   <label
                     htmlFor="city"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2.5 text-sm font-medium text-heading"
                   >
-                    City *
+                    City*
                   </label>
-                  <input
-                    name="city"
-                    id="city"
+                  <select
+                    name="company_city"
+                    id="company_city"
                     value={companyData.city}
                     onChange={(e) => {
                       handleCompamyDataChange("city", e.target.value);
                     }}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                    placeholder="Select City"
-                    required
-                  />
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
+               focus:ring-primary-600 focus:border-primary-600 
+               block w-full p-2.5 
+               dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
+               dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  >
+                    <option value="">Select City</option>
+                    {(
+                      countryStateCityData["India"]?.[companyData.state] || []
+                    ).map((city) => (
+                      <option key={city} value={city}>
+                        {city}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </form>
             ) : pageNumber == 3 ? (
@@ -340,7 +369,7 @@ export default function SignUpForm() {
                       handleUserDataChange("name", e.target.value);
                     }}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                    placeholder="Your Company Name"
+                    placeholder="Your Name"
                     required
                   />
                 </div>
@@ -361,7 +390,7 @@ export default function SignUpForm() {
                       handleUserDataChange("email", e.target.value);
                     }}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                    placeholder="email@company.com"
+                    placeholder="email@domain.com"
                     required
                   />
                 </div>
@@ -381,7 +410,7 @@ export default function SignUpForm() {
                       handleUserDataChange("phone", e.target.value);
                     }}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                    placeholder="Company Phone Number"
+                    placeholder="Phone Number"
                     required
                   />
                 </div>
