@@ -9,6 +9,8 @@ import {
   ListPlusIcon,
   BellSimpleRingingIcon,
   ListIcon,
+  TreeStructureIcon,
+  GearIcon,
 } from "@phosphor-icons/react";
 
 //? Specification Imports
@@ -388,6 +390,34 @@ export default function ThreadFlow() {
                   weight={iconSpecifications.weight as any}
                 />
                 <span className="ml-3">Order List</span>
+              </a>
+            </li>
+
+            <li>
+              <a
+                href="#"
+                className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+              >
+                <TreeStructureIcon
+                  size={iconSpecifications.size}
+                  color={iconSpecifications.colour}
+                  weight={iconSpecifications.weight as any}
+                />
+                <span className="ml-3">Order Tracking</span>
+              </a>
+            </li>
+
+            <li>
+              <a
+                href="#"
+                className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+              >
+                <GearIcon
+                  size={iconSpecifications.size}
+                  color={iconSpecifications.colour}
+                  weight={iconSpecifications.weight as any}
+                />
+                <span className="ml-3">Company Settings</span>
               </a>
             </li>
           </ul>
