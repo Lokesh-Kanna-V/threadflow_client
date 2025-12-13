@@ -6,6 +6,8 @@ type UserLoginType = {
   password: string;
   setLoading: (value: boolean) => void;
   setShowAlert: (value: { status: string; message: string }) => void;
+  setAccessToken?: any;
+  setUser?: any;
 };
 
 export const UserLogin = async ({
@@ -14,15 +16,18 @@ export const UserLogin = async ({
   password,
   setLoading,
   setShowAlert,
+  setAccessToken,
+  setUser,
 }: UserLoginType) => {
   setLoading(true);
   try {
     const response = await axios.post(
       "http://localhost:9000/user/login",
-      { email: email, password: password },
+      { email, password },
       {
         headers: {
           "Content-Type": "application/json",
+          withCredentials: true, // <--- VERY IMPORTANT FOR SECURITY
         },
       }
     );
@@ -30,9 +35,16 @@ export const UserLogin = async ({
     setLoading(false);
     setShowAlert({ status: "success", message: "success" });
 
+    // Store in-memory
+    setAccessToken(response.data.accessToken);
+    setUser(response.data.user);
+
     return {
       success: true,
-      data: response.data,
+      data: {
+        accessToken: response.data.accessToken,
+        user: response.data.user,
+      },
     };
   } catch (error: any) {
     setLoading(false);

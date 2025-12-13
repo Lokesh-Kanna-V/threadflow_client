@@ -5,6 +5,9 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
+//? Context Import
+import { useAuth } from "@/shared/context/AuthContext";
+
 //? Service Imports
 import { UserLogin } from "../services/login_api";
 
@@ -17,6 +20,7 @@ import { X, Check } from "lucide-react";
 export default function LoginForm() {
   const router = useRouter();
 
+  const { setAccessToken, setUser } = useAuth();
   const [loading, setLoading] = useState(false);
   const [showAlert, setShowAlert] = useState({
     status: "",
@@ -158,9 +162,11 @@ export default function LoginForm() {
                     password,
                     setLoading,
                     setShowAlert,
+                    setAccessToken,
+                    setUser,
                   });
 
-                  if (loginRes.data.success) {
+                  if (loginRes && loginRes.success) {
                     router.push("/app");
                   }
                 }}
