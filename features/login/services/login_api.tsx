@@ -25,9 +25,9 @@ export const UserLogin = async ({
       "http://localhost:9000/user/login",
       { email, password },
       {
+        withCredentials: true, // <--- VERY IMPORTANT FOR SECURITY
         headers: {
           "Content-Type": "application/json",
-          withCredentials: true, // <--- VERY IMPORTANT FOR SECURITY
         },
       }
     );

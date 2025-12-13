@@ -29,6 +29,8 @@ export const useApi = () => {
       if (error.response?.status === 401 && !originalRequest._retry) {
         originalRequest._retry = true;
 
+        console.log("Refreshing");
+
         try {
           // call refresh endpoint
           const refreshResponse = await axios.post(
@@ -38,6 +40,8 @@ export const useApi = () => {
           );
 
           const newToken = refreshResponse.data.accessToken;
+
+          console.log({ "New Refresh Token": newToken });
 
           // update memory storage
           setAccessToken(newToken);
