@@ -1,7 +1,13 @@
 "use client";
 
+//? React and Next Imports
+import { useState } from "react";
+
 //? NPM Imports
 import "flowbite";
+
+//? UI Imports
+import DashboardUI from "@/features/dashboard/ui/dashboard_ui";
 
 //? NPM UI Imports
 import {
@@ -11,12 +17,16 @@ import {
   ListIcon,
   TreeStructureIcon,
   GearIcon,
+  NeedleIcon,
+  UsersThreeIcon,
 } from "@phosphor-icons/react";
 
 //? Specification Imports
 import { iconSpecifications } from "@/shared/local_db/general_specifications";
 
 export default function ThreadFlow() {
+  const [selectedTab, setSelectedTab] = useState(0);
+
   return (
     <div className="antialiased bg-gray-50 dark:bg-gray-900">
       <nav className="bg-white border-b border-gray-200 px-4 py-2.5 dark:bg-gray-800 dark:border-gray-700 fixed left-0 right-0 top-0 z-50">
@@ -357,8 +367,7 @@ export default function ThreadFlow() {
         </div>
       </nav>
 
-      {/* <!-- Sidebar --> */}
-
+      {/* //? <!-- Sidebar --> */}
       <aside
         className="fixed top-0 left-0 z-40 w-64 h-screen pt-14 transition-transform -translate-x-full bg-white border-r border-gray-200 md:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
         aria-label="Sidenav"
@@ -368,7 +377,11 @@ export default function ThreadFlow() {
           <ul className="space-y-2">
             <li>
               <a
-                href="#"
+                href=""
+                onClick={(e) => {
+                  e.preventDefault();
+                  setSelectedTab(0);
+                }}
                 className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
               >
                 <LayoutIcon
@@ -381,7 +394,11 @@ export default function ThreadFlow() {
             </li>
             <li>
               <a
-                href="#"
+                href=""
+                onClick={(e) => {
+                  e.preventDefault();
+                  setSelectedTab(1);
+                }}
                 className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
               >
                 <ListPlusIcon
@@ -412,6 +429,34 @@ export default function ThreadFlow() {
                 href="#"
                 className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
               >
+                <NeedleIcon
+                  size={iconSpecifications.size}
+                  color={iconSpecifications.colour}
+                  weight={iconSpecifications.weight as any}
+                />
+                <span className="ml-3">JobWorker Management</span>
+              </a>
+            </li>
+
+            <li>
+              <a
+                href="#"
+                className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+              >
+                <UsersThreeIcon
+                  size={iconSpecifications.size}
+                  color={iconSpecifications.colour}
+                  weight={iconSpecifications.weight as any}
+                />
+                <span className="ml-3">Customer Management</span>
+              </a>
+            </li>
+
+            <li>
+              <a
+                href="#"
+                className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+              >
                 <GearIcon
                   size={iconSpecifications.size}
                   color={iconSpecifications.colour}
@@ -424,28 +469,7 @@ export default function ThreadFlow() {
         </div>
       </aside>
 
-      <main className="p-4 md:ml-64 h-auto pt-20">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-          <div className="border-2 border-dashed border-gray-300 rounded-lg dark:border-gray-600 h-32 md:h-64"></div>
-          <div className="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 h-32 md:h-64"></div>
-          <div className="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 h-32 md:h-64"></div>
-          <div className="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 h-32 md:h-64"></div>
-        </div>
-        <div className="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 h-96 mb-4"></div>
-        <div className="grid grid-cols-2 gap-4 mb-4">
-          <div className="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 h-48 md:h-72"></div>
-          <div className="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 h-48 md:h-72"></div>
-          <div className="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 h-48 md:h-72"></div>
-          <div className="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 h-48 md:h-72"></div>
-        </div>
-        <div className="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 h-96 mb-4"></div>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 h-48 md:h-72"></div>
-          <div className="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 h-48 md:h-72"></div>
-          <div className="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 h-48 md:h-72"></div>
-          <div className="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 h-48 md:h-72"></div>
-        </div>
-      </main>
+      {selectedTab == 0 ? <DashboardUI /> : <></>}
     </div>
   );
 }
