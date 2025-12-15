@@ -6,6 +6,7 @@ import { useState } from "react";
 //? Module Imports
 import SearchAndCreate from "../modules/search_and_create";
 import OrderListDisplay from "../modules/order_list_display";
+import AddEditOrder from "../modules/add_edit_order";
 
 //? Specification Imports
 import { iconSpecifications } from "@/shared/local_db/general_specifications";
@@ -39,7 +40,7 @@ export default function OrderListUI() {
         ) : (
           <></>
         )}
-        <h1 className="pb-2 text-2xl text-center font-bold md:text-3xl border-b border-dashed border-gray-500 uppercase mb-10">
+        <h1 className="text-2xl text-center font-bold md:text-3xl border-b border-dashed border-gray-500 uppercase mb-5">
           {!showCreateOrder ? "Order List" : "Cerate Order"}
         </h1>
       </div>
@@ -50,7 +51,9 @@ export default function OrderListUI() {
           <OrderListDisplay />
         </>
       ) : (
-        <></>
+        <>
+          <AddEditOrder />
+        </>
       )}
     </main>
   );

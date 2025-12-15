@@ -13,7 +13,7 @@
     "axios": "^1.13.2",
     "dotenv": "^17.2.3",
     "flowbite": "^4.0.1",
-    "flowbite-react": "^0.12.10",
+    "flowbite-react": "^0.12.13",
     "lucide-react": "^0.556.0",
     "next": "16.0.7",
     "react": "19.2.0",
