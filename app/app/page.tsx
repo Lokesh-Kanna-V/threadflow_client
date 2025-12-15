@@ -8,6 +8,7 @@ import "flowbite";
 
 //? UI Imports
 import DashboardUI from "@/features/dashboard/ui/dashboard_ui";
+import OrderListUI from "@/features/order_list/ui/order_list_ui";
 
 //? NPM UI Imports
 import {
@@ -469,7 +470,13 @@ export default function ThreadFlow() {
         </div>
       </aside>
 
-      {selectedTab == 0 ? <DashboardUI /> : <></>}
+      {selectedTab == 0 ? (
+        <DashboardUI />
+      ) : selectedTab == 1 ? (
+        <OrderListUI />
+      ) : (
+        <></>
+      )}
     </div>
   );
 }
