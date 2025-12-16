@@ -4,7 +4,7 @@
 import { useState } from "react";
 
 //? UI Imports
-import AddProductModal from "@/shared/ui/add_product_modal";
+import AddEditProductModal from "@/shared/ui/add_product_modal";
 
 //? NPM UI Imports
 import {
@@ -44,6 +44,11 @@ export default function AddEditOrder() {
       ...prev,
       [field]: value,
     }));
+  };
+
+  const createOrder = (e: any) => {
+    e.preventDefault();
+    console.log({ orderDetails, itemDetails });
   };
 
   return (
@@ -254,6 +259,9 @@ export default function AddEditOrder() {
 
             <button
               type="submit"
+              onClick={(e) => {
+                createOrder(e);
+              }}
               className="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
             >
               Create Order
@@ -272,7 +280,7 @@ export default function AddEditOrder() {
         } overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full`}
         style={{ backgroundColor: "rgba(0,0,0,0.9)" }}
       >
-        <AddProductModal
+        <AddEditProductModal
           setItemDetails={setItemDetails}
           setShowAddItemModal={setShowAddItemModal}
         />

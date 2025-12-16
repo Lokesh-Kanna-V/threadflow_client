@@ -16,7 +16,7 @@ type AddProductModalType = {
   setShowAddItemModal: (value: boolean) => void;
 };
 
-export default function AddProductModal({
+export default function AddEditProductModal({
   setItemDetails,
   setShowAddItemModal,
 }: AddProductModalType) {
