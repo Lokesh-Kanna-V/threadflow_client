@@ -28,6 +28,48 @@ import { iconSpecifications } from "@/shared/local_db/general_specifications";
 export default function ThreadFlow() {
   const [selectedTab, setSelectedTab] = useState(0);
 
+  const closeSidebar = () => {
+    // Close the drawer on mobile devices
+    if (typeof window === "undefined" || window.innerWidth >= 768) {
+      return; // Don't close on desktop
+    }
+
+    const drawerElement = document.getElementById("drawer-navigation");
+    if (!drawerElement) return;
+
+    // Try to find and click the toggle button (most reliable with Flowbite)
+    const toggleButton = document.querySelector(
+      '[data-drawer-toggle="drawer-navigation"]'
+    ) as HTMLElement;
+    if (
+      toggleButton &&
+      !drawerElement.classList.contains("-translate-x-full")
+    ) {
+      toggleButton.click();
+      return;
+    }
+
+    // Fallback: manually close the drawer
+    drawerElement.classList.add("-translate-x-full");
+
+    // Remove backdrop if it exists
+    const backdrop = document.querySelector("[data-drawer-backdrop]");
+    if (backdrop) {
+      backdrop.remove();
+    }
+
+    // Remove body scroll lock
+    document.body.classList.remove("overflow-hidden");
+
+    // Remove aria-hidden attribute if present
+    drawerElement.removeAttribute("aria-hidden");
+  };
+
+  const handleSidebarClick = (tabIndex: number) => {
+    setSelectedTab(tabIndex);
+    closeSidebar();
+  };
+
   return (
     <div className="antialiased bg-gray-50 dark:bg-gray-900">
       <nav className="bg-white border-b border-gray-200 px-4 py-2.5 dark:bg-gray-800 dark:border-gray-700 fixed left-0 right-0 top-0 z-50">
@@ -381,7 +423,7 @@ export default function ThreadFlow() {
                 href=""
                 onClick={(e) => {
                   e.preventDefault();
-                  setSelectedTab(0);
+                  handleSidebarClick(0);
                 }}
                 className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
               >
@@ -398,7 +440,7 @@ export default function ThreadFlow() {
                 href=""
                 onClick={(e) => {
                   e.preventDefault();
-                  setSelectedTab(1);
+                  handleSidebarClick(1);
                 }}
                 className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
               >
