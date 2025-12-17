@@ -70,7 +70,6 @@ export default function AddEditProductModal({
   };
 
   useEffect(() => {
-    console.log("clicked");
     if (typeof index != "number") {
       setNewItemDetails({
         product_id: "",
@@ -155,8 +154,8 @@ export default function AddEditProductModal({
                 id="name"
                 value={
                   typeof index === "number"
-                    ? itemDetails[index]?.product_id ?? ""
-                    : newItemDetails.product_id
+                    ? itemDetails[index]?.colour ?? ""
+                    : newItemDetails.colour
                 }
                 onChange={(e) => {
                   if (typeof index === "number") {

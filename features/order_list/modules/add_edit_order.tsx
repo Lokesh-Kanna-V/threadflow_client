@@ -181,64 +181,66 @@ export default function AddEditOrder() {
 
                 <tbody className="divide-y divide-default">
                   {itemDetails.map((item, index) => {
-                    return (
-                      <tr
-                        key={index}
-                        className="bg-neutral-primary hover:bg-neutral-secondary-soft transition-colors"
-                      >
-                        <td
-                          scope="row"
-                          className="px-6 py-4 font-medium text-heading whitespace-nowrap"
+                    if (item.product_id) {
+                      return (
+                        <tr
+                          key={index}
+                          className="bg-neutral-primary hover:bg-neutral-secondary-soft transition-colors"
                         >
-                          <InfoIcon
-                            size={iconSpecifications.size}
-                            color={iconSpecifications.colour}
-                            weight={iconSpecifications.weight as any}
-                          />
-                        </td>
-
-                        <th
-                          scope="row"
-                          className="px-6 py-4 font-medium text-heading whitespace-nowrap"
-                        >
-                          Queued
-                        </th>
-
-                        <th
-                          scope="row"
-                          className="px-6 py-4 font-medium text-heading whitespace-nowrap"
-                        >
-                          {item.product_id}
-                        </th>
-                        <th
-                          scope="row"
-                          className="px-6 py-4 font-medium text-heading whitespace-nowrap"
-                        >
-                          {item.quantity} {item.qty_unit}
-                        </th>
-                        <th
-                          scope="row"
-                          className="px-6 py-4 font-medium text-heading whitespace-nowrap"
-                        >
-                          {item.size} {item.size_unit}
-                        </th>
-                        <th
-                          scope="row"
-                          className="px-6 py-4 font-medium text-heading whitespace-nowrap"
-                        >
-                          {item.colour}
-                        </th>
-                        <td className="px-6 py-4 text-center">
-                          <span className="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full">
-                            <TrashIcon
+                          <td
+                            scope="row"
+                            className="px-6 py-4 font-medium text-heading whitespace-nowrap"
+                          >
+                            <InfoIcon
                               size={iconSpecifications.size}
-                              color="#800000"
+                              color={iconSpecifications.colour}
                               weight={iconSpecifications.weight as any}
                             />
-                          </span>
-                        </td>
-                      </tr>
-                    );
+                          </td>
+
+                          <th
+                            scope="row"
+                            className="px-6 py-4 font-medium text-heading whitespace-nowrap"
+                          >
+                            Queued
+                          </th>
+
+                          <th
+                            scope="row"
+                            className="px-6 py-4 font-medium text-heading whitespace-nowrap"
+                          >
+                            {item.product_id}
+                          </th>
+                          <th
+                            scope="row"
+                            className="px-6 py-4 font-medium text-heading whitespace-nowrap"
+                          >
+                            {item.quantity} {item.qty_unit}
+                          </th>
+                          <th
+                            scope="row"
+                            className="px-6 py-4 font-medium text-heading whitespace-nowrap"
+                          >
+                            {item.size} {item.size_unit}
+                          </th>
+                          <th
+                            scope="row"
+                            className="px-6 py-4 font-medium text-heading whitespace-nowrap"
+                          >
+                            {item.colour}
+                          </th>
+                          <td className="px-6 py-4 text-center">
+                            <span className="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full">
+                              <TrashIcon
+                                size={iconSpecifications.size}
+                                color="#800000"
+                                weight={iconSpecifications.weight as any}
+                              />
+                            </span>
+                          </td>
+                        </tr>
+                      );
+                    }
                   })}
                 </tbody>
               </table>
