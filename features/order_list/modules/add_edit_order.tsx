@@ -21,6 +21,7 @@ export default function AddEditOrder() {
   const [date, setDate] = useState("");
   const [showAddItemModal, setShowAddItemModal] = useState(false);
   const [addItemClick, setAddItemClick] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState<number>();
   const [orderDetails, setOrderDetails] = useState({
     company_id: "",
     customer_id: "",
@@ -46,6 +47,10 @@ export default function AddEditOrder() {
       ...prev,
       [field]: value,
     }));
+  };
+
+  const removeItem = (index: number) => {
+    setItemDetails((prev) => prev.filter((_, i) => i !== index));
   };
 
   const createOrder = (e: any) => {
@@ -189,7 +194,11 @@ export default function AddEditOrder() {
                         >
                           <td
                             scope="row"
-                            className="px-6 py-4 font-medium text-heading whitespace-nowrap"
+                            onClick={() => {
+                              setSelectedIndex(index);
+                              setShowAddItemModal(true);
+                            }}
+                            className="cursor-pointer px-6 py-4 font-medium text-heading whitespace-nowrap"
                           >
                             <InfoIcon
                               size={iconSpecifications.size}
@@ -230,13 +239,19 @@ export default function AddEditOrder() {
                             {item.colour}
                           </th>
                           <td className="px-6 py-4 text-center">
-                            <span className="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full">
+                            <button
+                              onClick={(e) => {
+                                e.preventDefault();
+                                removeItem(index);
+                              }}
+                              className="cursor-pointer inline-flex items-center px-2 py-1 text-xs font-medium rounded-full"
+                            >
                               <TrashIcon
                                 size={iconSpecifications.size}
                                 color="#800000"
                                 weight={iconSpecifications.weight as any}
                               />
-                            </span>
+                            </button>
                           </td>
                         </tr>
                       );
@@ -285,7 +300,7 @@ export default function AddEditOrder() {
         style={{ backgroundColor: "rgba(0,0,0,0.9)" }}
       >
         <AddEditProductModal
-          // index={5}
+          index={selectedIndex}
           addItemClick={addItemClick}
           itemDetails={itemDetails}
           setItemDetails={setItemDetails}
