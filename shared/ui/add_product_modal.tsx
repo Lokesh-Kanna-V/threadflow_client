@@ -1,5 +1,9 @@
 "use client";
 
+//? React and Next imports
+import { useEffect, useState } from "react";
+
+//? Icons
 import { XIcon, PlusIcon } from "@phosphor-icons/react";
 
 type ItemDetail = {
@@ -9,17 +13,34 @@ type ItemDetail = {
   colour: string;
   quantity: string;
   qty_unit: string;
+  remarks: string;
 };
 
 type AddProductModalType = {
+  index?: number;
+  addItemClick: boolean;
+  itemDetails: ItemDetail[];
   setItemDetails: React.Dispatch<React.SetStateAction<ItemDetail[]>>;
   setShowAddItemModal: (value: boolean) => void;
 };
 
 export default function AddEditProductModal({
+  index,
+  addItemClick,
+  itemDetails,
   setItemDetails,
   setShowAddItemModal,
 }: AddProductModalType) {
+  const [newItemDetails, setNewItemDetails] = useState<ItemDetail>({
+    product_id: "",
+    size: "",
+    size_unit: "",
+    colour: "",
+    quantity: "",
+    qty_unit: "",
+    remarks: "",
+  });
+
   const handleItemDetailsChange = (
     index: number,
     field: keyof ItemDetail,
@@ -29,6 +50,39 @@ export default function AddEditProductModal({
       prev.map((item, i) => (i === index ? { ...item, [field]: value } : item))
     );
   };
+
+  const handleNewItemDetails = (field: keyof ItemDetail, value: string) => {
+    setNewItemDetails((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Add mode → push new item once
+    if (index === undefined) {
+      setItemDetails((prev) => [...prev, newItemDetails]);
+    }
+
+    // setShowAddItemModal(false);
+  };
+
+  useEffect(() => {
+    console.log("clicked");
+    if (typeof index != "number") {
+      setNewItemDetails({
+        product_id: "",
+        size: "",
+        size_unit: "",
+        colour: "",
+        quantity: "",
+        qty_unit: "",
+        remarks: "",
+      });
+    }
+  }, [addItemClick]);
 
   return (
     <div className="relative p-4 w-full max-w-md max-h-full">
@@ -44,14 +98,16 @@ export default function AddEditProductModal({
               setShowAddItemModal(false);
             }}
             className="text-body bg-transparent hover:bg-neutral-tertiary hover:text-heading rounded-base text-sm w-9 h-9 ms-auto inline-flex justify-center items-center"
-            data-modal-hide="crud-modal"
           >
             <XIcon size={20} />
             <span className="sr-only">Close modal</span>
           </button>
         </div>
-        <form action="#">
+
+        {/* //? FORM */}
+        <form>
           <div className="grid gap-4 grid-cols-2 py-4 md:py-6">
+            {/* //? Name */}
             <div className="col-span-2">
               <label
                 htmlFor="name"
@@ -63,76 +119,203 @@ export default function AddEditProductModal({
                 type="text"
                 name="name"
                 id="name"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                value={
+                  typeof index === "number"
+                    ? itemDetails[index]?.product_id ?? ""
+                    : newItemDetails.product_id
+                }
+                onChange={(e) => {
+                  if (typeof index === "number") {
+                    handleItemDetailsChange(
+                      index,
+                      "product_id",
+                      e.target.value
+                    );
+                  } else {
+                    handleNewItemDetails("product_id", e.target.value);
+                  }
+                }}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                 placeholder="Type product name"
                 required
               />
             </div>
-            <div className="col-span-2 sm:col-span-1">
+
+            {/* //? Colour */}
+            <div className="col-span-2">
               <label
-                htmlFor="price"
+                htmlFor="name"
                 className="block mb-2.5 text-sm font-medium text-heading"
               >
-                Price
+                Colour
               </label>
               <input
-                type="number"
-                name="price"
-                id="price"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                placeholder="$2999"
+                type="text"
+                name="name"
+                id="name"
+                value={
+                  typeof index === "number"
+                    ? itemDetails[index]?.product_id ?? ""
+                    : newItemDetails.product_id
+                }
+                onChange={(e) => {
+                  if (typeof index === "number") {
+                    handleItemDetailsChange(index, "colour", e.target.value);
+                  } else {
+                    handleNewItemDetails("colour", e.target.value);
+                  }
+                }}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                placeholder="Type product name"
                 required
               />
             </div>
+
+            {/* //? Size */}
             <div className="col-span-2 sm:col-span-1">
               <label
-                htmlFor="category"
+                htmlFor="size"
                 className="block mb-2.5 text-sm font-medium text-heading"
               >
-                Category
+                Size
+              </label>
+              <input
+                id="size"
+                onChange={(e) => {
+                  if (typeof index === "number") {
+                    handleItemDetailsChange(index, "size", e.target.value);
+                  } else {
+                    handleNewItemDetails("size", e.target.value);
+                  }
+                }}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+              />
+            </div>
+
+            {/* //? Size Unit */}
+            <div className="col-span-2 sm:col-span-1">
+              <label
+                htmlFor="unit"
+                className="block mb-2.5 text-sm font-medium text-heading"
+              >
+                Unit
               </label>
               <select
-                id="category"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                id="size_unit"
+                onChange={(e) => {
+                  if (typeof index === "number") {
+                    handleItemDetailsChange(index, "size_unit", e.target.value);
+                  } else {
+                    handleNewItemDetails("size_unit", e.target.value);
+                  }
+                }}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
               >
-                <option value="">Select category</option>
-                <option value="TV">TV/Monitors</option>
-                <option value="PC">PC</option>
-                <option value="GA">Gaming/Console</option>
-                <option value="PH">Phones</option>
+                <option value="">Select Unit</option>
+                <option value="centimeter">cm</option>
+                <option value="meter">m</option>
+                <option value="inch">In</option>
               </select>
             </div>
-            <div className="col-span-2">
+
+            {/* //? Quantity */}
+            <div className="col-span-2 sm:col-span-1">
               <label
-                htmlFor="description"
+                htmlFor="size"
                 className="block mb-2.5 text-sm font-medium text-heading"
               >
-                Product Description
+                Quantity
+              </label>
+              <input
+                id="size"
+                onChange={(e) => {
+                  if (typeof index === "number") {
+                    handleItemDetailsChange(index, "quantity", e.target.value);
+                  } else {
+                    handleNewItemDetails("quantity", e.target.value);
+                  }
+                }}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+              />
+            </div>
+
+            <div className="col-span-2 sm:col-span-1">
+              <label
+                htmlFor="unit"
+                className="block mb-2.5 text-sm font-medium text-heading"
+              >
+                Unit
+              </label>
+              <select
+                id="unit"
+                onChange={(e) => {
+                  if (typeof index === "number") {
+                    handleItemDetailsChange(index, "qty_unit", e.target.value);
+                  } else {
+                    handleNewItemDetails("qty_unit", e.target.value);
+                  }
+                }}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+              >
+                <option value="">Select Unit</option>
+                <option value="gram">Gram</option>
+                <option value="kg">KiloGram</option>
+                <option value="tonne">Tonne</option>
+              </select>
+            </div>
+
+            <div className="col-span-2">
+              <label
+                htmlFor="remarks"
+                className="block mb-2.5 text-sm font-medium text-heading"
+              >
+                Remarks
               </label>
               <textarea
-                id="description"
+                id="remarks"
                 rows={4}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                onChange={(e) => {
+                  if (typeof index === "number") {
+                    handleItemDetailsChange(index, "remarks", e.target.value);
+                  } else {
+                    handleNewItemDetails("remarks", e.target.value);
+                  }
+                }}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                 placeholder="Write product description here"
               ></textarea>
             </div>
           </div>
+
           <div className="flex items-center space-x-4 border-t border-gray-500 pt-4 md:pt-6">
             <button
               type="submit"
-              className="inline-flex gap-2 items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
+              onClick={(e) => {
+                handleSubmit(e);
+                setNewItemDetails({
+                  product_id: "",
+                  size: "",
+                  size_unit: "",
+                  colour: "",
+                  quantity: "",
+                  qty_unit: "",
+                  remarks: "",
+                });
+              }}
+              className="inline-flex gap-2 items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-white bg-primary-700 rounded-lg hover:bg-primary-800"
             >
               <PlusIcon />
-              Add Item
+              Add More
             </button>
+
             <button
-              data-modal-hide="crud-modal"
               type="button"
               onClick={(e) => {
                 e.preventDefault();
+                handleSubmit(e);
                 setShowAddItemModal(false);
               }}
-              className="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
+              className="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-white bg-primary-700 rounded-lg hover:bg-primary-800"
             >
               Done
             </button>

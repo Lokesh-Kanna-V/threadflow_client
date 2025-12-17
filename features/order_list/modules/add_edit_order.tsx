@@ -20,6 +20,7 @@ import { iconSpecifications } from "@/shared/local_db/general_specifications";
 export default function AddEditOrder() {
   const [date, setDate] = useState("");
   const [showAddItemModal, setShowAddItemModal] = useState(false);
+  const [addItemClick, setAddItemClick] = useState(false);
   const [orderDetails, setOrderDetails] = useState({
     company_id: "",
     customer_id: "",
@@ -36,6 +37,7 @@ export default function AddEditOrder() {
       colour: "",
       quantity: "",
       qty_unit: "",
+      remarks: "",
     },
   ]);
 
@@ -173,72 +175,71 @@ export default function AddEditOrder() {
                     <th className="px-6 py-4 font-semibold">Qty</th>
                     <th className="px-6 py-4 font-semibold">Size</th>
                     <th className="px-6 py-4 font-semibold">Colour</th>
-                    <th className="px-6 py-4 font-semibold">ETA</th>
                     <th className="px-6 py-4 font-semibold"></th>
                   </tr>
                 </thead>
 
                 <tbody className="divide-y divide-default">
-                  <tr className="bg-neutral-primary hover:bg-neutral-secondary-soft transition-colors">
-                    <td
-                      scope="row"
-                      className="px-6 py-4 font-medium text-heading whitespace-nowrap"
-                    >
-                      <InfoIcon
-                        size={iconSpecifications.size}
-                        color={iconSpecifications.colour}
-                        weight={iconSpecifications.weight as any}
-                      />
-                    </td>
-                    <th
-                      scope="row"
-                      className="px-6 py-4 font-medium text-heading whitespace-nowrap"
-                    >
-                      ORD-1090
-                    </th>
-                    <td className="px-6 py-4 text-center">
-                      <span className="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full">
-                        <CheckIcon
-                          size={iconSpecifications.size}
-                          color={iconSpecifications.colour}
-                          weight={iconSpecifications.weight as any}
-                        />
-                      </span>
-                    </td>
-                    <th
-                      scope="row"
-                      className="px-6 py-4 font-medium text-heading whitespace-nowrap"
-                    >
-                      Walrus
-                    </th>
-                    <th
-                      scope="row"
-                      className="px-6 py-4 font-medium text-heading whitespace-nowrap"
-                    >
-                      100 Kg
-                    </th>
-                    <th
-                      scope="row"
-                      className="px-6 py-4 font-medium text-heading whitespace-nowrap"
-                    >
-                      100 Kg
-                    </th>
-                    <th
-                      scope="row"
-                      className="px-6 py-4 font-medium text-heading whitespace-nowrap"
-                    >
-                      100%
-                    </th>
-                    <td className="px-6 py-4 text-center">
-                      <span className="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full">
-                        <TrashIcon
-                          size={iconSpecifications.size}
-                          color="#800000"
-                          weight={iconSpecifications.weight as any}
-                        />
-                      </span>
-                    </td>
-                  </tr>
+                  {itemDetails.map((item, index) => {
+                    return (
+                      <tr
+                        key={index}
+                        className="bg-neutral-primary hover:bg-neutral-secondary-soft transition-colors"
+                      >
+                        <td
+                          scope="row"
+                          className="px-6 py-4 font-medium text-heading whitespace-nowrap"
+                        >
+                          <InfoIcon
+                            size={iconSpecifications.size}
+                            color={iconSpecifications.colour}
+                            weight={iconSpecifications.weight as any}
+                          />
+                        </td>
+
+                        <th
+                          scope="row"
+                          className="px-6 py-4 font-medium text-heading whitespace-nowrap"
+                        >
+                          Queued
+                        </th>
+
+                        <th
+                          scope="row"
+                          className="px-6 py-4 font-medium text-heading whitespace-nowrap"
+                        >
+                          {item.product_id}
+                        </th>
+                        <th
+                          scope="row"
+                          className="px-6 py-4 font-medium text-heading whitespace-nowrap"
+                        >
+                          {item.quantity} {item.qty_unit}
+                        </th>
+                        <th
+                          scope="row"
+                          className="px-6 py-4 font-medium text-heading whitespace-nowrap"
+                        >
+                          {item.size} {item.size_unit}
+                        </th>
+                        <th
+                          scope="row"
+                          className="px-6 py-4 font-medium text-heading whitespace-nowrap"
+                        >
+                          {item.colour}
+                        </th>
+                        <td className="px-6 py-4 text-center">
+                          <span className="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full">
+                            <TrashIcon
+                              size={iconSpecifications.size}
+                              color="#800000"
+                              weight={iconSpecifications.weight as any}
+                            />
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
@@ -250,6 +251,7 @@ export default function AddEditOrder() {
               onClick={(e) => {
                 e.preventDefault();
                 setShowAddItemModal(true);
+                setAddItemClick(!addItemClick);
               }}
               className="inline-flex items-center gap-2 px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
             >
@@ -281,6 +283,9 @@ export default function AddEditOrder() {
         style={{ backgroundColor: "rgba(0,0,0,0.9)" }}
       >
         <AddEditProductModal
+          // index={5}
+          addItemClick={addItemClick}
+          itemDetails={itemDetails}
           setItemDetails={setItemDetails}
           setShowAddItemModal={setShowAddItemModal}
         />
