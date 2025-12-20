@@ -1,7 +1,12 @@
 "use client";
 
 //? React and Next Imports
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+
+//? Service Imports
+import { useApi } from "@/shared/lib/api";
+import { useAuth } from "@/shared/context/AuthContext";
 
 //? NPM Imports
 import "flowbite";
@@ -26,6 +31,10 @@ import {
 import { iconSpecifications } from "@/shared/local_db/general_specifications";
 
 export default function ThreadFlow() {
+  const api = useApi();
+  const router = useRouter();
+  const { accessToken } = useAuth();
+
   const [selectedTab, setSelectedTab] = useState(0);
 
   const closeSidebar = () => {
@@ -69,6 +78,22 @@ export default function ThreadFlow() {
     setSelectedTab(tabIndex);
     closeSidebar();
   };
+
+  useEffect(() => {
+    if (!accessToken) {
+      return;
+    }
+
+    const validateUser = async () => {
+      try {
+        await api.get("/user/me");
+      } catch (err: any) {
+        router.replace("/login");
+      }
+    };
+
+    validateUser();
+  }, [accessToken]);
 
   return (
     <div className="antialiased bg-gray-50 dark:bg-gray-900">
