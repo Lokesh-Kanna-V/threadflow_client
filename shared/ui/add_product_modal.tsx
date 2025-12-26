@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 
 //? Icons
 import { XIcon, PlusIcon } from "@phosphor-icons/react";
+import { jobStageApi } from "../services/job_stages_api";
 
 type ItemDetail = {
   product_id: string;
@@ -40,6 +41,14 @@ export default function AddEditProductModal({
     qty_unit: "",
     remarks: "",
   });
+
+  const [stages, setStages] = useState([
+    {
+      id: "",
+      name: "",
+      description: "",
+    },
+  ]);
 
   const handleItemDetailsChange = (
     index: number,
@@ -82,6 +91,19 @@ export default function AddEditProductModal({
       });
     }
   }, [addItemClick]);
+
+  useEffect(() => {
+    const fetchStages = async () => {
+      let res = await jobStageApi();
+      console.log({ res });
+      if (res && res.data && res.data.stages) {
+        setStages(res.data.stages);
+      } else {
+        setStages([]);
+      }
+    };
+    fetchStages();
+  }, []);
 
   return (
     <div className="relative p-4 w-full max-w-md max-h-full">
@@ -140,36 +162,6 @@ export default function AddEditProductModal({
               />
             </div>
 
-            {/* //? Colour */}
-            <div className="col-span-2">
-              <label
-                htmlFor="name"
-                className="block mb-2.5 text-sm font-medium text-heading"
-              >
-                Colour
-              </label>
-              <input
-                type="text"
-                name="name"
-                id="name"
-                value={
-                  typeof index === "number"
-                    ? itemDetails[index]?.colour ?? ""
-                    : newItemDetails.colour
-                }
-                onChange={(e) => {
-                  if (typeof index === "number") {
-                    handleItemDetailsChange(index, "colour", e.target.value);
-                  } else {
-                    handleNewItemDetails("colour", e.target.value);
-                  }
-                }}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                placeholder="Type product name"
-                required
-              />
-            </div>
-
             {/* //? Size */}
             <div className="col-span-2 sm:col-span-1">
               <label
@@ -180,6 +172,7 @@ export default function AddEditProductModal({
               </label>
               <input
                 id="size"
+                placeholder="Enter size"
                 onChange={(e) => {
                   if (typeof index === "number") {
                     handleItemDetailsChange(index, "size", e.target.value);
@@ -227,6 +220,7 @@ export default function AddEditProductModal({
               </label>
               <input
                 id="size"
+                placeholder="Enter quantity"
                 onChange={(e) => {
                   if (typeof index === "number") {
                     handleItemDetailsChange(index, "quantity", e.target.value);
@@ -238,6 +232,7 @@ export default function AddEditProductModal({
               />
             </div>
 
+            {/* //? Quantity Unit*/}
             <div className="col-span-2 sm:col-span-1">
               <label
                 htmlFor="unit"
@@ -263,6 +258,68 @@ export default function AddEditProductModal({
               </select>
             </div>
 
+            {/* //? Colour */}
+            <div className="col-span-2 sm:col-span-1">
+              <label
+                htmlFor="unit"
+                className="block mb-2.5 text-sm font-medium text-heading"
+              >
+                Colour
+              </label>
+              <input
+                type="text"
+                name="name"
+                id="name"
+                value={
+                  typeof index === "number"
+                    ? itemDetails[index]?.colour ?? ""
+                    : newItemDetails.colour
+                }
+                onChange={(e) => {
+                  if (typeof index === "number") {
+                    handleItemDetailsChange(index, "colour", e.target.value);
+                  } else {
+                    handleNewItemDetails("colour", e.target.value);
+                  }
+                }}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                placeholder="Enter colour"
+                required
+              />
+            </div>
+
+            {/* //? Stage */}
+            <div className="col-span-2 sm:col-span-1">
+              <label
+                htmlFor="unit"
+                className="block mb-2.5 text-sm font-medium text-heading"
+              >
+                Stage
+              </label>
+              <select
+                id="unit"
+                onChange={(e) => {
+                  if (typeof index === "number") {
+                    handleItemDetailsChange(index, "qty_unit", e.target.value);
+                  } else {
+                    handleNewItemDetails("qty_unit", e.target.value);
+                  }
+                }}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+              >
+                <option value="">Select Stage</option>
+
+                {stages.map((stage) => {
+                  return (
+                    <option key={stage.id} value={stage.id}>
+                      {stage.name}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+
+            {/* //? Remarks */}
             <div className="col-span-2">
               <label
                 htmlFor="remarks"
@@ -272,7 +329,7 @@ export default function AddEditProductModal({
               </label>
               <textarea
                 id="remarks"
-                rows={4}
+                rows={2}
                 onChange={(e) => {
                   if (typeof index === "number") {
                     handleItemDetailsChange(index, "remarks", e.target.value);
