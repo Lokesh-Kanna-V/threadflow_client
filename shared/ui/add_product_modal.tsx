@@ -25,12 +25,22 @@ type ItemDetail = {
   remarks: string;
 };
 
+type StageDetails = {
+  id: string;
+  name: string;
+  description: string;
+  status: string;
+  assigned_to: string;
+};
+
 type AddProductModalType = {
   index?: number;
   addItemClick: boolean;
   itemDetails: ItemDetail[];
   setItemDetails: React.Dispatch<React.SetStateAction<ItemDetail[]>>;
   setShowAddItemModal: (value: boolean) => void;
+  itemStages: StageDetails[];
+  setItemStages: React.Dispatch<React.SetStateAction<StageDetails[]>>;
 };
 
 export default function AddEditProductModal({
@@ -39,6 +49,8 @@ export default function AddEditProductModal({
   itemDetails,
   setItemDetails,
   setShowAddItemModal,
+  itemStages,
+  setItemStages,
 }: AddProductModalType) {
   const [newItemDetails, setNewItemDetails] = useState<ItemDetail>({
     product_id: "",
@@ -51,16 +63,6 @@ export default function AddEditProductModal({
   });
 
   const [stages, setStages] = useState([
-    {
-      id: "",
-      name: "",
-      description: "",
-      status: "",
-      assigned_to: "",
-    },
-  ]);
-
-  const [itemStages, setItemStages] = useState([
     {
       id: "",
       name: "",
@@ -126,10 +128,6 @@ export default function AddEditProductModal({
     };
     fetchStages();
   }, []);
-
-  useEffect(() => {
-    console.log({ itemStages });
-  }, [itemStages]);
 
   return (
     <div className="relative p-4 w-full max-w-md max-h-full">
