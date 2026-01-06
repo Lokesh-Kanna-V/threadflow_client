@@ -70,6 +70,7 @@ export default function AddEditOrder() {
     e.preventDefault();
 
     const consolidatedItemDetails = {
+      orderDetails,
       itemDetails,
       itemStages,
     };

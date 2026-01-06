@@ -1,6 +1,7 @@
 import axios from "axios";
 
 type CreateOrderPayload = {
+  orderDetails: {};
   itemDetails: any[];
   itemStages: any[];
 };
