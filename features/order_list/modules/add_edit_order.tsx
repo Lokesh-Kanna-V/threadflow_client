@@ -41,6 +41,15 @@ export default function AddEditOrder() {
       colour: "",
       quantity: "",
       qty_unit: "",
+      stages: [
+        {
+          id: "",
+          name: "",
+          description: "",
+          status: "",
+          assigned_to: "",
+        },
+      ],
       remarks: "",
     },
   ]);
@@ -325,8 +334,8 @@ export default function AddEditOrder() {
           itemDetails={itemDetails}
           setItemDetails={setItemDetails}
           setShowAddItemModal={setShowAddItemModal}
-          itemStages={itemStages}
-          setItemStages={setItemStages}
+          // itemStages={itemStages}
+          // setItemStages={setItemStages}
         />
       </div>
     </section>
