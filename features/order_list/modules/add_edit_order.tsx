@@ -17,6 +17,9 @@ import {
 //? Specification Imports
 import { iconSpecifications } from "@/shared/local_db/general_specifications";
 
+//? Service Imports
+import { CreateOrderApi } from "../services/create_order_api";
+
 export default function AddEditOrder() {
   const [date, setDate] = useState("");
   const [showAddItemModal, setShowAddItemModal] = useState(false);
@@ -70,7 +73,8 @@ export default function AddEditOrder() {
       itemDetails,
       itemStages,
     };
-    console.log({ consolidatedItemDetails });
+
+    CreateOrderApi(consolidatedItemDetails);
   };
 
   return (
