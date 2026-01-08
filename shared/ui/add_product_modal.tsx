@@ -40,8 +40,8 @@ type AddProductModalType = {
   itemDetails: ItemDetail[];
   setItemDetails: React.Dispatch<React.SetStateAction<ItemDetail[]>>;
   setShowAddItemModal: (value: boolean) => void;
-  itemStages: StageDetails[];
-  setItemStages: React.Dispatch<React.SetStateAction<StageDetails[]>>;
+  // itemStages: StageDetails[];
+  // setItemStages: React.Dispatch<React.SetStateAction<StageDetails[]>>;
 };
 
 export default function AddEditProductModal({
@@ -50,9 +50,9 @@ export default function AddEditProductModal({
   itemDetails,
   setItemDetails,
   setShowAddItemModal,
-  itemStages,
-  setItemStages,
-}: AddProductModalType) {
+}: // itemStages,
+// setItemStages,
+AddProductModalType) {
   const [newItemDetails, setNewItemDetails] = useState<ItemDetail>({
     product_id: "",
     size: "",
@@ -205,7 +205,6 @@ export default function AddEditProductModal({
                   required
                 />
               </div>
-
               {/* //? Size */}
               <div className="col-span-2 sm:col-span-1">
                 <label
@@ -227,7 +226,6 @@ export default function AddEditProductModal({
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                 />
               </div>
-
               {/* //? Size Unit */}
               <div className="col-span-2 sm:col-span-1">
                 <label
@@ -257,7 +255,6 @@ export default function AddEditProductModal({
                   <option value="inch">In</option>
                 </select>
               </div>
-
               {/* //? Quantity */}
               <div className="col-span-2 sm:col-span-1">
                 <label
@@ -283,7 +280,6 @@ export default function AddEditProductModal({
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                 />
               </div>
-
               {/* //? Quantity Unit*/}
               <div className="col-span-2 sm:col-span-1">
                 <label
@@ -313,7 +309,6 @@ export default function AddEditProductModal({
                   <option value="tonne">Tonne</option>
                 </select>
               </div>
-
               {/* //? Colour */}
               <div className="col-span-2 sm:col-span-1">
                 <label
@@ -343,7 +338,6 @@ export default function AddEditProductModal({
                   required
                 />
               </div>
-
               {/* //? Stage */}
               <div className="col-span-2 sm:col-span-1">
                 <label
@@ -368,6 +362,7 @@ export default function AddEditProductModal({
                 </button>
               </div>
 
+              {/* //? Stages Display */}
               <div className="col-span-2">
                 <label
                   htmlFor="remarks"
@@ -376,25 +371,21 @@ export default function AddEditProductModal({
                   Stages
                 </label>
                 <div className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white min-h-[44px]">
-                  {itemStages.length > 1 ? (
-                    itemStages
-                      .filter((stage) => stage.id !== "")
-                      .map((stage) => (
-                        <span
-                          key={stage.id}
-                          className="inline-block bg-primary-100 text-primary-700 px-2 py-1 rounded mr-2 mb-1 text-xs"
-                        >
-                          {stage.name}
-                        </span>
-                      ))
-                  ) : (
-                    <span className="text-gray-400 text-xs">
-                      No stages selected
-                    </span>
-                  )}
+                  {(typeof index === "number"
+                    ? itemDetails[index]?.stages ?? []
+                    : newItemDetails.stages
+                  )
+                    .filter((stage) => stage.id !== "")
+                    .map((stage) => (
+                      <span
+                        key={stage.id}
+                        className="inline-block bg-primary-100 text-primary-700 px-2 py-1 rounded mr-2 mb-1 text-xs"
+                      >
+                        {stage.name}
+                      </span>
+                    ))}
                 </div>
               </div>
-
               {/* //? Remarks */}
               <div className="col-span-2">
                 <label
@@ -455,25 +446,6 @@ export default function AddEditProductModal({
                   e.preventDefault();
                   handleSubmit(e);
                   setShowAddItemModal(false);
-                  if (typeof index === "number") {
-                    setItemDetails((prev) =>
-                      prev.map((item, i) =>
-                        i === index
-                          ? { ...item, stages: [...itemStages] }
-                          : item
-                      )
-                    );
-
-                    setItemStages([
-                      {
-                        id: "",
-                        name: "",
-                        description: "",
-                        status: "",
-                        assigned_to: "",
-                      },
-                    ]);
-                  }
                 }}
                 className="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-white bg-primary-700 rounded-lg hover:bg-primary-800"
               >
@@ -507,27 +479,79 @@ export default function AddEditProductModal({
                   type="checkbox"
                   value={stage.id}
                   onChange={() => {
-                    setItemStages((prevStages) => {
-                      // Check if this stage is already selected
-                      if (prevStages.some((s) => s.id === stage.id)) {
+                    if (typeof index === "number") {
+                      // Editing existing item
+                      setItemDetails((prev) =>
+                        prev.map((item, i) => {
+                          if (i === index) {
+                            const currentStages = item.stages ?? [];
+                            const isSelected = currentStages.some(
+                              (s) => s.id === stage.id
+                            );
+                            if (isSelected) {
+                              // Uncheck: remove it from the array
+                              return {
+                                ...item,
+                                stages: currentStages.filter(
+                                  (s) => s.id !== stage.id
+                                ),
+                              };
+                            } else {
+                              // Check: add it to the array
+                              return {
+                                ...item,
+                                stages: [
+                                  ...currentStages,
+                                  {
+                                    id: stage.id,
+                                    name: stage.name,
+                                    description: stage.description,
+                                    status: "Not Started",
+                                    assigned_to: "",
+                                  },
+                                ],
+                              };
+                            }
+                          }
+                          return item;
+                        })
+                      );
+                    } else {
+                      // Creating new item
+                      const currentStages = newItemDetails.stages ?? [];
+                      const isSelected = currentStages.some(
+                        (s) => s.id === stage.id
+                      );
+                      if (isSelected) {
                         // Uncheck: remove it from the array
-                        return prevStages.filter((s) => s.id !== stage.id);
+                        setNewItemDetails((prev) => ({
+                          ...prev,
+                          stages: currentStages.filter(
+                            (s) => s.id !== stage.id
+                          ),
+                        }));
                       } else {
                         // Check: add it to the array
-                        return [
-                          ...prevStages,
-                          {
-                            id: stage.id,
-                            name: stage.name,
-                            description: stage.description,
-                            status: "Not Started",
-                            assigned_to: "",
-                          },
-                        ];
+                        setNewItemDetails((prev) => ({
+                          ...prev,
+                          stages: [
+                            ...currentStages,
+                            {
+                              id: stage.id,
+                              name: stage.name,
+                              description: stage.description,
+                              status: "Not Started",
+                              assigned_to: "",
+                            },
+                          ],
+                        }));
                       }
-                    });
+                    }
                   }}
-                  checked={itemStages.some((s) => s.id === stage.id)}
+                  checked={(typeof index === "number"
+                    ? itemDetails[index]?.stages ?? []
+                    : newItemDetails.stages
+                  ).some((s) => s.id === stage.id)}
                   className="w-4 h-4 border border-light rounded-xs bg-neutral-secondary-medium focus:ring-2 focus:ring-brand-soft"
                 />
                 <label

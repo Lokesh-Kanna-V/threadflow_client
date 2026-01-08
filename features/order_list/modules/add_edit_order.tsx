@@ -54,16 +54,6 @@ export default function AddEditOrder() {
     },
   ]);
 
-  const [itemStages, setItemStages] = useState([
-    {
-      id: "",
-      name: "",
-      description: "",
-      status: "",
-      assigned_to: "",
-    },
-  ]);
-
   const handleOrderDetailsChange = (field: string, value: string) => {
     setOrderDetails((prev) => ({
       ...prev,
@@ -81,7 +71,6 @@ export default function AddEditOrder() {
     const consolidatedItemDetails = {
       orderDetails,
       itemDetails,
-      itemStages,
     };
 
     CreateOrderApi(consolidatedItemDetails);
@@ -334,8 +323,6 @@ export default function AddEditOrder() {
           itemDetails={itemDetails}
           setItemDetails={setItemDetails}
           setShowAddItemModal={setShowAddItemModal}
-          itemStages={itemStages}
-          setItemStages={setItemStages}
         />
       </div>
     </section>
