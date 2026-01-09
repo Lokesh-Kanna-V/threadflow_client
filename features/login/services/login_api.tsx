@@ -39,6 +39,8 @@ export const UserLogin = async ({
     setAccessToken(response.data.accessToken);
     setUser(response.data.user);
 
+    localStorage.setItem("cid", response.data.user.company_id);
+
     return {
       success: true,
       data: {

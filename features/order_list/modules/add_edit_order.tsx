@@ -1,7 +1,7 @@
 "use client";
 
 //? React & Next Imports
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/shared/context/AuthContext";
 
 //? UI Imports
@@ -20,6 +20,7 @@ import { iconSpecifications } from "@/shared/local_db/general_specifications";
 
 //? Service Imports
 import { CreateOrderApi } from "../services/create_order_api";
+import { GetCustomersAPI } from "../services/get_customer_list_api";
 
 export default function AddEditOrder() {
   const { user } = useAuth();
@@ -29,12 +30,14 @@ export default function AddEditOrder() {
   const [addItemClick, setAddItemClick] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState<number>();
   const [orderDetails, setOrderDetails] = useState({
-    company_id: user.company_id,
+    company_id: "",
     customer_id: "",
     due_date: "",
     status: "",
     remarks: "",
   });
+
+  const [customerList, setCustomerList] = useState([{ id: "", name: "" }]);
 
   const [itemDetails, setItemDetails] = useState([
     {
@@ -79,45 +82,48 @@ export default function AddEditOrder() {
     CreateOrderApi(consolidatedItemDetails);
   };
 
+  useEffect(() => {
+    let company_id = localStorage.getItem("cid");
+    handleOrderDetailsChange("company_id", company_id || "");
+    if (company_id) {
+      const GetCustomersList = async () => {
+        let res = await GetCustomersAPI({ company_id });
+        setCustomerList(res.data.data);
+      };
+      GetCustomersList();
+    }
+  }, [user]);
+
   return (
     <section className="bg-white dark:bg-gray-900">
       <div className="px-4 mx-auto max-w-2xl lg:py-16">
         <form action="#">
           <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
             {/* //? Customer Name */}
-            <div>
+            <div className="col-span-2 sm:col-span-1">
               <label
-                htmlFor="customer"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                htmlFor="unit"
+                className="block mb-2.5 text-sm font-medium text-heading"
               >
-                Customer Name
+                Unit
               </label>
-
-              <input
-                list="customers"
-                id="customer"
-                name="customer"
-                placeholder="Select or type customer"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
-               focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5
-               dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-              />
-
-              <datalist id="customers">
-                <option value="Zara" />
-                <option value="H&M" />
-                <option value="Louis Philippe" />
-                <option value="Louis Vuitton" />
-              </datalist>
-
-              {/* Add New Customer Button */}
-              {/* <button
-                type="button"
-                className="mt-2 text-sm font-medium text-primary-600 hover:underline
-               dark:text-primary-400"
+              <select
+                id="size_unit"
+                onChange={(e) => {
+                  handleOrderDetailsChange("customer_id", e.target.value);
+                  console.log({ tval: e.target.value });
+                }}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
               >
-                + Add New Customer
-              </button> */}
+                <option value="">Select Customer</option>
+                {customerList.map((customer) => {
+                  return (
+                    <option key={customer.id} value={customer.id}>
+                      {customer.name}
+                    </option>
+                  );
+                })}
+              </select>
             </div>
 
             <div className="flex gap-3">
