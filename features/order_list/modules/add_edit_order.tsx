@@ -2,6 +2,7 @@
 
 //? React & Next Imports
 import { useState } from "react";
+import { useAuth } from "@/shared/context/AuthContext";
 
 //? UI Imports
 import AddEditProductModal from "@/shared/ui/add_product_modal";
@@ -21,12 +22,14 @@ import { iconSpecifications } from "@/shared/local_db/general_specifications";
 import { CreateOrderApi } from "../services/create_order_api";
 
 export default function AddEditOrder() {
+  const { user } = useAuth();
+
   const [date, setDate] = useState("");
   const [showAddItemModal, setShowAddItemModal] = useState(false);
   const [addItemClick, setAddItemClick] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState<number>();
   const [orderDetails, setOrderDetails] = useState({
-    company_id: "",
+    company_id: user.company_id,
     customer_id: "",
     due_date: "",
     status: "",
