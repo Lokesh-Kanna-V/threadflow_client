@@ -1,11 +1,31 @@
 "use client";
 
+//? React & Next Imports
+import { useEffect, useState } from "react";
+
+//? Service Imports
+import { GetAllWoListAPI } from "../services/get_all_wo_list_api";
+
 export default function OrderListDisplay() {
+  const [allWoList, setAllWoList] = useState([]);
+
+  useEffect(() => {
+    const fetchAllWoList = async () => {
+      const response = await GetAllWoListAPI();
+      setAllWoList(response.data.data);
+    };
+    fetchAllWoList();
+  }, []);
+
+
+
   return (
     <div>
       {/* //? <--- List ---> */}
       <div className="flex gap-5 flex-wrap justify-center md:border border-dashed border-gray-500 p-5">
-        <button className="block w-xs border rounded-lg shadow-xs border-gray-300 dark:border-gray-600 bg-emerald-100 dark:bg-gray-800 p-4">
+        {allWoList.map((wo) => {
+          return (
+            <button className="block w-xs border rounded-lg shadow-xs border-gray-300 dark:border-gray-600 bg-emerald-100 dark:bg-gray-800 p-4">
           <div className="mb-3">
             <p className="text-sm italic text-left">Order-102039</p>
             <p className="text-xl text-left">
@@ -22,6 +42,8 @@ export default function OrderListDisplay() {
             Status: <span className="text-green-600">On-Schedule</span>
           </p>
         </button>
+          );
+        })}
       </div>
     </div>
   );
