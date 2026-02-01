@@ -76,7 +76,7 @@ export default function AddEditOrder() {
 
     const consolidatedItemDetails = {
       orderDetails,
-      itemDetails,
+      itemDetails: itemDetails.slice(1),
     };
 
     CreateOrderApi(consolidatedItemDetails);
