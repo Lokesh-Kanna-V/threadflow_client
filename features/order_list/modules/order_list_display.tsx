@@ -10,9 +10,11 @@ export default function OrderListDisplay() {
   const [allWoList, setAllWoList] = useState([]);
 
   useEffect(() => {
+    let company_id = localStorage.getItem("cid");
     const fetchAllWoList = async () => {
-      const response = await GetAllWoListAPI();
+      const response = await GetAllWoListAPI({ company_id: company_id || undefined });
       setAllWoList(response.data.data);
+      console.log("allWoList", response.data.data);
     };
     fetchAllWoList();
   }, []);
@@ -23,9 +25,9 @@ export default function OrderListDisplay() {
     <div>
       {/* //? <--- List ---> */}
       <div className="flex gap-5 flex-wrap justify-center md:border border-dashed border-gray-500 p-5">
-        {allWoList.map((wo) => {
+        {allWoList.map((wo, index) => {
           return (
-            <button className="block w-xs border rounded-lg shadow-xs border-gray-300 dark:border-gray-600 bg-emerald-100 dark:bg-gray-800 p-4">
+            <button key={index} className="block w-xs border rounded-lg shadow-xs border-gray-300 dark:border-gray-600 bg-emerald-100 dark:bg-gray-800 p-4">
           <div className="mb-3">
             <p className="text-sm italic text-left">Order-102039</p>
             <p className="text-xl text-left">

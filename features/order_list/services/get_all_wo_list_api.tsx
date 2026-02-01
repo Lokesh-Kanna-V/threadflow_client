@@ -1,12 +1,16 @@
 import axios from "axios";
 
+type GetAllWoListType = {
+  company_id?: string;
+};
 
-export const GetAllWoListAPI = async () => {
+export const GetAllWoListAPI = async ({ company_id }: GetAllWoListType) => {
   // setLoading(true);
 
   try {
-    const response = await axios.get(
+    const response = await axios.post(
       "http://localhost:9000/workOrder/getAllWorkOrders",
+      { company_id },
       {
         withCredentials: true, // <--- VERY IMPORTANT FOR SECURITY
         headers: {
