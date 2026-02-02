@@ -14,6 +14,8 @@ import "flowbite";
 //? UI Imports
 import DashboardUI from "@/features/dashboard/ui/dashboard_ui";
 import OrderListUI from "@/features/order_list/ui/order_list_ui";
+import ProductManagementUI from "@/features/product_management/ui/product_management_ui";
+
 
 //? NPM UI Imports
 import {
@@ -30,6 +32,7 @@ import {
 
 //? Specification Imports
 import { iconSpecifications } from "@/shared/local_db/general_specifications";
+
 
 export default function ThreadFlow() {
   const api = useApi();
@@ -481,7 +484,7 @@ export default function ThreadFlow() {
 
             <li>
               <a
-                href="#"
+                href="#"  
                 className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
               >
                 <TreeStructureIcon
@@ -496,6 +499,10 @@ export default function ThreadFlow() {
             <li>
               <a
                 href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleSidebarClick(3);
+                }}
                 className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
               >
                 <PackageIcon
@@ -556,9 +563,9 @@ export default function ThreadFlow() {
         <DashboardUI />
       ) : selectedTab == 1 ? (
         <OrderListUI />
-      ) : (
-        <></>
-      )}
+      ) : selectedTab == 3 ? (
+        <ProductManagementUI />
+      ) : (<></>)}
     </div>
   );
 }
