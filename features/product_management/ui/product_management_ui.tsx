@@ -5,6 +5,8 @@ import { useState } from "react";
 
 //? Module Imports
 import ProductListDisplay from "../modules/product_list_display";
+import SearchAndCreate from "../modules/search_and_create";
+import AddEditProduct from "../modules/add_edit_product";
 
 //? Specification Imports
 import { iconSpecifications } from "@/shared/local_db/general_specifications";
@@ -13,19 +15,19 @@ import { iconSpecifications } from "@/shared/local_db/general_specifications";
 import { ArrowUUpLeftIcon } from "@phosphor-icons/react";
 
 export default function ProductManagementUI() {
-  const [showCreateOrder, setShowCreateOrder] = useState(false);
+  const [showCreateProduct, setShowCreateProduct] = useState(false);
   return (
     <main className="p-4 md:ml-64 h-auto pt-20">
       <div
         className={`flex ${
-          showCreateOrder ? "justify-between" : "justify-center"
+          showCreateProduct ? "justify-between" : "justify-center"
         } items-baseline`}
       >
-        {showCreateOrder ? (
+        {showCreateProduct ? (
           <button
             onClick={(e) => {
               e.preventDefault();
-              setShowCreateOrder(false);
+              setShowCreateProduct(false);
             }}
             className="border rounded-lg border-primary-700 cursor-pointer"
           >
@@ -39,18 +41,18 @@ export default function ProductManagementUI() {
           <></>
         )}
         <h1 className="text-2xl text-center font-bold md:text-3xl border-b border-dashed border-gray-500 uppercase mb-5">
-          {!showCreateOrder ? "Product List" : "Create Product"}
+          {!showCreateProduct ? "Product List" : "Create Product"}
         </h1>
       </div>
 
-      {!showCreateOrder ? (
+      {!showCreateProduct ? (
         <>
-          {/* <SearchAndCreate setShowCreateOrder={setShowCreateOrder} /> */}
+          <SearchAndCreate setShowCreateOrder={setShowCreateProduct} />
           {<ProductListDisplay />}
         </>
       ) : (
         <>
-          {/* <AddEditOrder /> */}
+          <AddEditProduct />
         </>
       )}
     </main>
