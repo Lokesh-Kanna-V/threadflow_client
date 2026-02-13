@@ -15,6 +15,9 @@ import { jobStageApi } from "../services/job_stages_api";
 //? Specification Imports
 import { iconSpecifications } from "../local_db/general_specifications";
 
+//? Service Imports
+import { getProductsApi } from "../services/get_products_api";
+
 type ItemDetail = {
   product_id: string;
   size: string;
@@ -51,8 +54,8 @@ export default function AddEditProductModal({
   setItemDetails,
   setShowAddItemModal,
 }: // itemStages,
-// setItemStages,
-AddProductModalType) {
+  // setItemStages,
+  AddProductModalType) {
   const [newItemDetails, setNewItemDetails] = useState<ItemDetail>({
     product_id: "",
     size: "",
@@ -71,6 +74,14 @@ AddProductModalType) {
     ],
     remarks: "",
   });
+
+  const [products, setProducts] = useState({
+    cutomer_id: "",
+    name: "",
+    sku: "",
+    hsn_code: "",
+    description: ""
+  })
 
   const [stages, setStages] = useState([
     {
@@ -136,6 +147,15 @@ AddProductModalType) {
   }, [addItemClick]);
 
   useEffect(() => {
+    const fetchProducts = async () => {
+      let company_id = localStorage.getItem("cid");
+      if (company_id) {
+        let res = await getProductsApi({ company_id });
+        console.log({ products: res });
+        // setProducts
+
+      }
+    }
     const fetchStages = async () => {
       let res = await jobStageApi();
       console.log({ res });
@@ -145,6 +165,7 @@ AddProductModalType) {
         setStages([]);
       }
     };
+    fetchProducts()
     fetchStages();
   }, []);
 
@@ -154,7 +175,7 @@ AddProductModalType) {
         <div className="relative rounded-xl dark:bg-gray-800 border border-gray-500 rounded-base shadow-sm p-4 md:p-6">
           <div className="flex items-center justify-between border-b border-gray-500 border-default pb-4 md:pb-5">
             <h3 className="text-lg font-medium text-heading">
-              Create new product
+              Add product
             </h3>
             <button
               type="button"
@@ -180,7 +201,7 @@ AddProductModalType) {
                 >
                   Item Name
                 </label>
-                <input
+                {/* <input
                   type="text"
                   name="name"
                   id="name"
@@ -203,7 +224,27 @@ AddProductModalType) {
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                   placeholder="Type product name"
                   required
-                />
+                /> */}
+                <select
+                  id="size_unit"
+                  onChange={(e) => {
+                    if (typeof index === "number") {
+                      handleItemDetailsChange(
+                        index,
+                        "size_unit",
+                        e.target.value
+                      );
+                    } else {
+                      handleNewItemDetails("size_unit", e.target.value);
+                    }
+                  }}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                >
+                  <option value="">Select Unit</option>
+                  <option value="centimeter">cm</option>
+                  <option value="meter">m</option>
+                  <option value="inch">In</option>
+                </select>
               </div>
               {/* //? Size */}
               <div className="col-span-2 sm:col-span-1">
