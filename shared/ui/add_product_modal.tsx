@@ -75,13 +75,14 @@ export default function AddEditProductModal({
     remarks: "",
   });
 
-  const [products, setProducts] = useState({
+  const [products, setProducts] = useState([{
+    id: "",
     cutomer_id: "",
     name: "",
     sku: "",
     hsn_code: "",
     description: ""
-  })
+  }])
 
   const [stages, setStages] = useState([
     {
@@ -152,7 +153,7 @@ export default function AddEditProductModal({
       if (company_id) {
         let res = await getProductsApi({ company_id });
         console.log({ products: res });
-        // setProducts
+        setProducts(res.data.data)
 
       }
     }
@@ -201,15 +202,8 @@ export default function AddEditProductModal({
                 >
                   Item Name
                 </label>
-                {/* <input
-                  type="text"
-                  name="name"
-                  id="name"
-                  value={
-                    typeof index === "number"
-                      ? itemDetails[index]?.product_id ?? ""
-                      : newItemDetails.product_id
-                  }
+                <select
+                  id="item_name"
                   onChange={(e) => {
                     if (typeof index === "number") {
                       handleItemDetailsChange(
@@ -222,28 +216,15 @@ export default function AddEditProductModal({
                     }
                   }}
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                  placeholder="Type product name"
-                  required
-                /> */}
-                <select
-                  id="size_unit"
-                  onChange={(e) => {
-                    if (typeof index === "number") {
-                      handleItemDetailsChange(
-                        index,
-                        "size_unit",
-                        e.target.value
-                      );
-                    } else {
-                      handleNewItemDetails("size_unit", e.target.value);
-                    }
-                  }}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                 >
-                  <option value="">Select Unit</option>
-                  <option value="centimeter">cm</option>
-                  <option value="meter">m</option>
-                  <option value="inch">In</option>
+                  <option value="">Select Product</option>
+                  {products.map((prod) => {
+                    return (
+                      <option key={prod.id} value={prod.id}>{prod.name}</option>
+                    )
+                  })}
+
+
                 </select>
               </div>
               {/* //? Size */}
