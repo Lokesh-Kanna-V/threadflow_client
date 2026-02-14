@@ -15,6 +15,8 @@ import "flowbite";
 import DashboardUI from "@/features/dashboard/ui/dashboard_ui";
 import OrderListUI from "@/features/order_list/ui/order_list_ui";
 import ProductManagementUI from "@/features/product_management/ui/product_management_ui";
+import JobWorkerManagementUI from "@/features/job_worker_management/ui/job_worker_management_ui";
+import CustomerManagementUI from "@/features/customer_management/ui/customer_management_ui";
 
 
 //? NPM UI Imports
@@ -517,6 +519,10 @@ export default function ThreadFlow() {
             <li>
               <a
                 href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleSidebarClick(4);
+                }}
                 className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
               >
                 <NeedleIcon
@@ -531,6 +537,10 @@ export default function ThreadFlow() {
             <li>
               <a
                 href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleSidebarClick(5);
+                }}
                 className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
               >
                 <UsersThreeIcon
@@ -565,7 +575,13 @@ export default function ThreadFlow() {
         <OrderListUI />
       ) : selectedTab == 3 ? (
         <ProductManagementUI />
-      ) : (<></>)}
+      ) : selectedTab == 4 ? (
+        <JobWorkerManagementUI />
+      ) : selectedTab == 5 ? (
+        <CustomerManagementUI />
+      ) : (
+        <></>
+      )}
     </div>
   );
 }
