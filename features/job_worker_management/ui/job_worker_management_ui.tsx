@@ -16,6 +16,15 @@ import { ArrowUUpLeftIcon } from "@phosphor-icons/react";
 
 export default function JobWorkerManagementUI() {
   const [showCreateJobWorker, setShowCreateJobWorker] = useState(false);
+  const [editJobWorkerId, setEditJobWorkerId] = useState<string | null>(null);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+
+  const handleBack = () => {
+    setShowCreateJobWorker(false);
+    setEditJobWorkerId(null);
+    setRefreshTrigger((prev) => prev + 1);
+  };
+
   return (
     <main className="p-4 md:ml-64 h-auto pt-20">
       <div
@@ -27,7 +36,7 @@ export default function JobWorkerManagementUI() {
           <button
             onClick={(e) => {
               e.preventDefault();
-              setShowCreateJobWorker(false);
+              handleBack();
             }}
             className="border rounded-lg border-primary-700 cursor-pointer"
           >
@@ -43,6 +52,8 @@ export default function JobWorkerManagementUI() {
         <h1 className="text-2xl text-center font-bold md:text-3xl border-b border-dashed border-gray-500 uppercase mb-5">
           {!showCreateJobWorker
             ? "Job Worker List"
+            : editJobWorkerId
+            ? "Edit Job Worker"
             : "Create Job Worker"}
         </h1>
       </div>
@@ -50,11 +61,20 @@ export default function JobWorkerManagementUI() {
       {!showCreateJobWorker ? (
         <>
           <SearchAndCreate setShowCreateJobWorker={setShowCreateJobWorker} />
-          <JobWorkerListDisplay />
+          <JobWorkerListDisplay
+            setShowCreateJobWorker={setShowCreateJobWorker}
+            setEditJobWorkerId={setEditJobWorkerId}
+            refreshTrigger={refreshTrigger}
+          />
         </>
       ) : (
         <>
-          <AddEditJobWorker />
+          <AddEditJobWorker
+            editJobWorkerId={editJobWorkerId}
+            setShowCreateJobWorker={setShowCreateJobWorker}
+            setEditJobWorkerId={setEditJobWorkerId}
+            setRefreshTrigger={setRefreshTrigger}
+          />
         </>
       )}
     </main>
