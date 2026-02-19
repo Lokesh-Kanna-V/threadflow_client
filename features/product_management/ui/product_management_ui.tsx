@@ -16,6 +16,15 @@ import { ArrowUUpLeftIcon } from "@phosphor-icons/react";
 
 export default function ProductManagementUI() {
   const [showCreateProduct, setShowCreateProduct] = useState(false);
+  const [editProductId, setEditProductId] = useState<string | null>(null);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+
+  const handleBack = () => {
+    setShowCreateProduct(false);
+    setEditProductId(null);
+    setRefreshTrigger((prev) => prev + 1);
+  };
+
   return (
     <main className="p-4 md:ml-64 h-auto pt-20">
       <div
@@ -27,7 +36,7 @@ export default function ProductManagementUI() {
           <button
             onClick={(e) => {
               e.preventDefault();
-              setShowCreateProduct(false);
+              handleBack();
             }}
             className="border rounded-lg border-primary-700 cursor-pointer"
           >
@@ -41,18 +50,31 @@ export default function ProductManagementUI() {
           <></>
         )}
         <h1 className="text-2xl text-center font-bold md:text-3xl border-b border-dashed border-gray-500 uppercase mb-5">
-          {!showCreateProduct ? "Product List" : "Create Product"}
+          {!showCreateProduct
+            ? "Product List"
+            : editProductId
+            ? "Edit Product"
+            : "Create Product"}
         </h1>
       </div>
 
       {!showCreateProduct ? (
         <>
           <SearchAndCreate setShowCreateOrder={setShowCreateProduct} />
-          {<ProductListDisplay />}
+          <ProductListDisplay
+            setShowCreateProduct={setShowCreateProduct}
+            setEditProductId={setEditProductId}
+            refreshTrigger={refreshTrigger}
+          />
         </>
       ) : (
         <>
-          <AddEditProduct />
+          <AddEditProduct
+            editProductId={editProductId}
+            setShowCreateProduct={setShowCreateProduct}
+            setEditProductId={setEditProductId}
+            setRefreshTrigger={setRefreshTrigger}
+          />
         </>
       )}
     </main>

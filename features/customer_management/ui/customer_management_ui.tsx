@@ -16,6 +16,15 @@ import { ArrowUUpLeftIcon } from "@phosphor-icons/react";
 
 export default function CustomerManagementUI() {
   const [showCreateCustomer, setShowCreateCustomer] = useState(false);
+  const [editCustomerId, setEditCustomerId] = useState<string | null>(null);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+
+  const handleBack = () => {
+    setShowCreateCustomer(false);
+    setEditCustomerId(null);
+    setRefreshTrigger((prev) => prev + 1);
+  };
+
   return (
     <main className="p-4 md:ml-64 h-auto pt-20">
       <div
@@ -27,7 +36,7 @@ export default function CustomerManagementUI() {
           <button
             onClick={(e) => {
               e.preventDefault();
-              setShowCreateCustomer(false);
+              handleBack();
             }}
             className="border rounded-lg border-primary-700 cursor-pointer"
           >
@@ -41,18 +50,31 @@ export default function CustomerManagementUI() {
           <></>
         )}
         <h1 className="text-2xl text-center font-bold md:text-3xl border-b border-dashed border-gray-500 uppercase mb-5">
-          {!showCreateCustomer ? "Customer List" : "Create Customer"}
+          {!showCreateCustomer
+            ? "Customer List"
+            : editCustomerId
+            ? "Edit Customer"
+            : "Create Customer"}
         </h1>
       </div>
 
       {!showCreateCustomer ? (
         <>
           <SearchAndCreate setShowCreateCustomer={setShowCreateCustomer} />
-          <CustomerListDisplay />
+          <CustomerListDisplay
+            setShowCreateCustomer={setShowCreateCustomer}
+            setEditCustomerId={setEditCustomerId}
+            refreshTrigger={refreshTrigger}
+          />
         </>
       ) : (
         <>
-          <AddEditCustomer />
+          <AddEditCustomer
+            editCustomerId={editCustomerId}
+            setShowCreateCustomer={setShowCreateCustomer}
+            setEditCustomerId={setEditCustomerId}
+            setRefreshTrigger={setRefreshTrigger}
+          />
         </>
       )}
     </main>

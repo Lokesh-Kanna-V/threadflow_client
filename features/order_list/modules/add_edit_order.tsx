@@ -20,9 +20,23 @@ import { iconSpecifications } from "@/shared/local_db/general_specifications";
 
 //? Service Imports
 import { CreateOrderApi } from "../services/create_order_api";
+import { UpdateOrderAPI } from "../services/update_order_api";
 import { GetCustomersAPI } from "../services/get_customer_list_api";
+import { GetOrderByIdAPI } from "../services/get_order_by_id_api";
 
-export default function AddEditOrder() {
+type AddEditOrderTypes = {
+  editOrderId: string | null;
+  setShowCreateOrder: (value: boolean) => void;
+  setEditOrderId: (value: string | null) => void;
+  setRefreshTrigger?: (fn: (prev: number) => number) => void;
+};
+
+export default function AddEditOrder({
+  editOrderId,
+  setShowCreateOrder,
+  setEditOrderId,
+  setRefreshTrigger,
+}: AddEditOrderTypes) {
   const { user } = useAuth();
 
   const [date, setDate] = useState("");
@@ -71,7 +85,7 @@ export default function AddEditOrder() {
     setItemDetails((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const createOrder = (e: any) => {
+  const createOrder = async (e: any) => {
     e.preventDefault();
 
     const consolidatedItemDetails = {
@@ -79,7 +93,119 @@ export default function AddEditOrder() {
       itemDetails: itemDetails.slice(1),
     };
 
-    CreateOrderApi(consolidatedItemDetails);
+    const response = await CreateOrderApi(consolidatedItemDetails);
+    if (response.success) {
+      setShowCreateOrder(false);
+      setOrderDetails({
+        company_id: "",
+        customer_id: "",
+        due_date: "",
+        status: "",
+        remarks: "",
+      });
+      setItemDetails([
+        {
+          product_id: "",
+          size: "",
+          size_unit: "",
+          colour: "",
+          quantity: "",
+          qty_unit: "",
+          stages: [
+            {
+              id: "",
+              name: "",
+              description: "",
+              status: "",
+              assigned_to: "",
+            },
+          ],
+          remarks: "",
+        },
+      ]);
+      if (setRefreshTrigger) {
+        setRefreshTrigger((prev) => prev + 1);
+      }
+    }
+  };
+
+  const updateOrder = async (e: any) => {
+    e.preventDefault();
+    if (!editOrderId) return;
+
+    const payload = {
+      id: editOrderId,
+      orderDetails,
+      itemDetails: itemDetails.slice(1),
+    };
+
+    const response = await UpdateOrderAPI(payload);
+    if (response.success) {
+      setShowCreateOrder(false);
+      setEditOrderId(null);
+      setOrderDetails({
+        company_id: "",
+        customer_id: "",
+        due_date: "",
+        status: "",
+        remarks: "",
+      });
+      setItemDetails([
+        {
+          product_id: "",
+          size: "",
+          size_unit: "",
+          colour: "",
+          quantity: "",
+          qty_unit: "",
+          stages: [
+            {
+              id: "",
+              name: "",
+              description: "",
+              status: "",
+              assigned_to: "",
+            },
+          ],
+          remarks: "",
+        },
+      ]);
+      if (setRefreshTrigger) {
+        setRefreshTrigger((prev) => prev + 1);
+      }
+    }
+  };
+
+  const handleCancel = () => {
+    setShowCreateOrder(false);
+    setEditOrderId(null);
+    setOrderDetails({
+      company_id: "",
+      customer_id: "",
+      due_date: "",
+      status: "",
+      remarks: "",
+    });
+    setItemDetails([
+      {
+        product_id: "",
+        size: "",
+        size_unit: "",
+        colour: "",
+        quantity: "",
+        qty_unit: "",
+        stages: [
+          {
+            id: "",
+            name: "",
+            description: "",
+            status: "",
+            assigned_to: "",
+          },
+        ],
+        remarks: "",
+      },
+    ]);
   };
 
   useEffect(() => {
@@ -88,11 +214,74 @@ export default function AddEditOrder() {
     if (company_id) {
       const GetCustomersList = async () => {
         let res = await GetCustomersAPI({ company_id });
-        setCustomerList(res.data.data);
+        if (res.success && res.data?.data) {
+          setCustomerList(res.data.data);
+        }
       };
       GetCustomersList();
     }
-  }, [user]);
+
+    if (editOrderId) {
+      const fetchOrder = async () => {
+        const response = await GetOrderByIdAPI({ id: editOrderId });
+        if (response.success && response.data?.data) {
+          const order = response.data.data;
+          setOrderDetails({
+            company_id: order.company_id || company_id || "",
+            customer_id: order.customer_id || "",
+            due_date: order.due_date || "",
+            status: order.status || "",
+            remarks: order.remarks || "",
+          });
+          if (order.due_date) {
+            const dateObj = new Date(order.due_date);
+            setDate(dateObj.toISOString().split("T")[0]);
+          }
+          if (order.items && order.items.length > 0) {
+            setItemDetails([
+              {
+                product_id: "",
+                size: "",
+                size_unit: "",
+                colour: "",
+                quantity: "",
+                qty_unit: "",
+                stages: [
+                  {
+                    id: "",
+                    name: "",
+                    description: "",
+                    status: "",
+                    assigned_to: "",
+                  },
+                ],
+                remarks: "",
+              },
+              ...order.items.map((item: any) => ({
+                product_id: item.product_id || "",
+                size: item.size || "",
+                size_unit: item.size_unit || "",
+                colour: item.colour || "",
+                quantity: item.quantity || "",
+                qty_unit: item.qty_unit || "",
+                stages: item.stages || [
+                  {
+                    id: "",
+                    name: "",
+                    description: "",
+                    status: "",
+                    assigned_to: "",
+                  },
+                ],
+                remarks: item.remarks || "",
+              })),
+            ]);
+          }
+        }
+      };
+      fetchOrder();
+    }
+  }, [user, editOrderId]);
 
   return (
     <section className="bg-white dark:bg-gray-900">
@@ -109,9 +298,9 @@ export default function AddEditOrder() {
               </label>
               <select
                 id="size_unit"
+                value={orderDetails.customer_id}
                 onChange={(e) => {
                   handleOrderDetailsChange("customer_id", e.target.value);
-                  console.log({ tval: e.target.value });
                 }}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
               >
@@ -159,11 +348,12 @@ export default function AddEditOrder() {
                   type="text"
                   name="status"
                   id="status"
+                  value={orderDetails.status}
                   onChange={(e) => {
                     handleOrderDetailsChange("status", e.target.value);
                   }}
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                  placeholder="Product status"
+                  placeholder="Order status"
                   required
                 />
               </div>
@@ -180,6 +370,7 @@ export default function AddEditOrder() {
                 id="remarks"
                 name="remarks"
                 rows={4}
+                value={orderDetails.remarks}
                 onChange={(e) => {
                   handleOrderDetailsChange("remarks", e.target.value);
                 }}
@@ -304,13 +495,27 @@ export default function AddEditOrder() {
             </button>
 
             <button
+              type="button"
+              onClick={handleCancel}
+              className="inline-flex items-center gap-2 px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
+            >
+              <PlusIcon />
+              Cancel
+            </button>
+
+            <button
               type="submit"
               onClick={(e) => {
-                createOrder(e);
+                e.preventDefault();
+                if (editOrderId) {
+                  updateOrder(e);
+                } else {
+                  createOrder(e);
+                }
               }}
               className="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
             >
-              Create Order
+              {editOrderId ? "Update Order" : "Create Order"}
             </button>
           </div>
         </form>

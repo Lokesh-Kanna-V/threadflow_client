@@ -5,33 +5,93 @@ import { useEffect, useState } from "react";
 
 //? Service Imports
 import { GetCustomersAPI } from "../services/get_customers_api";
+import { DeleteCustomerAPI } from "../services/delete_customer_api";
 
-export default function CustomerListDisplay() {
+//? NPM UI Imports
+import { PencilSimple, Trash } from "@phosphor-icons/react";
+
+//? Specification Imports
+import { iconSpecifications } from "@/shared/local_db/general_specifications";
+
+type CustomerListDisplayTypes = {
+  setShowCreateCustomer: (value: boolean) => void;
+  setEditCustomerId: (value: string | null) => void;
+  refreshTrigger?: number;
+};
+
+export default function CustomerListDisplay({
+  setShowCreateCustomer,
+  setEditCustomerId,
+  refreshTrigger,
+}: CustomerListDisplayTypes) {
   const [customerList, setCustomerList] = useState<
     { id: string; name: string; contact?: string; address?: string }[]
   >([]);
 
-  useEffect(() => {
+  const fetchCustomers = async () => {
     const company_id = localStorage.getItem("cid");
-    const fetchCustomers = async () => {
-      const response = await GetCustomersAPI({
-        company_id: company_id || undefined,
-      });
-      if (response.success && response.data?.data) {
-        setCustomerList(response.data.data);
-      }
-    };
+    const response = await GetCustomersAPI({
+      company_id: company_id || undefined,
+    });
+    if (response.success && response.data?.data) {
+      setCustomerList(response.data.data);
+    }
+  };
+
+  useEffect(() => {
     fetchCustomers();
-  }, []);
+  }, [refreshTrigger]);
+
+  const handleEdit = (customerId: string) => {
+    setEditCustomerId(customerId);
+    setShowCreateCustomer(true);
+  };
+
+  const handleDelete = async (customerId: string) => {
+    if (confirm("Are you sure you want to delete this customer?")) {
+      const response = await DeleteCustomerAPI({ id: customerId });
+      if (response.success) {
+        fetchCustomers();
+      }
+    }
+  };
 
   return (
     <div>
       <div className="flex gap-5 flex-wrap justify-center md:border border-dashed border-gray-500 p-5">
         {customerList.map((customer, index) => (
-          <button
+          <div
             key={customer.id}
-            className="block w-xs border rounded-lg shadow-xs border-gray-300 dark:border-gray-600 bg-emerald-100 dark:bg-gray-800 p-4 hover:cursor-pointer"
+            className="block w-xs border rounded-lg shadow-xs border-gray-300 dark:border-gray-600 bg-emerald-100 dark:bg-gray-800 p-4 relative"
           >
+            <div className="absolute top-2 right-2 flex gap-2">
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleEdit(customer.id);
+                }}
+                className="border rounded-lg border-primary-700 cursor-pointer p-1"
+              >
+                <PencilSimple
+                  size={iconSpecifications.size}
+                  color={iconSpecifications.colour}
+                  weight={iconSpecifications.weight as any}
+                />
+              </button>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleDelete(customer.id);
+                }}
+                className="border rounded-lg border-red-700 cursor-pointer p-1"
+              >
+                <Trash
+                  size={iconSpecifications.size}
+                  color={iconSpecifications.colour}
+                  weight={iconSpecifications.weight as any}
+                />
+              </button>
+            </div>
             <div className="mb-3">
               <p className="text-sm italic text-left">Cust-{index + 1}</p>
               <p className="text-xl text-left">
@@ -51,7 +111,7 @@ export default function CustomerListDisplay() {
                 </p>
               )}
             </div>
-          </button>
+          </div>
         ))}
       </div>
     </div>
