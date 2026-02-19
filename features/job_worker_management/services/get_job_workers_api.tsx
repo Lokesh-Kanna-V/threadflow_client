@@ -9,7 +9,7 @@ export const GetJobWorkersAPI = async ({
 }: GetJobWorkersApiType) => {
   try {
     const response = await axios.post(
-      "http://localhost:9000/jobWorker/getJobWorkersByCompany",
+      "http://localhost:9000/jobWorker/getJobWorkersByCompanyId",
       { company_id },
       {
         withCredentials: true, // <--- VERY IMPORTANT FOR SECURITY

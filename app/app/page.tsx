@@ -480,11 +480,12 @@ export default function ThreadFlow() {
                   color={iconSpecifications.colour}
                   weight={iconSpecifications.weight as any}
                 />
-                <span className="ml-3">Order List</span>
+                <span className="ml-3">Order Management</span>
               </a>
             </li>
 
-            <li>
+            {/* //! Remove if not used */}
+            {/* <li>
               <a
                 href="#"  
                 className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
@@ -496,7 +497,7 @@ export default function ThreadFlow() {
                 />
                 <span className="ml-3">Order Tracking</span>
               </a>
-            </li>
+            </li> */}
 
             <li>
               <a
