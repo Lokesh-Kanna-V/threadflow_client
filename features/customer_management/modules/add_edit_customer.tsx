@@ -33,8 +33,11 @@ export default function AddEditCustomer({
   const [customerDetails, setCustomerDetails] = useState({
     company_id: "",
     name: "",
-    contact: "",
-    address: "",
+    phone: "",
+    email: "",
+    billing_address: "",
+    shipping_address: "",
+    gst: "",
   });
 
   const handleCustomerDetailsChange = (field: string, value: string) => {
@@ -54,8 +57,11 @@ export default function AddEditCustomer({
       setCustomerDetails({
         company_id: "",
         name: "",
-        contact: "",
-        address: "",
+        phone: "",
+        email: "",
+        billing_address: "",
+        shipping_address: "",
+        gst: "",
       });
       if (setRefreshTrigger) {
         setRefreshTrigger((prev) => prev + 1);
@@ -69,8 +75,11 @@ export default function AddEditCustomer({
     const response = await UpdateCustomerAPI({
       id: editCustomerId,
       name: customerDetails.name,
-      contact: customerDetails.contact,
-      address: customerDetails.address,
+      phone: customerDetails.phone,
+      email: customerDetails.email,
+      billing_address: customerDetails.billing_address,
+      shipping_address: customerDetails.shipping_address,
+      gst: customerDetails.gst,
     });
     if (response.success) {
       setShowCreateCustomer(false);
@@ -78,8 +87,11 @@ export default function AddEditCustomer({
       setCustomerDetails({
         company_id: "",
         name: "",
-        contact: "",
-        address: "",
+        phone: "",
+        email: "",
+        billing_address: "",
+        shipping_address: "",
+        gst: "",
       });
       if (setRefreshTrigger) {
         setRefreshTrigger((prev) => prev + 1);
@@ -93,8 +105,11 @@ export default function AddEditCustomer({
     setCustomerDetails({
       company_id: "",
       name: "",
-      contact: "",
-      address: "",
+      phone: "",
+      email: "",
+      billing_address: "",
+      shipping_address: "",
+      gst: "",
     });
   };
 
@@ -116,8 +131,11 @@ export default function AddEditCustomer({
             setCustomerDetails({
               company_id: customer.company_id || company_id || "",
               name: customer.name || "",
-              contact: customer.contact || "",
-              address: customer.address || "",
+              phone: customer.phone || "",
+              email: customer.email || "",
+              billing_address: customer.billing_address || "",
+              shipping_address: customer.shipping_address || "",
+              gst: customer.gst || "",
             });
           }
         }
@@ -157,41 +175,100 @@ export default function AddEditCustomer({
 
             <div className="sm:col-span-2">
               <label
-                htmlFor="contact"
+                htmlFor="phone"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                Contact
+                Phone
               </label>
               <input
                 type="text"
-                name="contact"
-                id="contact"
-                value={customerDetails.contact}
+                name="phone"
+                id="phone"
+                value={customerDetails.phone}
                 onChange={(e) => {
-                  handleCustomerDetailsChange("contact", e.target.value);
+                  handleCustomerDetailsChange("phone", e.target.value);
                 }}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                placeholder="Enter contact number or email"
+                placeholder="Enter phone number"
               />
             </div>
 
             <div className="sm:col-span-2">
               <label
-                htmlFor="address"
+                htmlFor="email"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                Address
+                Email
+              </label>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                value={customerDetails.email}
+                onChange={(e) => {
+                  handleCustomerDetailsChange("email", e.target.value);
+                }}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                placeholder="Enter email address"
+              />
+            </div>
+
+            <div className="sm:col-span-2">
+              <label
+                htmlFor="billing_address"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Billing Address
               </label>
               <textarea
-                id="address"
+                id="billing_address"
                 rows={4}
-                value={customerDetails.address}
+                value={customerDetails.billing_address}
                 onChange={(e) => {
-                  handleCustomerDetailsChange("address", e.target.value);
+                  handleCustomerDetailsChange("billing_address", e.target.value);
                 }}
                 className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                placeholder="Your address here"
+                placeholder="Enter billing address"
               ></textarea>
+            </div>
+
+            <div className="sm:col-span-2">
+              <label
+                htmlFor="shipping_address"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Shipping Address
+              </label>
+              <textarea
+                id="shipping_address"
+                rows={4}
+                value={customerDetails.shipping_address}
+                onChange={(e) => {
+                  handleCustomerDetailsChange("shipping_address", e.target.value);
+                }}
+                className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                placeholder="Enter shipping address"
+              ></textarea>
+            </div>
+
+            <div className="sm:col-span-2">
+              <label
+                htmlFor="gst"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                GST
+              </label>
+              <input
+                type="text"
+                name="gst"
+                id="gst"
+                value={customerDetails.gst}
+                onChange={(e) => {
+                  handleCustomerDetailsChange("gst", e.target.value);
+                }}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                placeholder="Enter GST number"
+              />
             </div>
           </div>
           <div className="flex justify-between">

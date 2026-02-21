@@ -3,8 +3,11 @@ import axios from "axios";
 type UpdateCustomerType = {
   id: string;
   name?: string;
-  contact?: string;
-  address?: string;
+  phone?: string;
+  email?: string;
+  billing_address?: string;
+  shipping_address?: string;
+  gst?: string;
 };
 
 export const UpdateCustomerAPI = async ({

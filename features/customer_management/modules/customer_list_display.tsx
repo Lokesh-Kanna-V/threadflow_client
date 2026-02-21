@@ -25,7 +25,15 @@ export default function CustomerListDisplay({
   refreshTrigger,
 }: CustomerListDisplayTypes) {
   const [customerList, setCustomerList] = useState<
-    { id: string; name: string; contact?: string; address?: string }[]
+    {
+      id: string;
+      name: string;
+      phone?: string;
+      email?: string;
+      billing_address?: string;
+      shipping_address?: string;
+      gst?: string;
+    }[]
   >([]);
 
   const fetchCustomers = async () => {
@@ -100,14 +108,19 @@ export default function CustomerListDisplay({
               <hr className="text-gray-400"></hr>
             </div>
             <div className="mb-2">
-              {customer.contact && (
+              {customer.phone && (
                 <p className="text-sm italic text-left">
-                  Contact: {customer.contact}
+                  Phone: {customer.phone}
                 </p>
               )}
-              {customer.address && (
+              {customer.email && (
                 <p className="text-sm italic text-left">
-                  Address: {customer.address}
+                  Email: {customer.email}
+                </p>
+              )}
+              {customer.billing_address && (
+                <p className="text-sm italic text-left">
+                  Billing: {customer.billing_address}
                 </p>
               )}
             </div>
