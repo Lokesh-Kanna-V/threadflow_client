@@ -4,6 +4,10 @@ type UpdateJobWorkerType = {
   id: string;
   name?: string;
   contact?: string;
+  contact_person?: string;
+  phone?: string;
+  email?: string;
+  address?: string;
   status?: string;
 };
 

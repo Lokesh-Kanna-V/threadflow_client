@@ -33,7 +33,10 @@ export default function AddEditJobWorker({
   const [jobWorkerDetails, setJobWorkerDetails] = useState({
     company_id: "",
     name: "",
-    contact: "",
+    contact_person: "",
+    phone: "",
+    email: "",
+    address: "",
     status: "",
   });
 
@@ -54,7 +57,10 @@ export default function AddEditJobWorker({
       setJobWorkerDetails({
         company_id: "",
         name: "",
-        contact: "",
+        contact_person: "",
+        phone: "",
+        email: "",
+        address: "",
         status: "",
       });
       if (setRefreshTrigger) {
@@ -69,7 +75,10 @@ export default function AddEditJobWorker({
     const response = await UpdateJobWorkerAPI({
       id: editJobWorkerId,
       name: jobWorkerDetails.name,
-      contact: jobWorkerDetails.contact,
+      contact_person: jobWorkerDetails.contact_person,
+      phone: jobWorkerDetails.phone,
+      email: jobWorkerDetails.email,
+      address: jobWorkerDetails.address,
       status: jobWorkerDetails.status,
     });
     if (response.success) {
@@ -78,7 +87,10 @@ export default function AddEditJobWorker({
       setJobWorkerDetails({
         company_id: "",
         name: "",
-        contact: "",
+        contact_person: "",
+        phone: "",
+        email: "",
+        address: "",
         status: "",
       });
       if (setRefreshTrigger) {
@@ -93,7 +105,10 @@ export default function AddEditJobWorker({
     setJobWorkerDetails({
       company_id: "",
       name: "",
-      contact: "",
+      contact_person: "",
+      phone: "",
+      email: "",
+      address: "",
       status: "",
     });
   };
@@ -116,7 +131,10 @@ export default function AddEditJobWorker({
             setJobWorkerDetails({
               company_id: worker.company_id || company_id || "",
               name: worker.name || "",
-              contact: worker.contact || "",
+              contact_person: worker.contact_person || "",
+              phone: worker.phone || "",
+              email: worker.email || "",
+              address: worker.address || "",
               status: worker.status || "",
             });
           }
@@ -157,41 +175,81 @@ export default function AddEditJobWorker({
 
             <div className="sm:col-span-2">
               <label
-                htmlFor="contact"
+                htmlFor="contact_person"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                Contact
+                Contact Person
               </label>
               <input
                 type="text"
-                name="contact"
-                id="contact"
-                value={jobWorkerDetails.contact}
+                name="contact_person"
+                id="contact_person"
+                value={jobWorkerDetails.contact_person}
                 onChange={(e) => {
-                  handleJobWorkerDetailsChange("contact", e.target.value);
+                  handleJobWorkerDetailsChange("contact_person", e.target.value);
                 }}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                placeholder="Enter contact number or email"
+                placeholder="Type contact person name"
               />
             </div>
 
             <div className="sm:col-span-2">
               <label
-                htmlFor="status"
+                htmlFor="phone"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                Status
+                Phone
               </label>
               <input
                 type="text"
-                name="status"
-                id="status"
-                value={jobWorkerDetails.status}
+                name="phone"
+                id="phone"
+                value={jobWorkerDetails.phone}
                 onChange={(e) => {
-                  handleJobWorkerDetailsChange("status", e.target.value);
+                  handleJobWorkerDetailsChange("phone", e.target.value);
                 }}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                placeholder="e.g. Active"
+                placeholder="Enter phone number"
+              />
+            </div>
+
+            <div className="sm:col-span-2">
+              <label
+                htmlFor="email"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Email
+              </label>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                value={jobWorkerDetails.email}
+                onChange={(e) => {
+                  handleJobWorkerDetailsChange("email", e.target.value);
+                }}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                placeholder="Enter email address"
+              />
+            </div>
+
+            <div className="sm:col-span-2">
+              <label
+                htmlFor="address"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Address
+              </label>
+              <input
+                type="text"
+                name="address"
+                id="address"
+                value={jobWorkerDetails.address}
+                onChange={(e) => {
+                  handleJobWorkerDetailsChange("address", e.target.value);
+                }}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                placeholder="Enter address"
               />
             </div>
           </div>
