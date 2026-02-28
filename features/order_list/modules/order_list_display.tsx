@@ -9,7 +9,7 @@ import { GetCustomersAPI } from "../services/get_customer_list_api";
 import { DeleteOrderAPI } from "../services/delete_order_api";
 
 //? NPM UI Imports
-import { PencilSimple, Trash } from "@phosphor-icons/react";
+import { PencilSimpleIcon, TrashIcon } from "@phosphor-icons/react";
 
 //? Specification Imports
 import { iconSpecifications } from "@/shared/local_db/general_specifications";
@@ -81,17 +81,19 @@ export default function OrderListDisplay({
           return (
             <div
               key={wo.id}
-              className="block w-xs border rounded-lg shadow-xs border-gray-300 dark:border-gray-600 bg-emerald-100 dark:bg-gray-800 p-4 relative"
+              className="block w-xs border rounded-lg shadow-xs border-gray-300 dark:border-gray-600 bg-emerald-100 dark:bg-gray-800 p-4 relative hover:cursor-pointer"
+              onClick={() => handleEdit(wo.id)}
             >
               <div className="absolute top-2 right-2 flex gap-2">
                 <button
                   onClick={(e) => {
                     e.preventDefault();
+                    e.stopPropagation();
                     handleEdit(wo.id);
                   }}
-                  className="border rounded-lg border-primary-700 cursor-pointer p-1"
+                  className="cursor-pointer p-1"
                 >
-                  <PencilSimple
+                  <PencilSimpleIcon
                     size={iconSpecifications.size}
                     color={iconSpecifications.colour}
                     weight={iconSpecifications.weight as any}
@@ -100,11 +102,12 @@ export default function OrderListDisplay({
                 <button
                   onClick={(e) => {
                     e.preventDefault();
+                    e.stopPropagation();
                     handleDelete(wo.id);
                   }}
-                  className="border rounded-lg border-red-700 cursor-pointer p-1"
+                  className="cursor-pointer p-1"
                 >
-                  <Trash
+                  <TrashIcon
                     size={iconSpecifications.size}
                     color={iconSpecifications.colour}
                     weight={iconSpecifications.weight as any}
