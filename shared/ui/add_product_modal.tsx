@@ -76,6 +76,8 @@ export default function AddEditProductModal({
     remarks: itemDetails[0].remarks || "",
   });
 
+  console.log({ newItemDetails });
+
   const [products, setProducts] = useState([{
     id: "",
     cutomer_id: "",
@@ -216,7 +218,7 @@ export default function AddEditProductModal({
                       handleNewItemDetails("product_id", e.target.value);
                     }
                   }}
-                  value={newItemDetails.product_id}
+                  value={itemDetails[0].product_id || newItemDetails.product_id}
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                 >
                   <option value="">Select Product</option>
@@ -240,7 +242,7 @@ export default function AddEditProductModal({
                 <input
                   id="size"
                   placeholder="Enter size"
-                  value={newItemDetails.size}
+                  value={itemDetails[0].size || newItemDetails.size}
                   onChange={(e) => {
                     if (typeof index === "number") {
                       handleItemDetailsChange(index, "size", e.target.value);
@@ -261,6 +263,7 @@ export default function AddEditProductModal({
                 </label>
                 <select
                   id="size_unit"
+                  value={itemDetails[0].size_unit || newItemDetails.size_unit}
                   onChange={(e) => {
                     if (typeof index === "number") {
                       handleItemDetailsChange(
@@ -291,6 +294,7 @@ export default function AddEditProductModal({
                 <input
                   id="size"
                   placeholder="Enter quantity"
+                  value={itemDetails[0].quantity || newItemDetails.quantity}
                   onChange={(e) => {
                     if (typeof index === "number") {
                       handleItemDetailsChange(
@@ -315,6 +319,7 @@ export default function AddEditProductModal({
                 </label>
                 <select
                   id="unit"
+                  value={itemDetails[0].qty_unit || newItemDetails.qty_unit}
                   onChange={(e) => {
                     if (typeof index === "number") {
                       handleItemDetailsChange(
@@ -346,11 +351,7 @@ export default function AddEditProductModal({
                   type="text"
                   name="name"
                   id="name"
-                  value={
-                    typeof index === "number"
-                      ? itemDetails[index]?.colour ?? ""
-                      : newItemDetails.colour
-                  }
+                  value={itemDetails[0].colour || newItemDetails.colour}
                   onChange={(e) => {
                     if (typeof index === "number") {
                       handleItemDetailsChange(index, "colour", e.target.value);
@@ -393,22 +394,70 @@ export default function AddEditProductModal({
                   htmlFor="remarks"
                   className="block mb-2.5 text-sm font-medium text-heading"
                 >
-                  Stages
+                  Assign Stages
                 </label>
-                <div className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white min-h-[44px]">
-                  {(typeof index === "number"
-                    ? itemDetails[index]?.stages ?? []
-                    : newItemDetails.stages
-                  )
-                    .filter((stage) => stage.id !== "")
-                    .map((stage) => (
-                      <span
-                        key={stage.id}
-                        className="inline-block bg-primary-100 text-primary-700 px-2 py-1 rounded mr-2 mb-1 text-xs"
-                      >
-                        {stage.name}
-                      </span>
-                    ))}
+                <div
+                  className="flex flex-col bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white min-h-[44px] max-h-40 overflow-y-auto"
+                  style={{ scrollbarWidth: "thin" }}
+                >
+                  {
+                    (itemDetails[0]?.stages
+                      ? itemDetails[0]?.stages
+                      : newItemDetails.stages
+                    )
+                      .filter((stage) => stage.id !== "")
+                      .map((stage) => (
+                        <div key={stage.id} className="flex flex-col mb-5">
+                          <span
+                            className="inline-block bg-primary-100 text-primary-700 px-2 py-1 rounded mr-2 mb-1 text-xs"
+                          >
+                            {stage.name}
+                          </span>
+                          <div className="flex">
+                            <select
+                              id="size_unit"
+                              onChange={(e) => {
+                                if (typeof index === "number") {
+                                  handleItemDetailsChange(
+                                    index,
+                                    "size_unit",
+                                    e.target.value
+                                  );
+                                } else {
+                                  handleNewItemDetails("size_unit", e.target.value);
+                                }
+                              }}
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-3/4 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                            >
+                              <option value="">Select JobWorker</option>
+                              <option value="centimeter">cm</option>
+                              <option value="meter">m</option>
+                              <option value="inch">In</option>
+                            </select>
+
+                            <input
+                              type="text"
+                              name="name"
+                              id="name"
+                              // value={
+                              //   typeof index === "number"
+                              //     ? itemDetails[index]?.colour ?? ""
+                              //     : newItemDetails.colour
+                              // }
+                              onChange={(e) => {
+                                // if (typeof index === "number") {
+                                //   handleItemDetailsChange(index, "colour", e.target.value);
+                                // } else {
+                                //   handleNewItemDetails("colour", e.target.value);
+                                // }
+                              }}
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-1/4 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                              placeholder="Qty"
+                              required
+                            />
+                          </div>
+                        </div>
+                      ))}
                 </div>
               </div>
               {/* //? Remarks */}
@@ -422,6 +471,7 @@ export default function AddEditProductModal({
                 <textarea
                   id="remarks"
                   rows={2}
+                  value={itemDetails[0].remarks || newItemDetails.remarks}
                   onChange={(e) => {
                     if (typeof index === "number") {
                       handleItemDetailsChange(index, "remarks", e.target.value);
