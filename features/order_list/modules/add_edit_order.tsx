@@ -9,7 +9,7 @@ import AddEditProductModal from "@/shared/ui/add_product_modal";
 
 //? NPM UI Imports
 import {
-  CheckIcon,
+  PencilSimpleIcon,
   InfoIcon,
   PlusIcon,
   TrashIcon,
@@ -457,19 +457,58 @@ export default function AddEditOrder({
                             {item.colour}
                           </th>
                           <td className="px-6 py-4 text-center">
-                            <button
-                              onClick={(e) => {
-                                e.preventDefault();
-                                removeItem(index);
-                              }}
-                              className="cursor-pointer inline-flex items-center px-2 py-1 text-xs font-medium rounded-full"
-                            >
-                              <TrashIcon
-                                size={iconSpecifications.size}
-                                color="#800000"
-                                weight={iconSpecifications.weight as any}
-                              />
-                            </button>
+                            <div className="flex">
+                              <button
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  setShowAddItemModal(true)
+                                  setItemDetails([
+                                    {
+                                      product_id: item.product_id,
+                                      size: item.size,
+                                      size_unit: item.size_unit,
+                                      colour: item.colour,
+                                      quantity: item.quantity,
+                                      qty_unit: item.qty_unit,
+                                      stages: item.stages,
+                                      remarks: item.remarks,
+                                    },
+                                  ])
+                                  // console.log([
+                                  //   {
+                                  //     product_id: item.product_id,
+                                  //     size: item.size,
+                                  //     size_unit: item.size_unit,
+                                  //     colour: item.colour,
+                                  //     quantity: item.quantity,
+                                  //     qty_unit: item.qty_unit,
+                                  //     stages: item.stages,
+                                  //     remarks: item.remarks,
+                                  //   },
+                                  // ]);
+                                }}
+                                className="cursor-pointer inline-flex items-center px-2 py-1 text-xs font-medium rounded-full"
+                              >
+                                <PencilSimpleIcon
+                                  size={iconSpecifications.size}
+                                  color={iconSpecifications.colour}
+                                  weight={iconSpecifications.weight as any}
+                                />
+                              </button>
+                              <button
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  removeItem(index);
+                                }}
+                                className="cursor-pointer inline-flex items-center px-2 py-1 text-xs font-medium rounded-full"
+                              >
+                                <TrashIcon
+                                  size={iconSpecifications.size}
+                                  color="#800000"
+                                  weight={iconSpecifications.weight as any}
+                                />
+                              </button>
+                            </div>
                           </td>
                         </tr>
                       );
@@ -526,9 +565,8 @@ export default function AddEditOrder({
         id="crud-modal"
         tabIndex={-1}
         aria-hidden="true"
-        className={`${
-          showAddItemModal ? "flex" : "hidden"
-        } overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full`}
+        className={`${showAddItemModal ? "flex" : "hidden"
+          } overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full`}
         style={{ backgroundColor: "rgba(0,0,0,0.9)" }}
       >
         <AddEditProductModal

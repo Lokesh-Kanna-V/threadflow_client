@@ -56,14 +56,15 @@ export default function AddEditProductModal({
 }: // itemStages,
   // setItemStages,
   AddProductModalType) {
+  console.log({ ppppp: itemDetails });
   const [newItemDetails, setNewItemDetails] = useState<ItemDetail>({
-    product_id: "",
-    size: "",
-    size_unit: "",
-    colour: "",
-    quantity: "",
-    qty_unit: "",
-    stages: [
+    product_id: itemDetails[0].product_id || "",
+    size: itemDetails[0].size || "",
+    size_unit: itemDetails[0].size_unit || "",
+    colour: itemDetails[0].colour || "",
+    quantity: itemDetails[0].quantity || "",
+    qty_unit: itemDetails[0].qty_unit || "",
+    stages: itemDetails[0].stages || [
       {
         id: "",
         name: "",
@@ -72,7 +73,7 @@ export default function AddEditProductModal({
         assigned_to: "",
       },
     ],
-    remarks: "",
+    remarks: itemDetails[0].remarks || "",
   });
 
   const [products, setProducts] = useState([{
@@ -215,6 +216,7 @@ export default function AddEditProductModal({
                       handleNewItemDetails("product_id", e.target.value);
                     }
                   }}
+                  value={newItemDetails.product_id}
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                 >
                   <option value="">Select Product</option>
@@ -238,6 +240,7 @@ export default function AddEditProductModal({
                 <input
                   id="size"
                   placeholder="Enter size"
+                  value={newItemDetails.size}
                   onChange={(e) => {
                     if (typeof index === "number") {
                       handleItemDetailsChange(index, "size", e.target.value);

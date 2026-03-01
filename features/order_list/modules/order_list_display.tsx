@@ -109,7 +109,7 @@ export default function OrderListDisplay({
                 >
                   <TrashIcon
                     size={iconSpecifications.size}
-                    color={iconSpecifications.colour}
+                    color="#800000"
                     weight={iconSpecifications.weight as any}
                   />
                 </button>
