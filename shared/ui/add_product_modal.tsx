@@ -17,6 +17,7 @@ import { iconSpecifications } from "../local_db/general_specifications";
 
 //? Service Imports
 import { getProductsApi } from "../services/get_products_api";
+import { GetJobWorkersAPI } from "@/features/job_worker_management/services/get_job_workers_api";
 
 type ItemDetail = {
   product_id: string;
@@ -56,15 +57,15 @@ export default function AddEditProductModal({
 }: // itemStages,
   // setItemStages,
   AddProductModalType) {
-  console.log({ ppppp: itemDetails });
+
   const [newItemDetails, setNewItemDetails] = useState<ItemDetail>({
-    product_id: itemDetails[0].product_id || "",
-    size: itemDetails[0].size || "",
-    size_unit: itemDetails[0].size_unit || "",
-    colour: itemDetails[0].colour || "",
-    quantity: itemDetails[0].quantity || "",
-    qty_unit: itemDetails[0].qty_unit || "",
-    stages: itemDetails[0].stages || [
+    product_id: "",
+    size: "",
+    size_unit: "",
+    colour: "",
+    quantity: "",
+    qty_unit: "",
+    stages: [
       {
         id: "",
         name: "",
@@ -73,10 +74,9 @@ export default function AddEditProductModal({
         assigned_to: "",
       },
     ],
-    remarks: itemDetails[0].remarks || "",
+    remarks: "",
   });
 
-  console.log({ newItemDetails });
 
   const [products, setProducts] = useState([{
     id: "",
@@ -94,6 +94,13 @@ export default function AddEditProductModal({
       description: "",
       status: "",
       assigned_to: "",
+    },
+  ]);
+
+  const [jobWorkers, setJobWorkers] = useState([
+    {
+      id: "",
+      name: "",
     },
   ]);
 
@@ -151,15 +158,15 @@ export default function AddEditProductModal({
   }, [addItemClick]);
 
   useEffect(() => {
+    let company_id = localStorage.getItem("cid");
     const fetchProducts = async () => {
-      let company_id = localStorage.getItem("cid");
       if (company_id) {
         let res = await getProductsApi({ company_id });
         console.log({ products: res });
         setProducts(res.data.data)
-
       }
     }
+
     const fetchStages = async () => {
       let res = await jobStageApi();
       console.log({ res });
@@ -169,6 +176,16 @@ export default function AddEditProductModal({
         setStages([]);
       }
     };
+
+    const fetchJobWorkers = async () => {
+      if (company_id) {
+        let res = await GetJobWorkersAPI({ company_id });
+        console.log({ jobWorkers: res });
+        setJobWorkers(res.data.data)
+      }
+    }
+
+    fetchJobWorkers()
     fetchProducts()
     fetchStages();
   }, []);
@@ -429,10 +446,12 @@ export default function AddEditProductModal({
                               }}
                               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-3/4 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                             >
-                              <option value="">Select JobWorker</option>
-                              <option value="centimeter">cm</option>
-                              <option value="meter">m</option>
-                              <option value="inch">In</option>
+                              <option value="internal">Internal</option>
+                              {jobWorkers.map((worker) => {
+                                return (
+                                  <option key={worker.id} value={worker.id}>{worker.name}</option>
+                                )
+                              })}
                             </select>
 
                             <input
