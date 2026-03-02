@@ -13,6 +13,9 @@ import { PencilSimple, Trash } from "@phosphor-icons/react";
 //? Specification Imports
 import { iconSpecifications } from "@/shared/local_db/general_specifications";
 
+//? Shared UI Imports
+import ListLoader from "@/shared/ui/list_loader";
+
 type JobWorkerListDisplayTypes = {
   setShowCreateJobWorker: (value: boolean) => void;
   setEditJobWorkerId: (value: string | null) => void;
@@ -27,6 +30,7 @@ export default function JobWorkerListDisplay({
   const [jobWorkerList, setJobWorkerList] = useState<
     { id: string; name: string; contact?: string; status?: string }[]
   >([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const fetchJobWorkers = async () => {
     const company_id = localStorage.getItem("cid");
@@ -35,11 +39,22 @@ export default function JobWorkerListDisplay({
     });
     if (response.success && response.data?.data) {
       setJobWorkerList(response.data.data);
+    } else {
+      setJobWorkerList([]);
     }
   };
 
   useEffect(() => {
-    fetchJobWorkers();
+    const load = async () => {
+      setLoading(true);
+      try {
+        await fetchJobWorkers();
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    load();
   }, [refreshTrigger]);
 
   const handleEdit = (workerId: string) => {
@@ -59,59 +74,69 @@ export default function JobWorkerListDisplay({
   return (
     <div>
       <div className="flex gap-5 flex-wrap justify-center md:border border-dashed border-gray-500 p-5">
-        {jobWorkerList.map((worker, index) => (
-          <div
-            key={worker.id}
-            className="block w-xs border rounded-lg shadow-xs border-gray-300 dark:border-gray-600 bg-emerald-100 dark:bg-gray-800 p-4 relative"
-          >
-            <div className="absolute top-2 right-2 flex gap-2">
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleEdit(worker.id);
-                }}
-                className="border rounded-lg border-primary-700 cursor-pointer p-1"
-              >
-                <PencilSimple
-                  size={iconSpecifications.size}
-                  color={iconSpecifications.colour}
-                  weight={iconSpecifications.weight as any}
-                />
-              </button>
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleDelete(worker.id);
-                }}
-                className="border rounded-lg border-red-700 cursor-pointer p-1"
-              >
-                <Trash
-                  size={iconSpecifications.size}
-                  color={iconSpecifications.colour}
-                  weight={iconSpecifications.weight as any}
-                />
-              </button>
-            </div>
-            <div className="mb-3">
-              <p className="text-sm italic text-left">Worker-{index + 1}</p>
-              <p className="text-xl text-left">
-                Name: <span className="font-bold">{worker.name}</span>
-              </p>
-              <hr className="text-gray-400"></hr>
-            </div>
-            <div className="mb-2">
-              {worker.contact && (
-                <p className="text-sm italic text-left">
-                  Contact: {worker.contact}
+        {loading ? (
+          <ListLoader text="Loading job workers..." />
+        ) : jobWorkerList.length === 0 ? (
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            No job workers found.
+          </p>
+        ) : (
+          jobWorkerList.map((worker, index) => (
+            <div
+              key={worker.id}
+              className="block w-xs border rounded-lg shadow-xs border-gray-300 dark:border-gray-600 bg-emerald-100 dark:bg-gray-800 p-4 relative"
+            >
+              <div className="absolute top-2 right-2 flex gap-2">
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleEdit(worker.id);
+                  }}
+                  className="border rounded-lg border-primary-700 cursor-pointer p-1"
+                >
+                  <PencilSimple
+                    size={iconSpecifications.size}
+                    color={iconSpecifications.colour}
+                    weight={iconSpecifications.weight as any}
+                  />
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleDelete(worker.id);
+                  }}
+                  className="border rounded-lg border-red-700 cursor-pointer p-1"
+                >
+                  <Trash
+                    size={iconSpecifications.size}
+                    color={iconSpecifications.colour}
+                    weight={iconSpecifications.weight as any}
+                  />
+                </button>
+              </div>
+              <div className="mb-3">
+                <p className="text-sm italic text-left">Worker-{index + 1}</p>
+                <p className="text-xl text-left">
+                  Name: <span className="font-bold">{worker.name}</span>
                 </p>
-              )}
+                <hr className="text-gray-400"></hr>
+              </div>
+              <div className="mb-2">
+                {worker.contact && (
+                  <p className="text-sm italic text-left">
+                    Contact: {worker.contact}
+                  </p>
+                )}
+              </div>
+              <p className="text-md text-left">
+                Status:{" "}
+                <span className="text-green-600">
+                  {worker.status || "Active"}
+                </span>
+              </p>
             </div>
-            <p className="text-md text-left">
-              Status:{" "}
-              <span className="text-green-600">{worker.status || "Active"}</span>
-            </p>
-          </div>
-        ))}
+          ))
+        )}
       </div>
     </div>
   );
