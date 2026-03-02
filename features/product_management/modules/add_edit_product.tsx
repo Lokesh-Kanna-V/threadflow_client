@@ -25,6 +25,9 @@ import { CreateProductAPI } from "../services/create_product_api";
 import { UpdateProductAPI } from "../services/update_product_api";
 import { getProductsApi } from "@/shared/services/get_products_api";
 
+//? Shared UI Imports
+import ListLoader from "@/shared/ui/list_loader";
+
 type AddEditProductTypes = {
   editProductId: string | null;
   setShowCreateProduct: (value: boolean) => void;
@@ -47,6 +50,7 @@ export default function AddEditProduct({
     sku: "",
     hsn_code: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const handleProductDetailsChange = (field: string, value: string) => {
     setProductDetails((prev) => ({
@@ -118,16 +122,16 @@ export default function AddEditProduct({
 
     if (editProductId) {
       const fetchProduct = async () => {
-        const company_id = localStorage.getItem("cid");
-        if (company_id) {
-          const response = await getProductsApi({ company_id });
+        const cid = localStorage.getItem("cid");
+        if (cid) {
+          const response = await getProductsApi({ company_id: cid });
           if (response.success && response.data?.data) {
             const product = response.data.data.find(
               (p: any) => p.id === editProductId
             );
             if (product) {
               setProductDetails({
-                company_id: product.company_id || company_id || "",
+                company_id: product.company_id || cid || "",
                 name: product.name || "",
                 description: product.description || "",
                 sku: product.sku || "",
@@ -137,7 +141,15 @@ export default function AddEditProduct({
           }
         }
       };
-      fetchProduct();
+      const load = async () => {
+        setLoading(true);
+        try {
+          await fetchProduct();
+        } finally {
+          setLoading(false);
+        }
+      };
+      load();
     }
   }, [user, editProductId]);
 
@@ -147,7 +159,10 @@ export default function AddEditProduct({
         <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
           {editProductId ? "Edit product" : "Add a new product"}
         </h2>
-        <form action="#">
+        {loading ? (
+          <ListLoader text="Loading product..." />
+        ) : (
+          <form action="#">
           <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
             <div className="sm:col-span-2">
               <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Name</label>
@@ -237,6 +252,7 @@ export default function AddEditProduct({
             </button>
           </div>
         </form>
+        )}
       </div>
     </section>
   );

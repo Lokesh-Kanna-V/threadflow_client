@@ -4,6 +4,9 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/shared/context/AuthContext";
 
+//? Shared UI Imports
+import ListLoader from "@/shared/ui/list_loader";
+
 //? UI Imports
 import AddEditProductModal from "@/shared/ui/add_product_modal";
 
@@ -52,6 +55,7 @@ export default function AddEditOrder({
   });
 
   const [customerList, setCustomerList] = useState([{ id: "", name: "" }]);
+  const [loading, setLoading] = useState(false);
 
   const [itemDetails, setItemDetails] = useState([
     {
@@ -211,82 +215,95 @@ export default function AddEditOrder({
   useEffect(() => {
     let company_id = localStorage.getItem("cid");
     handleOrderDetailsChange("company_id", company_id || "");
-    if (company_id) {
-      const GetCustomersList = async () => {
-        let res = await GetCustomersAPI({ company_id });
-        if (res.success && res.data?.data) {
-          setCustomerList(res.data.data);
-        }
-      };
-      GetCustomersList();
-    }
 
-    if (editOrderId) {
-      const fetchOrder = async () => {
-        const response = await GetOrderByIdAPI({ id: editOrderId });
-        if (response.success && response.data?.data) {
-          const order = response.data.data;
-          setOrderDetails({
-            company_id: order.company_id || company_id || "",
-            customer_id: order.customer_id || "",
-            due_date: order.due_date || "",
-            status: order.status || "",
-            remarks: order.remarks || "",
-          });
-          if (order.due_date) {
-            const dateObj = new Date(order.due_date);
-            setDate(dateObj.toISOString().split("T")[0]);
-          }
-          if (order.items && order.items.length > 0) {
-            setItemDetails([
-              {
-                product_id: "",
-                size: "",
-                size_unit: "",
-                colour: "",
-                quantity: "",
-                qty_unit: "",
-                stages: [
-                  {
-                    id: "",
-                    name: "",
-                    description: "",
-                    status: "",
-                    assigned_to: "",
-                  },
-                ],
-                remarks: "",
-              },
-              ...order.items.map((item: any) => ({
-                product_id: item.product_id || "",
-                size: item.size || "",
-                size_unit: item.size_unit || "",
-                colour: item.colour || "",
-                quantity: item.quantity || "",
-                qty_unit: item.qty_unit || "",
-                stages: item.stages || [
-                  {
-                    id: "",
-                    name: "",
-                    description: "",
-                    status: "",
-                    assigned_to: "",
-                  },
-                ],
-                remarks: item.remarks || "",
-              })),
-            ]);
-          }
+    const load = async () => {
+      setLoading(true);
+      try {
+        if (company_id) {
+          const GetCustomersList = async () => {
+            let res = await GetCustomersAPI({ company_id });
+            if (res.success && res.data?.data) {
+              setCustomerList(res.data.data);
+            }
+          };
+          await GetCustomersList();
         }
-      };
-      fetchOrder();
-    }
+
+        if (editOrderId) {
+          const fetchOrder = async () => {
+            const response = await GetOrderByIdAPI({ id: editOrderId });
+            if (response.success && response.data?.data) {
+              const order = response.data.data;
+              setOrderDetails({
+                company_id: order.company_id || company_id || "",
+                customer_id: order.customer_id || "",
+                due_date: order.due_date || "",
+                status: order.status || "",
+                remarks: order.remarks || "",
+              });
+              if (order.due_date) {
+                const dateObj = new Date(order.due_date);
+                setDate(dateObj.toISOString().split("T")[0]);
+              }
+              if (order.items && order.items.length > 0) {
+                setItemDetails([
+                  {
+                    product_id: "",
+                    size: "",
+                    size_unit: "",
+                    colour: "",
+                    quantity: "",
+                    qty_unit: "",
+                    stages: [
+                      {
+                        id: "",
+                        name: "",
+                        description: "",
+                        status: "",
+                        assigned_to: "",
+                      },
+                    ],
+                    remarks: "",
+                  },
+                  ...order.items.map((item: any) => ({
+                    product_id: item.product_id || "",
+                    size: item.size || "",
+                    size_unit: item.size_unit || "",
+                    colour: item.colour || "",
+                    quantity: item.quantity || "",
+                    qty_unit: item.qty_unit || "",
+                    stages: item.stages || [
+                      {
+                        id: "",
+                        name: "",
+                        description: "",
+                        status: "",
+                        assigned_to: "",
+                      },
+                    ],
+                    remarks: item.remarks || "",
+                  })),
+                ]);
+              }
+            }
+          };
+          await fetchOrder();
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    load();
   }, [user, editOrderId]);
 
   return (
     <section className="bg-white dark:bg-gray-900">
       <div className="px-4 mx-auto max-w-2xl lg:py-16">
-        <form action="#">
+        {loading ? (
+          <ListLoader text={editOrderId ? "Loading order..." : "Loading..."} />
+        ) : (
+          <form action="#">
           <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
             {/* //? Customer Name */}
             <div className="col-span-2 sm:col-span-1">
@@ -558,6 +575,7 @@ export default function AddEditOrder({
             </button>
           </div>
         </form>
+        )}
       </div>
 
       {/* <!-- Main modal --> */}

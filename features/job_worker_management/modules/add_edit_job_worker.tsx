@@ -15,6 +15,9 @@ import { CreateJobWorkerAPI } from "../services/create_job_worker_api";
 import { UpdateJobWorkerAPI } from "../services/update_job_worker_api";
 import { GetJobWorkersAPI } from "../services/get_job_workers_api";
 
+//? Shared UI Imports
+import ListLoader from "@/shared/ui/list_loader";
+
 type AddEditJobWorkerTypes = {
   editJobWorkerId: string | null;
   setShowCreateJobWorker: (value: boolean) => void;
@@ -39,6 +42,7 @@ export default function AddEditJobWorker({
     address: "",
     status: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const handleJobWorkerDetailsChange = (field: string, value: string) => {
     setJobWorkerDetails((prev) => ({
@@ -119,9 +123,9 @@ export default function AddEditJobWorker({
 
     if (editJobWorkerId) {
       const fetchJobWorker = async () => {
-        const company_id = localStorage.getItem("cid");
+        const cid = localStorage.getItem("cid");
         const response = await GetJobWorkersAPI({
-          company_id: company_id || undefined,
+          company_id: cid || undefined,
         });
         if (response.success && response.data?.data) {
           const worker = response.data.data.find(
@@ -129,7 +133,7 @@ export default function AddEditJobWorker({
           );
           if (worker) {
             setJobWorkerDetails({
-              company_id: worker.company_id || company_id || "",
+              company_id: worker.company_id || cid || "",
               name: worker.name || "",
               contact_person: worker.contact_person || "",
               phone: worker.phone || "",
@@ -140,7 +144,15 @@ export default function AddEditJobWorker({
           }
         }
       };
-      fetchJobWorker();
+      const load = async () => {
+        setLoading(true);
+        try {
+          await fetchJobWorker();
+        } finally {
+          setLoading(false);
+        }
+      };
+      load();
     }
   }, [user, editJobWorkerId]);
 
@@ -150,7 +162,10 @@ export default function AddEditJobWorker({
         <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
           {editJobWorkerId ? "Edit job worker" : "Add a new job worker"}
         </h2>
-        <form action="#">
+        {loading ? (
+          <ListLoader text="Loading job worker..." />
+        ) : (
+          <form action="#">
           <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
             <div className="sm:col-span-2">
               <label
@@ -283,6 +298,7 @@ export default function AddEditJobWorker({
             </button>
           </div>
         </form>
+        )}
       </div>
     </section>
   );

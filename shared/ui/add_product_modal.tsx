@@ -19,6 +19,9 @@ import { iconSpecifications } from "../local_db/general_specifications";
 import { getProductsApi } from "../services/get_products_api";
 import { GetJobWorkersAPI } from "@/features/job_worker_management/services/get_job_workers_api";
 
+//? Shared UI Imports
+import LoadingSpinner from "./spinner";
+
 type ItemDetail = {
   product_id: string;
   size: string;
@@ -105,6 +108,7 @@ export default function AddEditProductModal({
   ]);
 
   const [showAddStages, setShowAddStages] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleItemDetailsChange = (
     index: number,
@@ -163,9 +167,11 @@ export default function AddEditProductModal({
       if (company_id) {
         let res = await getProductsApi({ company_id });
         console.log({ products: res });
-        setProducts(res.data.data)
+        setProducts(res.data.data);
+      } else {
+        setProducts([]);
       }
-    }
+    };
 
     const fetchStages = async () => {
       let res = await jobStageApi();
@@ -181,18 +187,31 @@ export default function AddEditProductModal({
       if (company_id) {
         let res = await GetJobWorkersAPI({ company_id });
         console.log({ jobWorkers: res });
-        setJobWorkers(res.data.data)
+        setJobWorkers(res.data.data);
+      } else {
+        setJobWorkers([]);
       }
-    }
+    };
 
-    fetchJobWorkers()
-    fetchProducts()
-    fetchStages();
+    const load = async () => {
+      setLoading(true);
+      try {
+        await Promise.all([fetchProducts(), fetchStages(), fetchJobWorkers()]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    load();
   }, []);
 
   return (
     <div className="relative p-4 w-full max-w-md max-h-full">
-      {!showAddStages ? (
+      {loading ? (
+        <div className="flex justify-center items-center min-h-40">
+          <LoadingSpinner />
+        </div>
+      ) : !showAddStages ? (
         <div className="relative rounded-xl dark:bg-gray-800 border border-gray-500 rounded-base shadow-sm p-4 md:p-6">
           <div className="flex items-center justify-between border-b border-gray-500 border-default pb-4 md:pb-5">
             <h3 className="text-lg font-medium text-heading">

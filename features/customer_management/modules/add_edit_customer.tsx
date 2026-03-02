@@ -15,6 +15,9 @@ import { CreateCustomerAPI } from "../services/create_customer_api";
 import { UpdateCustomerAPI } from "../services/update_customer_api";
 import { GetCustomersAPI } from "../services/get_customers_api";
 
+//? Shared UI Imports
+import ListLoader from "@/shared/ui/list_loader";
+
 type AddEditCustomerTypes = {
   editCustomerId: string | null;
   setShowCreateCustomer: (value: boolean) => void;
@@ -39,6 +42,7 @@ export default function AddEditCustomer({
     shipping_address: "",
     gst: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const handleCustomerDetailsChange = (field: string, value: string) => {
     setCustomerDetails((prev) => ({
@@ -119,9 +123,9 @@ export default function AddEditCustomer({
 
     if (editCustomerId) {
       const fetchCustomer = async () => {
-        const company_id = localStorage.getItem("cid");
+        const cid = localStorage.getItem("cid");
         const response = await GetCustomersAPI({
-          company_id: company_id || undefined,
+          company_id: cid || undefined,
         });
         if (response.success && response.data?.data) {
           const customer = response.data.data.find(
@@ -129,7 +133,7 @@ export default function AddEditCustomer({
           );
           if (customer) {
             setCustomerDetails({
-              company_id: customer.company_id || company_id || "",
+              company_id: customer.company_id || cid || "",
               name: customer.name || "",
               phone: customer.phone || "",
               email: customer.email || "",
@@ -140,7 +144,15 @@ export default function AddEditCustomer({
           }
         }
       };
-      fetchCustomer();
+      const load = async () => {
+        setLoading(true);
+        try {
+          await fetchCustomer();
+        } finally {
+          setLoading(false);
+        }
+      };
+      load();
     }
   }, [user, editCustomerId]);
 
@@ -150,7 +162,10 @@ export default function AddEditCustomer({
         <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
           {editCustomerId ? "Edit customer" : "Add a new customer"}
         </h2>
-        <form action="#">
+        {loading ? (
+          <ListLoader text="Loading customer..." />
+        ) : (
+          <form action="#">
           <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
             <div className="sm:col-span-2">
               <label
@@ -301,6 +316,7 @@ export default function AddEditCustomer({
             </button>
           </div>
         </form>
+        )}
       </div>
     </section>
   );
