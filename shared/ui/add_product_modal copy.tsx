@@ -418,8 +418,8 @@ export default function AddEditProductModal({
                   style={{ scrollbarWidth: "thin" }}
                 >
                   {
-                    (typeof index === "number"
-                      ? itemDetails[index]?.stages ?? []
+                    (itemDetails[0]?.stages
+                      ? itemDetails[0]?.stages
                       : newItemDetails.stages
                     )
                       .filter((stage) => stage.id !== "")
@@ -432,42 +432,16 @@ export default function AddEditProductModal({
                           </span>
                           <div className="flex">
                             <select
-                              value={stage.assigned_to || "internal"}
+                              id="size_unit"
                               onChange={(e) => {
-                                const workerId =
-                                  e.target.value === "internal"
-                                    ? ""
-                                    : e.target.value;
-
                                 if (typeof index === "number") {
-                                  setItemDetails((prev) =>
-                                    prev.map((item, i) => {
-                                      if (i === index) {
-                                        return {
-                                          ...item,
-                                          stages: (item.stages ?? []).map(
-                                            (s) =>
-                                              s.id === stage.id
-                                                ? {
-                                                    ...s,
-                                                    assigned_to: workerId,
-                                                  }
-                                                : s
-                                          ),
-                                        };
-                                      }
-                                      return item;
-                                    })
+                                  handleItemDetailsChange(
+                                    index,
+                                    "size_unit",
+                                    e.target.value
                                   );
                                 } else {
-                                  setNewItemDetails((prev) => ({
-                                    ...prev,
-                                    stages: (prev.stages ?? []).map((s) =>
-                                      s.id === stage.id
-                                        ? { ...s, assigned_to: workerId }
-                                        : s
-                                    ),
-                                  }));
+                                  handleNewItemDetails("size_unit", e.target.value);
                                 }
                               }}
                               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-3/4 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
@@ -475,10 +449,8 @@ export default function AddEditProductModal({
                               <option value="internal">Internal</option>
                               {jobWorkers.map((worker) => {
                                 return (
-                                  <option key={worker.id} value={worker.id}>
-                                    {worker.name}
-                                  </option>
-                                );
+                                  <option key={worker.id} value={worker.id}>{worker.name}</option>
+                                )
                               })}
                             </select>
 
