@@ -478,31 +478,8 @@ export default function AddEditOrder({
                               <button
                                 onClick={(e) => {
                                   e.preventDefault();
-                                  setShowAddItemModal(true)
-                                  setItemDetails([
-                                    {
-                                      product_id: item.product_id,
-                                      size: item.size,
-                                      size_unit: item.size_unit,
-                                      colour: item.colour,
-                                      quantity: item.quantity,
-                                      qty_unit: item.qty_unit,
-                                      stages: item.stages,
-                                      remarks: item.remarks,
-                                    },
-                                  ])
-                                  // console.log([
-                                  //   {
-                                  //     product_id: item.product_id,
-                                  //     size: item.size,
-                                  //     size_unit: item.size_unit,
-                                  //     colour: item.colour,
-                                  //     quantity: item.quantity,
-                                  //     qty_unit: item.qty_unit,
-                                  //     stages: item.stages,
-                                  //     remarks: item.remarks,
-                                  //   },
-                                  // ]);
+                                  setSelectedIndex(index);
+                                  setShowAddItemModal(true);
                                 }}
                                 className="cursor-pointer inline-flex items-center px-2 py-1 text-xs font-medium rounded-full"
                               >

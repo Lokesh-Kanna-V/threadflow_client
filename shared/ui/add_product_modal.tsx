@@ -254,7 +254,11 @@ export default function AddEditProductModal({
                       handleNewItemDetails("product_id", e.target.value);
                     }
                   }}
-                  value={itemDetails[0].product_id || newItemDetails.product_id}
+                  value={
+                    typeof index === "number"
+                      ? itemDetails[index]?.product_id ?? ""
+                      : newItemDetails.product_id
+                  }
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                 >
                   <option value="">Select Product</option>
@@ -278,7 +282,11 @@ export default function AddEditProductModal({
                 <input
                   id="size"
                   placeholder="Enter size"
-                  value={itemDetails[0].size || newItemDetails.size}
+                  value={
+                    typeof index === "number"
+                      ? itemDetails[index]?.size ?? ""
+                      : newItemDetails.size
+                  }
                   onChange={(e) => {
                     if (typeof index === "number") {
                       handleItemDetailsChange(index, "size", e.target.value);
@@ -299,7 +307,11 @@ export default function AddEditProductModal({
                 </label>
                 <select
                   id="size_unit"
-                  value={itemDetails[0].size_unit || newItemDetails.size_unit}
+                  value={
+                    typeof index === "number"
+                      ? itemDetails[index]?.size_unit ?? ""
+                      : newItemDetails.size_unit
+                  }
                   onChange={(e) => {
                     if (typeof index === "number") {
                       handleItemDetailsChange(
@@ -330,7 +342,11 @@ export default function AddEditProductModal({
                 <input
                   id="size"
                   placeholder="Enter quantity"
-                  value={itemDetails[0].quantity || newItemDetails.quantity}
+                  value={
+                    typeof index === "number"
+                      ? itemDetails[index]?.quantity ?? ""
+                      : newItemDetails.quantity
+                  }
                   onChange={(e) => {
                     if (typeof index === "number") {
                       handleItemDetailsChange(
@@ -355,7 +371,11 @@ export default function AddEditProductModal({
                 </label>
                 <select
                   id="unit"
-                  value={itemDetails[0].qty_unit || newItemDetails.qty_unit}
+                  value={
+                    typeof index === "number"
+                      ? itemDetails[index]?.qty_unit ?? ""
+                      : newItemDetails.qty_unit
+                  }
                   onChange={(e) => {
                     if (typeof index === "number") {
                       handleItemDetailsChange(
@@ -387,7 +407,11 @@ export default function AddEditProductModal({
                   type="text"
                   name="name"
                   id="name"
-                  value={itemDetails[0].colour || newItemDetails.colour}
+                  value={
+                    typeof index === "number"
+                      ? itemDetails[index]?.colour ?? ""
+                      : newItemDetails.colour
+                  }
                   onChange={(e) => {
                     if (typeof index === "number") {
                       handleItemDetailsChange(index, "colour", e.target.value);
@@ -537,7 +561,11 @@ export default function AddEditProductModal({
                 <textarea
                   id="remarks"
                   rows={2}
-                  value={itemDetails[0].remarks || newItemDetails.remarks}
+                  value={
+                    typeof index === "number"
+                      ? itemDetails[index]?.remarks ?? ""
+                      : newItemDetails.remarks
+                  }
                   onChange={(e) => {
                     if (typeof index === "number") {
                       handleItemDetailsChange(index, "remarks", e.target.value);
