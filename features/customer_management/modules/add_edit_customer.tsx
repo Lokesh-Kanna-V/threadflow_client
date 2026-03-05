@@ -211,156 +211,156 @@ export default function AddEditCustomer({
           <ListLoader text="Loading customer..." />
         ) : (
           <form action="#">
-          <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
-            <div className="sm:col-span-2">
-              <label
-                htmlFor="name"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Customer Name
-              </label>
-              <input
-                type="text"
-                name="name"
-                id="name"
-                value={customerDetails.name}
-                onChange={(e) => {
-                  handleCustomerDetailsChange("name", e.target.value);
-                }}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                placeholder="Type customer name"
-                required
-              />
-            </div>
+            <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
+              <div className="sm:col-span-2">
+                <label
+                  htmlFor="name"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Customer Name
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  id="name"
+                  value={customerDetails.name}
+                  onChange={(e) => {
+                    handleCustomerDetailsChange("name", e.target.value);
+                  }}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  placeholder="Type customer name"
+                  required
+                />
+              </div>
 
-            <div className="sm:col-span-2">
-              <label
-                htmlFor="phone"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Phone
-              </label>
-              <input
-                type="text"
-                name="phone"
-                id="phone"
-                value={customerDetails.phone}
-                onChange={(e) => {
-                  handleCustomerDetailsChange("phone", e.target.value);
-                }}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                placeholder="Enter phone number"
-              />
-            </div>
+              <div className="sm:col-span-2">
+                <label
+                  htmlFor="phone"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Phone
+                </label>
+                <input
+                  type="text"
+                  name="phone"
+                  id="phone"
+                  value={customerDetails.phone}
+                  onChange={(e) => {
+                    handleCustomerDetailsChange("phone", e.target.value);
+                  }}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  placeholder="Enter phone number"
+                />
+              </div>
 
-            <div className="sm:col-span-2">
-              <label
-                htmlFor="email"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Email
-              </label>
-              <input
-                type="email"
-                name="email"
-                id="email"
-                value={customerDetails.email}
-                onChange={(e) => {
-                  handleCustomerDetailsChange("email", e.target.value);
-                }}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                placeholder="Enter email address"
-              />
-            </div>
+              <div className="sm:col-span-2">
+                <label
+                  htmlFor="email"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Email
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  id="email"
+                  value={customerDetails.email}
+                  onChange={(e) => {
+                    handleCustomerDetailsChange("email", e.target.value);
+                  }}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  placeholder="Enter email address"
+                />
+              </div>
 
-            <div className="sm:col-span-2">
-              <label
-                htmlFor="billing_address"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Billing Address
-              </label>
-              <textarea
-                id="billing_address"
-                rows={4}
-                value={customerDetails.billing_address}
-                onChange={(e) => {
-                  handleCustomerDetailsChange("billing_address", e.target.value);
-                }}
-                className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                placeholder="Enter billing address"
-              ></textarea>
-            </div>
+              <div className="sm:col-span-2">
+                <label
+                  htmlFor="billing_address"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Billing Address
+                </label>
+                <textarea
+                  id="billing_address"
+                  rows={4}
+                  value={customerDetails.billing_address}
+                  onChange={(e) => {
+                    handleCustomerDetailsChange("billing_address", e.target.value);
+                  }}
+                  className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  placeholder="Enter billing address"
+                ></textarea>
+              </div>
 
-            <div className="sm:col-span-2">
-              <label
-                htmlFor="shipping_address"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Shipping Address
-              </label>
-              <textarea
-                id="shipping_address"
-                rows={4}
-                value={customerDetails.shipping_address}
-                onChange={(e) => {
-                  handleCustomerDetailsChange("shipping_address", e.target.value);
-                }}
-                className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                placeholder="Enter shipping address"
-              ></textarea>
-            </div>
+              <div className="sm:col-span-2">
+                <label
+                  htmlFor="shipping_address"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Shipping Address
+                </label>
+                <textarea
+                  id="shipping_address"
+                  rows={4}
+                  value={customerDetails.shipping_address}
+                  onChange={(e) => {
+                    handleCustomerDetailsChange("shipping_address", e.target.value);
+                  }}
+                  className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  placeholder="Enter shipping address"
+                ></textarea>
+              </div>
 
-            <div className="sm:col-span-2">
-              <label
-                htmlFor="gst"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                GST
-              </label>
-              <input
-                type="text"
-                name="gst"
-                id="gst"
-                value={customerDetails.gst}
-                onChange={(e) => {
-                  handleCustomerDetailsChange("gst", e.target.value);
-                }}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                placeholder="Enter GST number"
-              />
+              <div className="sm:col-span-2">
+                <label
+                  htmlFor="gst"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  GST
+                </label>
+                <input
+                  type="text"
+                  name="gst"
+                  id="gst"
+                  value={customerDetails.gst}
+                  onChange={(e) => {
+                    handleCustomerDetailsChange("gst", e.target.value);
+                  }}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  placeholder="Enter GST number"
+                />
+              </div>
             </div>
-          </div>
-          <div className="flex justify-between">
-            <button
-              type="button"
-              onClick={handleCancel}
-              className="inline-flex items-center gap-2 px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
-            >
-              <PlusIcon
-                size={iconSpecifications.size}
-                color={iconSpecifications.colour}
-                weight={iconSpecifications.weight as any}
-              />
-              Cancel
-            </button>
+            <div className="flex justify-between">
+              <button
+                type="button"
+                onClick={handleCancel}
+                className="inline-flex items-center gap-2 px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
+              >
+                <PlusIcon
+                  size={iconSpecifications.size}
+                  color={iconSpecifications.colour}
+                  weight={iconSpecifications.weight as any}
+                />
+                Cancel
+              </button>
 
-            <button
-              type="submit"
-              onClick={(e) => {
-                e.preventDefault();
-                if (editCustomerId) {
-                  updateCustomer(e);
-                } else {
-                  createCustomer(e);
-                }
-              }}
-              className="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
-            >
-              {editCustomerId ? "Update Customer" : "Create Customer"}
-            </button>
-          </div>
-        </form>
+              <button
+                type="submit"
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (editCustomerId) {
+                    updateCustomer(e);
+                  } else {
+                    createCustomer(e);
+                  }
+                }}
+                className="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
+              >
+                {editCustomerId ? "Update Customer" : "Create Customer"}
+              </button>
+            </div>
+          </form>
         )}
       </div>
     </section>

@@ -208,95 +208,95 @@ export default function AddEditProduct({
           <ListLoader text="Loading product..." />
         ) : (
           <form action="#">
-          <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
-            <div className="sm:col-span-2">
-              <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Name</label>
-              <input
-                type="text"
-                name="name"
-                id="name"
-                value={productDetails.name}
-                onChange={(e) => {
-                  handleProductDetailsChange("name", e.target.value);
-                }}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                placeholder="Type product name"
-                required
-              />
-            </div>
+            <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
+              <div className="sm:col-span-2">
+                <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  id="name"
+                  value={productDetails.name}
+                  onChange={(e) => {
+                    handleProductDetailsChange("name", e.target.value);
+                  }}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  placeholder="Type product name"
+                  required
+                />
+              </div>
 
-            <div className="sm:col-span-2">
-              <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">SKU</label>
-              <input
-                type="text"
-                name="sku"
-                id="sku"
-                value={productDetails.sku}
-                onChange={(e) => {
-                  handleProductDetailsChange("sku", e.target.value);
-                }}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                placeholder="Enter SKU"
-                required
-              />
-            </div>
+              <div className="sm:col-span-2">
+                <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">SKU</label>
+                <input
+                  type="text"
+                  name="sku"
+                  id="sku"
+                  value={productDetails.sku}
+                  onChange={(e) => {
+                    handleProductDetailsChange("sku", e.target.value);
+                  }}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  placeholder="Enter SKU"
+                  required
+                />
+              </div>
 
-            <div className="sm:col-span-2">
-              <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">HSN Code</label>
-              <input
-                type="text"
-                name="hsn_code"
-                id="hsn_code"
-                value={productDetails.hsn_code}
-                onChange={(e) => {
-                  handleProductDetailsChange("hsn_code", e.target.value);
-                }}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                placeholder="Enter HSN Code"
-                required
-              />
-            </div>
+              <div className="sm:col-span-2">
+                <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">HSN Code</label>
+                <input
+                  type="text"
+                  name="hsn_code"
+                  id="hsn_code"
+                  value={productDetails.hsn_code}
+                  onChange={(e) => {
+                    handleProductDetailsChange("hsn_code", e.target.value);
+                  }}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  placeholder="Enter HSN Code"
+                  required
+                />
+              </div>
 
-            <div className="sm:col-span-2">
-              <label htmlFor="description" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
-              <textarea
-                id="description"
-                rows={4}
-                value={productDetails.description}
-                onChange={(e) => {
-                  handleProductDetailsChange("description", e.target.value);
-                }}
-                className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                placeholder="Your description here"
-              ></textarea>
+              <div className="sm:col-span-2">
+                <label htmlFor="description" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
+                <textarea
+                  id="description"
+                  rows={4}
+                  value={productDetails.description}
+                  onChange={(e) => {
+                    handleProductDetailsChange("description", e.target.value);
+                  }}
+                  className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  placeholder="Your description here"
+                ></textarea>
+              </div>
             </div>
-          </div>
-          <div className="flex justify-between">
-            <button
-              type="button"
-              onClick={handleCancel}
-              className="inline-flex items-center gap-2 px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
-            >
-              <PlusIcon />
-              Cancel
-            </button>
+            <div className="flex justify-between">
+              <button
+                type="button"
+                onClick={handleCancel}
+                className="inline-flex items-center gap-2 px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
+              >
+                <PlusIcon />
+                Cancel
+              </button>
 
-            <button
-              type="submit"
-              onClick={(e) => {
-                e.preventDefault();
-                if (editProductId) {
-                  updateProduct();
-                } else {
-                  createProduct();
-                }
-              }}
-              className="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
-            >
-              {editProductId ? "Update Product" : "Create Product"}
-            </button>
-          </div>
-        </form>
+              <button
+                type="submit"
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (editProductId) {
+                    updateProduct();
+                  } else {
+                    createProduct();
+                  }
+                }}
+                className="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
+              >
+                {editProductId ? "Update Product" : "Create Product"}
+              </button>
+            </div>
+          </form>
         )}
       </div>
     </section>

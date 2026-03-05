@@ -211,138 +211,138 @@ export default function AddEditJobWorker({
           <ListLoader text="Loading job worker..." />
         ) : (
           <form action="#">
-          <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
-            <div className="sm:col-span-2">
-              <label
-                htmlFor="name"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Name
-              </label>
-              <input
-                type="text"
-                name="name"
-                id="name"
-                value={jobWorkerDetails.name}
-                onChange={(e) => {
-                  handleJobWorkerDetailsChange("name", e.target.value);
-                }}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                placeholder="Type job worker name"
-                required
-              />
-            </div>
+            <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
+              <div className="sm:col-span-2">
+                <label
+                  htmlFor="name"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Name
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  id="name"
+                  value={jobWorkerDetails.name}
+                  onChange={(e) => {
+                    handleJobWorkerDetailsChange("name", e.target.value);
+                  }}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  placeholder="Type job worker name"
+                  required
+                />
+              </div>
 
-            <div className="sm:col-span-2">
-              <label
-                htmlFor="contact_person"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Contact Person
-              </label>
-              <input
-                type="text"
-                name="contact_person"
-                id="contact_person"
-                value={jobWorkerDetails.contact_person}
-                onChange={(e) => {
-                  handleJobWorkerDetailsChange("contact_person", e.target.value);
-                }}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                placeholder="Type contact person name"
-              />
-            </div>
+              <div className="sm:col-span-2">
+                <label
+                  htmlFor="contact_person"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Contact Person
+                </label>
+                <input
+                  type="text"
+                  name="contact_person"
+                  id="contact_person"
+                  value={jobWorkerDetails.contact_person}
+                  onChange={(e) => {
+                    handleJobWorkerDetailsChange("contact_person", e.target.value);
+                  }}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  placeholder="Type contact person name"
+                />
+              </div>
 
-            <div className="sm:col-span-2">
-              <label
-                htmlFor="phone"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Phone
-              </label>
-              <input
-                type="text"
-                name="phone"
-                id="phone"
-                value={jobWorkerDetails.phone}
-                onChange={(e) => {
-                  handleJobWorkerDetailsChange("phone", e.target.value);
-                }}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                placeholder="Enter phone number"
-              />
-            </div>
+              <div className="sm:col-span-2">
+                <label
+                  htmlFor="phone"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Phone
+                </label>
+                <input
+                  type="text"
+                  name="phone"
+                  id="phone"
+                  value={jobWorkerDetails.phone}
+                  onChange={(e) => {
+                    handleJobWorkerDetailsChange("phone", e.target.value);
+                  }}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  placeholder="Enter phone number"
+                />
+              </div>
 
-            <div className="sm:col-span-2">
-              <label
-                htmlFor="email"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Email
-              </label>
-              <input
-                type="email"
-                name="email"
-                id="email"
-                value={jobWorkerDetails.email}
-                onChange={(e) => {
-                  handleJobWorkerDetailsChange("email", e.target.value);
-                }}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                placeholder="Enter email address"
-              />
-            </div>
+              <div className="sm:col-span-2">
+                <label
+                  htmlFor="email"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Email
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  id="email"
+                  value={jobWorkerDetails.email}
+                  onChange={(e) => {
+                    handleJobWorkerDetailsChange("email", e.target.value);
+                  }}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  placeholder="Enter email address"
+                />
+              </div>
 
-            <div className="sm:col-span-2">
-              <label
-                htmlFor="address"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Address
-              </label>
-              <input
-                type="text"
-                name="address"
-                id="address"
-                value={jobWorkerDetails.address}
-                onChange={(e) => {
-                  handleJobWorkerDetailsChange("address", e.target.value);
-                }}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                placeholder="Enter address"
-              />
+              <div className="sm:col-span-2">
+                <label
+                  htmlFor="address"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Address
+                </label>
+                <input
+                  type="text"
+                  name="address"
+                  id="address"
+                  value={jobWorkerDetails.address}
+                  onChange={(e) => {
+                    handleJobWorkerDetailsChange("address", e.target.value);
+                  }}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  placeholder="Enter address"
+                />
+              </div>
             </div>
-          </div>
-          <div className="flex justify-between">
-            <button
-              type="button"
-              onClick={handleCancel}
-              className="inline-flex items-center gap-2 px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
-            >
-              <PlusIcon
-                size={iconSpecifications.size}
-                color={iconSpecifications.colour}
-                weight={iconSpecifications.weight as any}
-              />
-              Cancel
-            </button>
+            <div className="flex justify-between">
+              <button
+                type="button"
+                onClick={handleCancel}
+                className="inline-flex items-center gap-2 px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
+              >
+                <PlusIcon
+                  size={iconSpecifications.size}
+                  color={iconSpecifications.colour}
+                  weight={iconSpecifications.weight as any}
+                />
+                Cancel
+              </button>
 
-            <button
-              type="submit"
-              onClick={(e) => {
-                e.preventDefault();
-                if (editJobWorkerId) {
-                  updateJobWorker(e);
-                } else {
-                  createJobWorker(e);
-                }
-              }}
-              className="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
-            >
-              {editJobWorkerId ? "Update Job Worker" : "Create Job Worker"}
-            </button>
-          </div>
-        </form>
+              <button
+                type="submit"
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (editJobWorkerId) {
+                    updateJobWorker(e);
+                  } else {
+                    createJobWorker(e);
+                  }
+                }}
+                className="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
+              >
+                {editJobWorkerId ? "Update Job Worker" : "Create Job Worker"}
+              </button>
+            </div>
+          </form>
         )}
       </div>
     </section>
