@@ -13,6 +13,7 @@ import { UserLogin } from "../services/login_api";
 
 //? Shared UI Import
 import LoadingSpinner from "@/shared/ui/spinner";
+import AlertBanner from "@/shared/ui/alert_banner";
 
 //? NPM UI Imports
 import { X, Check } from "lucide-react";
@@ -144,14 +145,18 @@ export default function LoginForm() {
                   Forgot password?
                 </a>
               </div>
-              {showAlert.status === "error" && (
-                <div className="p-2 flex justify-center items-center border-red-900 rounded-xl">
-                  <X className="text-red-500" />
-                  <div className="ms-3 text-sm font-normal">
-                    {showAlert.message}
-                  </div>
-                </div>
-              )}
+            {showAlert.status && (
+              <AlertBanner
+                type={showAlert.status === "error" ? "error" : "success"}
+                message={showAlert.message}
+                onClose={() =>
+                  setShowAlert({
+                    status: "",
+                    message: "",
+                  })
+                }
+              />
+            )}
               <button
                 type="submit"
                 onClick={async (e) => {

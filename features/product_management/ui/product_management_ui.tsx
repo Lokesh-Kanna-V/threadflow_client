@@ -8,6 +8,9 @@ import ProductListDisplay from "../modules/product_list_display";
 import SearchAndCreate from "../modules/search_and_create";
 import AddEditProduct from "../modules/add_edit_product";
 
+//? Shared UI Imports
+import AlertBanner from "@/shared/ui/alert_banner";
+
 //? Specification Imports
 import { iconSpecifications } from "@/shared/local_db/general_specifications";
 
@@ -18,6 +21,7 @@ export default function ProductManagementUI() {
   const [showCreateProduct, setShowCreateProduct] = useState(false);
   const [editProductId, setEditProductId] = useState<string | null>(null);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [alert, setAlert] = useState({ status: "", message: "" });
 
   const handleBack = () => {
     setShowCreateProduct(false);
@@ -27,6 +31,15 @@ export default function ProductManagementUI() {
 
   return (
     <main className="p-4 md:ml-64 h-auto pt-20">
+      {alert.status && (
+        <div className="mb-4">
+          <AlertBanner
+            type={alert.status === "error" ? "error" : "success"}
+            message={alert.message}
+            onClose={() => setAlert({ status: "", message: "" })}
+          />
+        </div>
+      )}
       <div
         className={`flex ${
           showCreateProduct ? "justify-between" : "justify-center"
@@ -74,6 +87,7 @@ export default function ProductManagementUI() {
             setShowCreateProduct={setShowCreateProduct}
             setEditProductId={setEditProductId}
             setRefreshTrigger={setRefreshTrigger}
+            setAlert={setAlert}
           />
         </>
       )}

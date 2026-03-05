@@ -17,12 +17,14 @@ import { GetJobWorkersAPI } from "../services/get_job_workers_api";
 
 //? Shared UI Imports
 import ListLoader from "@/shared/ui/list_loader";
+import AlertBanner from "@/shared/ui/alert_banner";
 
 type AddEditJobWorkerTypes = {
   editJobWorkerId: string | null;
   setShowCreateJobWorker: (value: boolean) => void;
   setEditJobWorkerId: (value: string | null) => void;
   setRefreshTrigger?: (fn: (prev: number) => number) => void;
+  setAlert?: (value: { status: string; message: string }) => void;
 };
 
 export default function AddEditJobWorker({
@@ -30,6 +32,7 @@ export default function AddEditJobWorker({
   setShowCreateJobWorker,
   setEditJobWorkerId,
   setRefreshTrigger,
+  setAlert: setParentAlert,
 }: AddEditJobWorkerTypes) {
   const { user } = useAuth();
 
@@ -43,6 +46,7 @@ export default function AddEditJobWorker({
     status: "",
   });
   const [loading, setLoading] = useState(false);
+  const [alert, setAlert] = useState({ status: "", message: "" });
 
   const handleJobWorkerDetailsChange = (field: string, value: string) => {
     setJobWorkerDetails((prev) => ({
@@ -57,6 +61,15 @@ export default function AddEditJobWorker({
       job_worker_details: jobWorkerDetails,
     });
     if (response.success) {
+      const msg = {
+        status: "success",
+        message: "Job worker created successfully.",
+      };
+      if (setParentAlert) {
+        setParentAlert(msg);
+      } else {
+        setAlert(msg);
+      }
       setShowCreateJobWorker(false);
       setJobWorkerDetails({
         company_id: "",
@@ -70,6 +83,13 @@ export default function AddEditJobWorker({
       if (setRefreshTrigger) {
         setRefreshTrigger((prev) => prev + 1);
       }
+    } else {
+      setAlert({
+        status: "error",
+        message:
+          response.error ||
+          "Unable to create job worker. Please check the details and try again.",
+      });
     }
   };
 
@@ -86,6 +106,15 @@ export default function AddEditJobWorker({
       status: jobWorkerDetails.status,
     });
     if (response.success) {
+      const msg = {
+        status: "success",
+        message: "Job worker updated successfully.",
+      };
+      if (setParentAlert) {
+        setParentAlert(msg);
+      } else {
+        setAlert(msg);
+      }
       setShowCreateJobWorker(false);
       setEditJobWorkerId(null);
       setJobWorkerDetails({
@@ -100,6 +129,13 @@ export default function AddEditJobWorker({
       if (setRefreshTrigger) {
         setRefreshTrigger((prev) => prev + 1);
       }
+    } else {
+      setAlert({
+        status: "error",
+        message:
+          response.error ||
+          "Unable to update job worker. Please try again in a moment.",
+      });
     }
   };
 
@@ -159,6 +195,15 @@ export default function AddEditJobWorker({
   return (
     <section className="bg-white dark:bg-gray-900">
       <div className="py-8 px-4 mx-auto max-w-2xl lg:py-16">
+        {alert.status && (
+          <div className="mb-4">
+            <AlertBanner
+              type={alert.status === "error" ? "error" : "success"}
+              message={alert.message}
+              onClose={() => setAlert({ status: "", message: "" })}
+            />
+          </div>
+        )}
         <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
           {editJobWorkerId ? "Edit job worker" : "Add a new job worker"}
         </h2>

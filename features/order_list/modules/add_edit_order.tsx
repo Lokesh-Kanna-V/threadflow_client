@@ -6,6 +6,7 @@ import { useAuth } from "@/shared/context/AuthContext";
 
 //? Shared UI Imports
 import ListLoader from "@/shared/ui/list_loader";
+import AlertBanner from "@/shared/ui/alert_banner";
 
 //? UI Imports
 import AddEditProductModal from "@/shared/ui/add_product_modal";
@@ -32,6 +33,7 @@ type AddEditOrderTypes = {
   setShowCreateOrder: (value: boolean) => void;
   setEditOrderId: (value: string | null) => void;
   setRefreshTrigger?: (fn: (prev: number) => number) => void;
+  setAlert?: (value: { status: string; message: string }) => void;
 };
 
 export default function AddEditOrder({
@@ -39,6 +41,7 @@ export default function AddEditOrder({
   setShowCreateOrder,
   setEditOrderId,
   setRefreshTrigger,
+  setAlert: setParentAlert,
 }: AddEditOrderTypes) {
   const { user } = useAuth();
 
@@ -56,6 +59,7 @@ export default function AddEditOrder({
 
   const [customerList, setCustomerList] = useState([{ id: "", name: "" }]);
   const [loading, setLoading] = useState(false);
+  const [alert, setAlert] = useState({ status: "", message: "" });
 
   const [itemDetails, setItemDetails] = useState([
     {
@@ -99,6 +103,12 @@ export default function AddEditOrder({
 
     const response = await CreateOrderApi(consolidatedItemDetails);
     if (response.success) {
+      const msg = { status: "success", message: "Order created successfully." };
+      if (setParentAlert) {
+        setParentAlert(msg);
+      } else {
+        setAlert(msg);
+      }
       setShowCreateOrder(false);
       setOrderDetails({
         company_id: "",
@@ -130,6 +140,13 @@ export default function AddEditOrder({
       if (setRefreshTrigger) {
         setRefreshTrigger((prev) => prev + 1);
       }
+    } else {
+      setAlert({
+        status: "error",
+        message:
+          response.error ||
+          "Unable to create order. Please check the details and try again.",
+      });
     }
   };
 
@@ -145,6 +162,12 @@ export default function AddEditOrder({
 
     const response = await UpdateOrderAPI(payload);
     if (response.success) {
+      const msg = { status: "success", message: "Order updated successfully." };
+      if (setParentAlert) {
+        setParentAlert(msg);
+      } else {
+        setAlert(msg);
+      }
       setShowCreateOrder(false);
       setEditOrderId(null);
       setOrderDetails({
@@ -177,6 +200,13 @@ export default function AddEditOrder({
       if (setRefreshTrigger) {
         setRefreshTrigger((prev) => prev + 1);
       }
+    } else {
+      setAlert({
+        status: "error",
+        message:
+          response.error ||
+          "Unable to update order. Please try again in a moment.",
+      });
     }
   };
 
@@ -300,6 +330,15 @@ export default function AddEditOrder({
   return (
     <section className="bg-white dark:bg-gray-900">
       <div className="px-4 mx-auto max-w-2xl lg:py-16">
+        {alert.status && (
+          <div className="mb-4">
+            <AlertBanner
+              type={alert.status === "error" ? "error" : "success"}
+              message={alert.message}
+              onClose={() => setAlert({ status: "", message: "" })}
+            />
+          </div>
+        )}
         {loading ? (
           <ListLoader text={editOrderId ? "Loading order..." : "Loading..."} />
         ) : (

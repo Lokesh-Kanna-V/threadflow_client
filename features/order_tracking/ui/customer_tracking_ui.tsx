@@ -10,6 +10,7 @@ import { getProductsApi } from "@/shared/services/get_products_api";
 
 //? Shared UI Imports
 import ListLoader from "@/shared/ui/list_loader";
+import AlertBanner from "@/shared/ui/alert_banner";
 
 //? Specification Imports
 import { iconSpecifications } from "@/shared/local_db/general_specifications";
@@ -129,17 +130,19 @@ export default function CustomerTrackingUI({ woId }: TrackingPageProps) {
           Order Tracking
         </h1>
 
-        {loading && (
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-            <ListLoader text="Loading order status..." />
+        {error && (
+          <div className="mb-4">
+            <AlertBanner
+              type="error"
+              message={error}
+              onClose={() => setError(null)}
+            />
           </div>
         )}
 
-        {!loading && error && (
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-red-300 dark:border-red-700 p-4">
-            <p className="text-sm text-red-700 dark:text-red-300 text-center">
-              {error}
-            </p>
+        {loading && (
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+            <ListLoader text="Loading order status..." />
           </div>
         )}
 

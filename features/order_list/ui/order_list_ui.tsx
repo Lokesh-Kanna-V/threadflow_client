@@ -8,6 +8,9 @@ import SearchAndCreate from "../modules/search_and_create";
 import OrderListDisplay from "../modules/order_list_display";
 import AddEditOrder from "../modules/add_edit_order";
 
+//? Shared UI Imports
+import AlertBanner from "@/shared/ui/alert_banner";
+
 //? Specification Imports
 import { iconSpecifications } from "@/shared/local_db/general_specifications";
 
@@ -18,6 +21,7 @@ export default function OrderListUI() {
   const [showCreateOrder, setShowCreateOrder] = useState(false);
   const [editOrderId, setEditOrderId] = useState<string | null>(null);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [alert, setAlert] = useState({ status: "", message: "" });
 
   const handleBack = () => {
     setShowCreateOrder(false);
@@ -27,6 +31,15 @@ export default function OrderListUI() {
 
   return (
     <main className="p-4 md:ml-64 h-auto pt-20">
+      {alert.status && (
+        <div className="mb-4">
+          <AlertBanner
+            type={alert.status === "error" ? "error" : "success"}
+            message={alert.message}
+            onClose={() => setAlert({ status: "", message: "" })}
+          />
+        </div>
+      )}
       <div
         className={`flex ${
           showCreateOrder ? "justify-between" : "justify-center"
@@ -74,6 +87,7 @@ export default function OrderListUI() {
             setShowCreateOrder={setShowCreateOrder}
             setEditOrderId={setEditOrderId}
             setRefreshTrigger={setRefreshTrigger}
+            setAlert={setAlert}
           />
         </>
       )}

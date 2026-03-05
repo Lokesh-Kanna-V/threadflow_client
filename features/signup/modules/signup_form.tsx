@@ -11,6 +11,9 @@ import { createUser } from "../services/create_user_api";
 //? UI NPM Imports
 import { X, Check } from "lucide-react";
 
+//? Shared UI Imports
+import AlertBanner from "@/shared/ui/alert_banner";
+
 //? Data Imports
 import {
   countryStateCityData,
@@ -488,19 +491,17 @@ export default function SignUpForm() {
               </a>
             </p>
 
-            {showAlert.status ? (
-              <div className="p-2 flex justify-center items-center bg-red-900 rounded-xl">
-                {showAlert.status == "success" ? (
-                  <Check className="text-emerald-700" />
-                ) : (
-                  <X className="text-red-500" />
-                )}
-                <div className="ms-3 text-sm font-normal">
-                  {showAlert.message}
-                </div>
-              </div>
-            ) : (
-              ""
+            {showAlert.status && (
+              <AlertBanner
+                type={showAlert.status === "error" ? "error" : "success"}
+                message={showAlert.message}
+                onClose={() =>
+                  setShowAlert({
+                    status: "",
+                    message: "",
+                  })
+                }
+              />
             )}
 
             {/* //? Button Section */}

@@ -11,6 +11,7 @@ import { UpdateOrderAPI } from "@/features/order_list/services/update_order_api"
 
 //? Shared UI Imports
 import ListLoader from "@/shared/ui/list_loader";
+import AlertBanner from "@/shared/ui/alert_banner";
 
 //? Specification Imports
 import { iconSpecifications } from "@/shared/local_db/general_specifications";
@@ -195,25 +196,26 @@ export default function WorkerUpdateUI({ woId }: WorkerUpdatePageProps) {
           Update Job Status
         </h1>
 
+        {(error || saveMessage) && (
+          <div className="mb-4">
+            <AlertBanner
+              type={error ? "error" : "success"}
+              message={
+                error ||
+                saveMessage ||
+                "Status updated. This message will close automatically."
+              }
+              onClose={() => {
+                setError(null);
+                setSaveMessage(null);
+              }}
+            />
+          </div>
+        )}
+
         {loading && (
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
             <ListLoader text="Loading work order..." />
-          </div>
-        )}
-
-        {!loading && error && (
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-red-300 dark:border-red-700 p-4 mb-4">
-            <p className="text-sm text-red-700 dark:text-red-300 text-center">
-              {error}
-            </p>
-          </div>
-        )}
-
-        {!loading && saveMessage && (
-          <div className="bg-emerald-100 dark:bg-emerald-900 rounded-lg shadow-sm border border-emerald-300 dark:border-emerald-700 p-3 mb-4">
-            <p className="text-sm text-emerald-800 dark:text-emerald-100 text-center">
-              {saveMessage}
-            </p>
           </div>
         )}
 

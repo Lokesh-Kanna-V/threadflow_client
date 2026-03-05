@@ -17,12 +17,14 @@ import { GetCustomersAPI } from "../services/get_customers_api";
 
 //? Shared UI Imports
 import ListLoader from "@/shared/ui/list_loader";
+import AlertBanner from "@/shared/ui/alert_banner";
 
 type AddEditCustomerTypes = {
   editCustomerId: string | null;
   setShowCreateCustomer: (value: boolean) => void;
   setEditCustomerId: (value: string | null) => void;
   setRefreshTrigger?: (fn: (prev: number) => number) => void;
+  setAlert?: (value: { status: string; message: string }) => void;
 };
 
 export default function AddEditCustomer({
@@ -30,6 +32,7 @@ export default function AddEditCustomer({
   setShowCreateCustomer,
   setEditCustomerId,
   setRefreshTrigger,
+  setAlert: setParentAlert,
 }: AddEditCustomerTypes) {
   const { user } = useAuth();
 
@@ -43,6 +46,7 @@ export default function AddEditCustomer({
     gst: "",
   });
   const [loading, setLoading] = useState(false);
+  const [alert, setAlert] = useState({ status: "", message: "" });
 
   const handleCustomerDetailsChange = (field: string, value: string) => {
     setCustomerDetails((prev) => ({
@@ -57,6 +61,15 @@ export default function AddEditCustomer({
       customer_details: customerDetails,
     });
     if (response.success) {
+      const msg = {
+        status: "success",
+        message: "Customer created successfully.",
+      };
+      if (setParentAlert) {
+        setParentAlert(msg);
+      } else {
+        setAlert(msg);
+      }
       setShowCreateCustomer(false);
       setCustomerDetails({
         company_id: "",
@@ -70,6 +83,13 @@ export default function AddEditCustomer({
       if (setRefreshTrigger) {
         setRefreshTrigger((prev) => prev + 1);
       }
+    } else {
+      setAlert({
+        status: "error",
+        message:
+          response.error ||
+          "Unable to create customer. Please check the details and try again.",
+      });
     }
   };
 
@@ -86,6 +106,15 @@ export default function AddEditCustomer({
       gst: customerDetails.gst,
     });
     if (response.success) {
+      const msg = {
+        status: "success",
+        message: "Customer updated successfully.",
+      };
+      if (setParentAlert) {
+        setParentAlert(msg);
+      } else {
+        setAlert(msg);
+      }
       setShowCreateCustomer(false);
       setEditCustomerId(null);
       setCustomerDetails({
@@ -100,6 +129,13 @@ export default function AddEditCustomer({
       if (setRefreshTrigger) {
         setRefreshTrigger((prev) => prev + 1);
       }
+    } else {
+      setAlert({
+        status: "error",
+        message:
+          response.error ||
+          "Unable to update customer. Please try again in a moment.",
+      });
     }
   };
 
@@ -159,6 +195,15 @@ export default function AddEditCustomer({
   return (
     <section className="bg-white dark:bg-gray-900">
       <div className="py-8 px-4 mx-auto max-w-2xl lg:py-16">
+        {alert.status && (
+          <div className="mb-4">
+            <AlertBanner
+              type={alert.status === "error" ? "error" : "success"}
+              message={alert.message}
+              onClose={() => setAlert({ status: "", message: "" })}
+            />
+          </div>
+        )}
         <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
           {editCustomerId ? "Edit customer" : "Add a new customer"}
         </h2>

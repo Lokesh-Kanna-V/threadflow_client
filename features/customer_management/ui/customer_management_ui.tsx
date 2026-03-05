@@ -8,6 +8,9 @@ import CustomerListDisplay from "../modules/customer_list_display";
 import SearchAndCreate from "../modules/search_and_create";
 import AddEditCustomer from "../modules/add_edit_customer";
 
+//? Shared UI Imports
+import AlertBanner from "@/shared/ui/alert_banner";
+
 //? Specification Imports
 import { iconSpecifications } from "@/shared/local_db/general_specifications";
 
@@ -18,6 +21,7 @@ export default function CustomerManagementUI() {
   const [showCreateCustomer, setShowCreateCustomer] = useState(false);
   const [editCustomerId, setEditCustomerId] = useState<string | null>(null);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [alert, setAlert] = useState({ status: "", message: "" });
 
   const handleBack = () => {
     setShowCreateCustomer(false);
@@ -27,6 +31,15 @@ export default function CustomerManagementUI() {
 
   return (
     <main className="p-4 md:ml-64 h-auto pt-20">
+      {alert.status && (
+        <div className="mb-4">
+          <AlertBanner
+            type={alert.status === "error" ? "error" : "success"}
+            message={alert.message}
+            onClose={() => setAlert({ status: "", message: "" })}
+          />
+        </div>
+      )}
       <div
         className={`flex ${
           showCreateCustomer ? "justify-between" : "justify-center"
@@ -74,6 +87,7 @@ export default function CustomerManagementUI() {
             setShowCreateCustomer={setShowCreateCustomer}
             setEditCustomerId={setEditCustomerId}
             setRefreshTrigger={setRefreshTrigger}
+            setAlert={setAlert}
           />
         </>
       )}
