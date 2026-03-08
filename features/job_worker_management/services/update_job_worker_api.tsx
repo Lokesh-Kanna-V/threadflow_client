@@ -9,6 +9,7 @@ type UpdateJobWorkerType = {
   email?: string;
   address?: string;
   status?: string;
+  job_stage_id?: string[];
 };
 
 export const UpdateJobWorkerAPI = async ({

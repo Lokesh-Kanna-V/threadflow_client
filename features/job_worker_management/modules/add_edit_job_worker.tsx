@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/shared/context/AuthContext";
 
 //? NPM UI Imports
-import { PlusIcon } from "@phosphor-icons/react";
+import { PlusIcon, CaretDownIcon, XIcon } from "@phosphor-icons/react";
 
 //? Specification Imports
 import { iconSpecifications } from "@/shared/local_db/general_specifications";
@@ -14,6 +14,7 @@ import { iconSpecifications } from "@/shared/local_db/general_specifications";
 import { CreateJobWorkerAPI } from "../services/create_job_worker_api";
 import { UpdateJobWorkerAPI } from "../services/update_job_worker_api";
 import { GetJobWorkersAPI } from "../services/get_job_workers_api";
+import { jobStageApi } from "@/shared/services/job_stages_api";
 
 //? Shared UI Imports
 import ListLoader from "@/shared/ui/list_loader";
@@ -44,14 +45,37 @@ export default function AddEditJobWorker({
     email: "",
     address: "",
     status: "",
+    job_stage_id: [] as string[],
   });
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState({ status: "", message: "" });
+  const [jobStages, setJobStages] = useState<{ id: string; name: string }[]>([]);
+  const [jobStageDropdownOpen, setJobStageDropdownOpen] = useState(false);
 
   const handleJobWorkerDetailsChange = (field: string, value: string) => {
     setJobWorkerDetails((prev) => ({
       ...prev,
       [field]: value,
+    }));
+  };
+
+  const handleJobStageToggle = (stageId: string) => {
+    setJobWorkerDetails((prev) => {
+      const current = prev.job_stage_id || [];
+      const exists = current.includes(stageId);
+      return {
+        ...prev,
+        job_stage_id: exists
+          ? current.filter((id) => id !== stageId)
+          : [...current, stageId],
+      };
+    });
+  };
+
+  const handleJobStageRemove = (stageId: string) => {
+    setJobWorkerDetails((prev) => ({
+      ...prev,
+      job_stage_id: (prev.job_stage_id || []).filter((id) => id !== stageId),
     }));
   };
 
@@ -79,6 +103,7 @@ export default function AddEditJobWorker({
         email: "",
         address: "",
         status: "",
+        job_stage_id: [],
       });
       if (setRefreshTrigger) {
         setRefreshTrigger((prev) => prev + 1);
@@ -104,6 +129,7 @@ export default function AddEditJobWorker({
       email: jobWorkerDetails.email,
       address: jobWorkerDetails.address,
       status: jobWorkerDetails.status,
+      job_stage_id: jobWorkerDetails.job_stage_id,
     });
     if (response.success) {
       const msg = {
@@ -125,6 +151,7 @@ export default function AddEditJobWorker({
         email: "",
         address: "",
         status: "",
+        job_stage_id: [],
       });
       if (setRefreshTrigger) {
         setRefreshTrigger((prev) => prev + 1);
@@ -150,12 +177,23 @@ export default function AddEditJobWorker({
       email: "",
       address: "",
       status: "",
+      job_stage_id: [],
     });
   };
 
   useEffect(() => {
     const company_id = localStorage.getItem("cid");
     handleJobWorkerDetailsChange("company_id", company_id || "");
+
+    const fetchStages = async () => {
+      const response = await jobStageApi();
+      if (response.success && response.data?.stages) {
+        setJobStages(
+          response.data.stages.map((s: any) => ({ id: s.id, name: s.name || s.stage_name || "" }))
+        );
+      }
+    };
+    fetchStages();
 
     if (editJobWorkerId) {
       const fetchJobWorker = async () => {
@@ -168,6 +206,9 @@ export default function AddEditJobWorker({
             (w: any) => w.id === editJobWorkerId
           );
           if (worker) {
+            const stageIds = Array.isArray(worker.job_stage_id)
+              ? worker.job_stage_id
+              : [];
             setJobWorkerDetails({
               company_id: worker.company_id || cid || "",
               name: worker.name || "",
@@ -176,6 +217,7 @@ export default function AddEditJobWorker({
               email: worker.email || "",
               address: worker.address || "",
               status: worker.status || "",
+              job_stage_id: stageIds,
             });
           }
         }
@@ -293,6 +335,81 @@ export default function AddEditJobWorker({
                 />
               </div>
 
+              <div className="sm:col-span-2 relative">
+                <label
+                  htmlFor="job_stages"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Job Stages
+                </label>
+                <div
+                  onClick={() => setJobStageDropdownOpen((prev) => !prev)}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full min-h-[42px] p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 cursor-pointer flex items-center justify-between"
+                >
+                  <div className="flex flex-wrap gap-1.5 flex-1">
+                    {(jobWorkerDetails.job_stage_id || []).length > 0 ? (
+                      (jobWorkerDetails.job_stage_id || []).map((stageId) => {
+                        const stage = jobStages.find((s) => s.id === stageId);
+                        return (
+                          <span
+                            key={stageId}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleJobStageRemove(stageId);
+                            }}
+                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200 text-xs"
+                          >
+                            {stage?.name || stageId}
+                            <XIcon size={14} weight="bold" />
+                          </span>
+                        );
+                      })
+                    ) : (
+                      <span className="text-gray-500 dark:text-gray-400">
+                        Select job stages
+                      </span>
+                    )}
+                  </div>
+                  <CaretDownIcon
+                    size={18}
+                    weight="bold"
+                    className={`shrink-0 ml-2 transition-transform ${jobStageDropdownOpen ? "rotate-180" : ""}`}
+                  />
+                </div>
+                {jobStageDropdownOpen && (
+                  <>
+                    <div
+                      className="fixed inset-0 z-10"
+                      aria-hidden="true"
+                      onClick={() => setJobStageDropdownOpen(false)}
+                    />
+                    <div className="absolute z-20 mt-1 w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+                      {jobStages.length === 0 ? (
+                        <div className="px-3 py-2 text-sm text-gray-500 dark:text-gray-400">
+                          No stages available
+                        </div>
+                      ) : (
+                        jobStages.map((stage) => {
+                          const isSelected = (jobWorkerDetails.job_stage_id || []).includes(stage.id);
+                          return (
+                            <div
+                              key={stage.id}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleJobStageToggle(stage.id);
+                              }}
+                              className={`px-3 py-2 text-sm cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 ${isSelected ? "bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-200" : "text-gray-900 dark:text-white"}`}
+                            >
+                              {stage.name}
+                            </div>
+                          );
+                        })
+                      )}
+                    </div>
+                  </>
+                )}
+              </div>
+
               <div className="sm:col-span-2">
                 <label
                   htmlFor="address"
@@ -312,6 +429,8 @@ export default function AddEditJobWorker({
                   placeholder="Enter address"
                 />
               </div>
+
+
             </div>
             <div className="flex justify-between">
               <button
