@@ -100,7 +100,7 @@ export default function ProductListDisplay({
                     e.preventDefault();
                     handleEdit(product.id);
                   }}
-                  className="border rounded-lg border-primary-700 cursor-pointer p-1"
+                  className="rounded-lg border-primary-700 cursor-pointer p-1"
                 >
                   <PencilSimple
                     size={iconSpecifications.size}
@@ -113,11 +113,11 @@ export default function ProductListDisplay({
                     e.preventDefault();
                     handleDelete(product.id);
                   }}
-                  className="border rounded-lg border-red-700 cursor-pointer p-1"
+                  className="rounded-lg border-red-700 cursor-pointer p-1"
                 >
                   <Trash
                     size={iconSpecifications.size}
-                    color={iconSpecifications.colour}
+                    color="#800000"
                     weight={iconSpecifications.weight as any}
                   />
                 </button>
