@@ -22,6 +22,7 @@ export default function OrderListUI() {
   const [editOrderId, setEditOrderId] = useState<string | null>(null);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [alert, setAlert] = useState({ status: "", message: "" });
+  const [searchText, setSearchText] = useState("");
 
   const handleBack = () => {
     setShowCreateOrder(false);
@@ -73,11 +74,16 @@ export default function OrderListUI() {
 
       {!showCreateOrder ? (
         <>
-          <SearchAndCreate setShowCreateOrder={setShowCreateOrder} />
+          <SearchAndCreate
+            setShowCreateOrder={setShowCreateOrder}
+            searchText={searchText}
+            onSearchChange={setSearchText}
+          />
           <OrderListDisplay
             setShowCreateOrder={setShowCreateOrder}
             setEditOrderId={setEditOrderId}
             refreshTrigger={refreshTrigger}
+            searchText={searchText}
           />
         </>
       ) : (

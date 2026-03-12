@@ -20,12 +20,14 @@ type CustomerListDisplayTypes = {
   setShowCreateCustomer: (value: boolean) => void;
   setEditCustomerId: (value: string | null) => void;
   refreshTrigger?: number;
+  searchText?: string;
 };
 
 export default function CustomerListDisplay({
   setShowCreateCustomer,
   setEditCustomerId,
   refreshTrigger,
+  searchText,
 }: CustomerListDisplayTypes) {
   const [customerList, setCustomerList] = useState<
     {
@@ -79,6 +81,17 @@ export default function CustomerListDisplay({
     }
   };
 
+  const filteredCustomerList = customerList.filter((customer) => {
+    if (!searchText || !searchText.trim()) return true;
+    const query = searchText.toLowerCase();
+    return (
+      customer.name.toLowerCase().includes(query) ||
+      (customer.phone || "").toLowerCase().includes(query) ||
+      (customer.email || "").toLowerCase().includes(query) ||
+      (customer.billing_address || "").toLowerCase().includes(query)
+    );
+  });
+
   return (
     <div>
       <div className="flex gap-5 flex-wrap justify-center md:border border-dashed border-gray-500 p-5">
@@ -88,8 +101,12 @@ export default function CustomerListDisplay({
           <p className="text-sm text-gray-500 dark:text-gray-400">
             No customers found.
           </p>
+        ) : filteredCustomerList.length === 0 ? (
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            No customers match your search.
+          </p>
         ) : (
-          customerList.map((customer, index) => (
+          filteredCustomerList.map((customer, index) => (
             <div
               key={customer.id}
               className="block w-xs border rounded-lg shadow-xs border-gray-300 dark:border-gray-600 bg-emerald-100 dark:bg-gray-800 p-4 relative"

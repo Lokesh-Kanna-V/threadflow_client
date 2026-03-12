@@ -22,6 +22,7 @@ export default function CustomerManagementUI() {
   const [editCustomerId, setEditCustomerId] = useState<string | null>(null);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [alert, setAlert] = useState({ status: "", message: "" });
+  const [searchText, setSearchText] = useState("");
 
   const handleBack = () => {
     setShowCreateCustomer(false);
@@ -73,11 +74,16 @@ export default function CustomerManagementUI() {
 
       {!showCreateCustomer ? (
         <>
-          <SearchAndCreate setShowCreateCustomer={setShowCreateCustomer} />
+          <SearchAndCreate
+            setShowCreateCustomer={setShowCreateCustomer}
+            searchText={searchText}
+            onSearchChange={setSearchText}
+          />
           <CustomerListDisplay
             setShowCreateCustomer={setShowCreateCustomer}
             setEditCustomerId={setEditCustomerId}
             refreshTrigger={refreshTrigger}
+            searchText={searchText}
           />
         </>
       ) : (

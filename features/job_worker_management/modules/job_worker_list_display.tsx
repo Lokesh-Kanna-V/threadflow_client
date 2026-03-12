@@ -20,12 +20,14 @@ type JobWorkerListDisplayTypes = {
   setShowCreateJobWorker: (value: boolean) => void;
   setEditJobWorkerId: (value: string | null) => void;
   refreshTrigger?: number;
+  searchText?: string;
 };
 
 export default function JobWorkerListDisplay({
   setShowCreateJobWorker,
   setEditJobWorkerId,
   refreshTrigger,
+  searchText,
 }: JobWorkerListDisplayTypes) {
   const [jobWorkerList, setJobWorkerList] = useState<
     { id: string; name: string; contact?: string; status?: string }[]
@@ -71,6 +73,16 @@ export default function JobWorkerListDisplay({
     }
   };
 
+  const filteredJobWorkerList = jobWorkerList.filter((worker) => {
+    if (!searchText || !searchText.trim()) return true;
+    const query = searchText.toLowerCase();
+    return (
+      worker.name.toLowerCase().includes(query) ||
+      (worker.contact || "").toLowerCase().includes(query) ||
+      (worker.status || "").toLowerCase().includes(query)
+    );
+  });
+
   return (
     <div>
       <div className="flex gap-5 flex-wrap justify-center md:border border-dashed border-gray-500 p-5">
@@ -80,8 +92,12 @@ export default function JobWorkerListDisplay({
           <p className="text-sm text-gray-500 dark:text-gray-400">
             No job workers found.
           </p>
+        ) : filteredJobWorkerList.length === 0 ? (
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            No job workers match your search.
+          </p>
         ) : (
-          jobWorkerList.map((worker, index) => (
+          filteredJobWorkerList.map((worker, index) => (
             <div
               key={worker.id}
               className="block w-xs border rounded-lg shadow-xs border-gray-300 dark:border-gray-600 bg-emerald-100 dark:bg-gray-800 p-4 relative"

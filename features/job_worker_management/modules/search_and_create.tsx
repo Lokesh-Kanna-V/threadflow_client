@@ -11,14 +11,22 @@ import { iconSpecifications } from "@/shared/local_db/general_specifications";
 
 type SearchCreateTypes = {
   setShowCreateJobWorker: (value: boolean) => void;
+  searchText: string;
+  onSearchChange: (value: string) => void;
 };
 
 export default function SearchAndCreate({
   setShowCreateJobWorker,
+  searchText,
+  onSearchChange,
 }: SearchCreateTypes) {
   return (
     <div className="w-full mb-5 lg:mb-10 flex justify-between items-center">
-      <SearchInput />
+      <SearchInput
+        value={searchText}
+        onChange={onSearchChange}
+        placeholder="Search job workers"
+      />
       <div>
         <button
           data-tooltip-target="tooltip-default"

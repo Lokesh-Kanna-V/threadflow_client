@@ -22,6 +22,7 @@ export default function ProductManagementUI() {
   const [editProductId, setEditProductId] = useState<string | null>(null);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [alert, setAlert] = useState({ status: "", message: "" });
+  const [searchText, setSearchText] = useState("");
 
   const handleBack = () => {
     setShowCreateProduct(false);
@@ -73,11 +74,16 @@ export default function ProductManagementUI() {
 
       {!showCreateProduct ? (
         <>
-          <SearchAndCreate setShowCreateOrder={setShowCreateProduct} />
+          <SearchAndCreate
+            setShowCreateOrder={setShowCreateProduct}
+            searchText={searchText}
+            onSearchChange={setSearchText}
+          />
           <ProductListDisplay
             setShowCreateProduct={setShowCreateProduct}
             setEditProductId={setEditProductId}
             refreshTrigger={refreshTrigger}
+            searchText={searchText}
           />
         </>
       ) : (

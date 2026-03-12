@@ -22,6 +22,7 @@ export default function JobWorkerManagementUI() {
   const [editJobWorkerId, setEditJobWorkerId] = useState<string | null>(null);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [alert, setAlert] = useState({ status: "", message: "" });
+  const [searchText, setSearchText] = useState("");
 
   const handleBack = () => {
     setShowCreateJobWorker(false);
@@ -73,11 +74,16 @@ export default function JobWorkerManagementUI() {
 
       {!showCreateJobWorker ? (
         <>
-          <SearchAndCreate setShowCreateJobWorker={setShowCreateJobWorker} />
+          <SearchAndCreate
+            setShowCreateJobWorker={setShowCreateJobWorker}
+            searchText={searchText}
+            onSearchChange={setSearchText}
+          />
           <JobWorkerListDisplay
             setShowCreateJobWorker={setShowCreateJobWorker}
             setEditJobWorkerId={setEditJobWorkerId}
             refreshTrigger={refreshTrigger}
+            searchText={searchText}
           />
         </>
       ) : (

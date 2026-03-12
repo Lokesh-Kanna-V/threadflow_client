@@ -21,12 +21,14 @@ type OrderListDisplayTypes = {
   setShowCreateOrder: (value: boolean) => void;
   setEditOrderId: (value: string | null) => void;
   refreshTrigger?: number;
+  searchText?: string;
 };
 
 export default function OrderListDisplay({
   setShowCreateOrder,
   setEditOrderId,
   refreshTrigger,
+  searchText,
 }: OrderListDisplayTypes) {
   const [allWoList, setAllWoList] = useState<
     { id: string; customer_id: string; status: string; due_date: string }[]
@@ -85,6 +87,27 @@ export default function OrderListDisplay({
     }
   };
 
+  const getCustomerName = (customerId: string) => {
+    const customer: any = customerList.find(
+      (customer) => customer.id === customerId
+    );
+    return customer?.name || "";
+  };
+
+  const filteredWoList = allWoList.filter((wo) => {
+    if (!searchText || !searchText.trim()) return true;
+    const query = searchText.toLowerCase();
+    const customerName = getCustomerName(wo.customer_id).toLowerCase();
+    const status = (wo.status || "").toLowerCase();
+    const idMatch = wo.id.toLowerCase().includes(query);
+
+    return (
+      customerName.includes(query) ||
+      status.includes(query) ||
+      idMatch
+    );
+  });
+
   return (
     <div>
       {/* //? <--- List ---> */}
@@ -96,10 +119,13 @@ export default function OrderListDisplay({
             No orders found.
           </p>
         ) : (
-          allWoList.map((wo, index) => {
-            const customer: any = customerList.find(
-              (customer) => customer.id === wo.customer_id
-            );
+          filteredWoList.length === 0 ? (
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              No orders match your search.
+            </p>
+          ) : (
+          filteredWoList.map((wo, index) => {
+            const customerName = getCustomerName(wo.customer_id);
             return (
               <div
                 key={wo.id}
@@ -139,7 +165,7 @@ export default function OrderListDisplay({
                 <div className="mb-3">
                   <p className="text-sm italic text-left">Order-{index + 1}</p>
                   <p className="text-xl text-left">
-                    Customer: <span className="font-bold">{customer?.name}</span>
+                    Customer: <span className="font-bold">{customerName}</span>
                   </p>
                   <hr className="text-gray-400"></hr>
                 </div>
@@ -156,7 +182,7 @@ export default function OrderListDisplay({
                 </p>
               </div>
             );
-          })
+          }))
         )}
       </div>
     </div>

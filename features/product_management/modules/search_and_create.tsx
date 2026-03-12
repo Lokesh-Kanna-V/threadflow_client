@@ -11,14 +11,22 @@ import { iconSpecifications } from "@/shared/local_db/general_specifications";
 
 type SearchCreateTypes = {
   setShowCreateOrder: (value: boolean) => void;
+  searchText: string;
+  onSearchChange: (value: string) => void;
 };
 
 export default function SearchAndCreate({
   setShowCreateOrder,
+  searchText,
+  onSearchChange,
 }: SearchCreateTypes) {
   return (
     <div className="w-full mb-5 lg:mb-10 flex justify-between items-center">
-      <SearchInput />
+      <SearchInput
+        value={searchText}
+        onChange={onSearchChange}
+        placeholder="Search products"
+      />
       <div>
         <button
           data-tooltip-target="tooltip-default"

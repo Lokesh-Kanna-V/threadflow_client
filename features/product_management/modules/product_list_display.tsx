@@ -20,12 +20,14 @@ type ProductListDisplayTypes = {
   setShowCreateProduct: (value: boolean) => void;
   setEditProductId: (value: string | null) => void;
   refreshTrigger?: number;
+  searchText?: string;
 };
 
 export default function ProductListDisplay({
   setShowCreateProduct,
   setEditProductId,
   refreshTrigger,
+  searchText,
 }: ProductListDisplayTypes) {
   const [productList, setProductList] = useState<
     {
@@ -79,6 +81,17 @@ export default function ProductListDisplay({
     }
   };
 
+  const filteredProductList = productList.filter((product) => {
+    if (!searchText || !searchText.trim()) return true;
+    const query = searchText.toLowerCase();
+    return (
+      product.name.toLowerCase().includes(query) ||
+      (product.sku || "").toLowerCase().includes(query) ||
+      (product.hsn_code || "").toLowerCase().includes(query) ||
+      (product.description || "").toLowerCase().includes(query)
+    );
+  });
+
   return (
     <div>
       <div className="flex gap-5 flex-wrap justify-center md:border border-dashed border-gray-500 p-5">
@@ -88,8 +101,12 @@ export default function ProductListDisplay({
           <p className="text-sm text-gray-500 dark:text-gray-400">
             No products found.
           </p>
+        ) : filteredProductList.length === 0 ? (
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            No products match your search.
+          </p>
         ) : (
-          productList.map((product, index) => (
+          filteredProductList.map((product, index) => (
             <div
               key={product.id}
               className="block w-xs border rounded-lg shadow-xs border-gray-300 dark:border-gray-600 bg-emerald-100 dark:bg-gray-800 p-4 relative"
