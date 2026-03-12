@@ -34,6 +34,7 @@ export default function OrderTrackingListDisplay({
   const [allWoList, setAllWoList] = useState<WorkOrderListItem[]>([]);
   const [customerList, setCustomerList] = useState<Customer[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+   const [searchText, setSearchText] = useState("");
 
   const fetchAllWoList = async () => {
     const company_id = localStorage.getItem("cid");
@@ -76,8 +77,43 @@ export default function OrderTrackingListDisplay({
     return customerList.find((c) => c.id === customerId)?.name || "-";
   };
 
+  const filteredWoList = allWoList.filter((wo) => {
+    if (!searchText.trim()) return true;
+    const query = searchText.toLowerCase();
+    const customerName = getCustomerName(wo.customer_id).toLowerCase();
+    const status = (wo.status || "").toLowerCase();
+    const idMatch = wo.id.toLowerCase().includes(query);
+
+    return (
+      customerName.includes(query) ||
+      status.includes(query) ||
+      idMatch
+    );
+  });
+
   return (
     <div>
+      <div className="mb-4 flex justify-center">
+        <div className="w-full max-w-md">
+          <label
+            htmlFor="order-tracking-search"
+            className="block mb-2 text-sm font-medium text-heading"
+          >
+            Search orders
+          </label>
+          <div className="relative">
+            <input
+              id="order-tracking-search"
+              type="search"
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              placeholder="Search by customer, status or order id"
+              className="block w-full p-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-emerald-50 dark:bg-gray-800 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-primary-600 focus:border-primary-600"
+            />
+          </div>
+        </div>
+      </div>
+
       <div className="flex gap-5 flex-wrap justify-center md:border border-dashed border-gray-500 p-5">
         {loading ? (
           <ListLoader text="Loading orders..." />
@@ -85,8 +121,12 @@ export default function OrderTrackingListDisplay({
           <p className="text-sm text-gray-500 dark:text-gray-400">
             No orders found.
           </p>
+        ) : filteredWoList.length === 0 ? (
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            No orders match your search.
+          </p>
         ) : (
-          allWoList.map((wo, index) => (
+          filteredWoList.map((wo, index) => (
             <button
               key={wo.id}
               type="button"
