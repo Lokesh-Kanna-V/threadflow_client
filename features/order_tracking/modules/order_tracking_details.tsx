@@ -302,11 +302,10 @@ export default function OrderTrackingDetails({ woId }: OrderTrackingDetailsProps
                                                 stageId: stage.id,
                                               })
                                             }
-                                            className={`w-full rounded-lg border px-3 py-2 text-left bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-600 ${
-                                              isActive
+                                            className={`w-full rounded-lg border px-3 py-2 text-left bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-600 ${isActive
                                                 ? "ring-2 ring-primary-600"
                                                 : ""
-                                            }`}
+                                              }`}
                                           >
                                             <div className="flex items-start justify-between gap-2">
                                               <div className="min-w-0">
@@ -348,7 +347,7 @@ export default function OrderTrackingDetails({ woId }: OrderTrackingDetailsProps
                         <div className="w-full lg:w-[360px]">
                           <div className="rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 h-full">
                             {!selectedStageData ||
-                            selectedStageData.item.id !== item.id ? (
+                              selectedStageData.item.id !== item.id ? (
                               <div>
                                 <p className="text-sm font-semibold text-gray-900 dark:text-white">
                                   Stage Details
