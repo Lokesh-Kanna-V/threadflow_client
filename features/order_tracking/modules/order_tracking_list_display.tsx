@@ -9,6 +9,7 @@ import { GetCustomersAPI } from "@/features/order_list/services/get_customer_lis
 
 //? Shared UI Imports
 import ListLoader from "@/shared/ui/list_loader";
+import SearchInput from "@/shared/ui/search_input";
 
 type OrderTrackingListDisplayProps = {
   refreshTrigger?: number;
@@ -93,25 +94,13 @@ export default function OrderTrackingListDisplay({
 
   return (
     <div>
-      <div className="mb-4 flex justify-center">
-        <div className="w-full max-w-md">
-          <label
-            htmlFor="order-tracking-search"
-            className="block mb-2 text-sm font-medium text-heading"
-          >
-            Search orders
-          </label>
-          <div className="relative">
-            <input
-              id="order-tracking-search"
-              type="search"
-              value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
-              placeholder="Search by customer, status or order id"
-              className="block w-full p-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-emerald-50 dark:bg-gray-800 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-primary-600 focus:border-primary-600"
-            />
-          </div>
-        </div>
+      <div className="mb-4 flex justify-between items-center">
+        <SearchInput
+          value={searchText}
+          onChange={setSearchText}
+          placeholder="Search by customer, status or order id"
+          label="Search orders"
+        />
       </div>
 
       <div className="flex gap-5 flex-wrap justify-center md:border border-dashed border-gray-500 p-5">
