@@ -290,9 +290,9 @@ export default function OrderTrackingDetails({ woId }: OrderTrackingDetailsProps
                                     return (
                                       <li
                                         key={stage.id}
-                                        className="mb-6 md:mb-3 md:flex-none md:w-[220px]"
+                                        className="mb-6 md:mb-3 md:flex-none md:w-[220px] flex"
                                       >
-                                        <div className="flex items-start md:flex-col md:items-stretch gap-3">
+                                        <div className="flex items-start md:flex-col md:items-stretch gap-3 w-full">
                                           <span
                                             className={`absolute -left-1.5 mt-1.5 h-3 w-3 rounded-full ${styles.dot} md:static md:mt-0 md:mx-auto`}
                                           />
@@ -305,7 +305,7 @@ export default function OrderTrackingDetails({ woId }: OrderTrackingDetailsProps
                                                 stageId: stage.id,
                                               })
                                             }
-                                            className={`w-full rounded-lg border px-3 py-2 text-left bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-600 ${isActive
+                                            className={`w-full h-full rounded-lg border px-3 py-2 text-left bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-600 ${isActive
                                                 ? "ring-2 ring-primary-600"
                                                 : ""
                                               }`}
