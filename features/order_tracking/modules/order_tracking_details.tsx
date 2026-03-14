@@ -240,8 +240,8 @@ export default function OrderTrackingDetails({ woId }: OrderTrackingDetailsProps
                       key={item.id}
                       className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-emerald-50 dark:bg-gray-900"
                     >
-                      <div className="flex flex-col lg:flex-row lg:items-start gap-4">
-                        <div className="flex-1 min-w-0">
+                      <div className="flex flex-col md:flex-row md:items-start gap-4">
+                        <div className="min-w-0 w-full md:flex-1">
                           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-3">
                             <div className="min-w-0">
                               <p className="text-sm italic text-gray-600 dark:text-gray-400">
@@ -282,7 +282,7 @@ export default function OrderTrackingDetails({ woId }: OrderTrackingDetailsProps
                               </div>
 
                               <div className="mt-3">
-                                <ol className="relative border-l border-gray-200 dark:border-gray-700 md:border-l-0 md:flex md:items-stretch md:gap-3">
+                                <ol className="relative border-l border-gray-200 dark:border-gray-700 md:border-l-0 md:flex md:flex-wrap md:gap-3">
                                   {stages.map((stage, idx) => {
                                     const isActive = activeStageId === stage.id;
                                     const styles = getStageStatusStyles(stage.status);
@@ -290,7 +290,7 @@ export default function OrderTrackingDetails({ woId }: OrderTrackingDetailsProps
                                     return (
                                       <li
                                         key={stage.id}
-                                        className="mb-6 md:mb-0 md:flex-1"
+                                        className="mb-6 md:mb-3 md:flex-none md:w-[220px]"
                                       >
                                         <div className="flex items-start md:flex-col md:items-stretch gap-3">
                                           <span
@@ -347,7 +347,7 @@ export default function OrderTrackingDetails({ woId }: OrderTrackingDetailsProps
                           )}
                         </div>
 
-                        <div className="w-full lg:w-[360px]">
+                        <div className="w-full md:w-[360px]">
                           <div className="rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 h-full">
                             {!selectedStageData ||
                               selectedStageData.item.id !== item.id ? (
