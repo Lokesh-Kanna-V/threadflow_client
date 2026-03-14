@@ -576,7 +576,15 @@ export default function ThreadFlow() {
       </aside>
 
       {selectedTab == 0 ? (
-        <DashboardUI />
+        <DashboardUI
+          onAddWorkOrder={() => handleSidebarClick(1)}
+          onAddCustomer={() => handleSidebarClick(5)}
+          onAddJobWorker={() => handleSidebarClick(4)}
+          onViewSettings={() => {
+            // Placeholder: keep user on dashboard, can be wired to settings page later
+            closeSidebar();
+          }}
+        />
       ) : selectedTab == 1 ? (
         <OrderListUI />
       ) : selectedTab == 2 ? (

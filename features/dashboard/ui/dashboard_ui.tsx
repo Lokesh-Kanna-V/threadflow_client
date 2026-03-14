@@ -29,7 +29,19 @@ type Customer = {
   name: string;
 };
 
-export default function DashboardUI() {
+type DashboardUIProps = {
+  onAddWorkOrder: () => void;
+  onAddCustomer: () => void;
+  onAddJobWorker: () => void;
+  onViewSettings: () => void;
+};
+
+export default function DashboardUI({
+  onAddWorkOrder,
+  onAddCustomer,
+  onAddJobWorker,
+  onViewSettings,
+}: DashboardUIProps) {
   const [orders, setOrders] = useState<WorkOrder[]>([]);
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [loading, setLoading] = useState(false);
@@ -85,12 +97,60 @@ export default function DashboardUI() {
     return customers.find((c) => c.id === customerId)?.name || "-";
   };
 
+  const ordersThisWeek = orders.filter((wo) => {
+    if (!wo.created_at) return false;
+    const created = new Date(wo.created_at);
+    if (Number.isNaN(created.getTime())) return false;
+    const weekAgo = new Date();
+    weekAgo.setDate(weekAgo.getDate() - 7);
+    return created >= weekAgo;
+  }).length;
+
+  const completionRate =
+    totalOrders === 0 ? 0 : Math.round((completedOrders / totalOrders) * 100);
+
+  const nextDueOrder = (() => {
+    const upcoming = orders
+      .filter((wo) => {
+        if (!wo.due_date) return false;
+        const due = new Date(wo.due_date);
+        const now = new Date();
+        now.setHours(0, 0, 0, 0);
+        if (Number.isNaN(due.getTime())) return false;
+        return (
+          due >= now && wo.status?.toLowerCase() !== "completed"
+        );
+      })
+      .sort((a, b) => {
+        const da = new Date(a.due_date || "").getTime();
+        const db = new Date(b.due_date || "").getTime();
+        return da - db;
+      });
+    return upcoming[0] || null;
+  })();
+
+  const topCustomers = (() => {
+    const counts: Record<string, number> = {};
+    orders.forEach((wo) => {
+      if (!wo.customer_id) return;
+      counts[wo.customer_id] = (counts[wo.customer_id] || 0) + 1;
+    });
+    return Object.entries(counts)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 3)
+      .map(([customerId, count]) => ({
+        customerId,
+        count,
+        name: getCustomerName(customerId),
+      }));
+  })();
+
   return (
     <main className="p-4 md:ml-64 h-auto pt-20">
       {/* //? <---- Statistics ----> */}
       <div className="flex flex-col gap-4 mb-10">
         <h1 className="text-md font-bold md:text-lg uppercase">Statistics</h1>
-        <div className="grid grid-cols-2 gap-4 mb-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
           {/* //? Total orders */}
           <div className="flex flex-col justify-center items-center border-2 rounded-lg border-gray-300 dark:border-gray-600 h-48 md:h-72 bg-emerald-100 dark:bg-gray-800 shadow-sm p-4">
             <div className="text-4xl font-extrabold text-emerald-700 mb-2">
@@ -113,10 +173,10 @@ export default function DashboardUI() {
           {/* //? Active orders */}
           <div className="flex flex-col justify-center items-center border-2 rounded-lg border-gray-300 dark:border-gray-600 h-48 md:h-72 bg-amber-100 dark:bg-gray-800 shadow-sm p-4">
             <div className="text-4xl font-extrabold text-amber-700 mb-2">
-              {activeOrders}
+              {ordersThisWeek}
             </div>
             <div className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
-              Active Orders
+              Orders This Week
             </div>
             <div className="mt-3 inline-flex items-center text-xs text-emerald-800 bg-amber-200 dark:bg-amber-900 dark:text-orange-200 px-2 py-1 rounded-full">
               <WarningIcon
@@ -125,7 +185,7 @@ export default function DashboardUI() {
                 weight={iconSpecifications.weight as any}
                 className="mr-1"
               />
-              status = "Active"
+              Created in last 7 days
             </div>
           </div>
 
@@ -151,10 +211,10 @@ export default function DashboardUI() {
           {/* //? Completed orders */}
           <div className="flex flex-col justify-center items-center border-2 rounded-lg border-gray-300 dark:border-gray-600 h-48 md:h-72 bg-emerald-100 dark:bg-gray-800 shadow-sm p-4">
             <div className="text-4xl font-extrabold text-emerald-700 mb-2">
-              {completedOrders}
+              {completionRate}%
             </div>
             <div className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
-              Completed Orders
+              Completion Rate
             </div>
             <div className="mt-3 inline-flex items-center text-xs text-emerald-800 bg-emerald-200 dark:bg-emerald-900 dark:text-emerald-200 px-2 py-1 rounded-full">
               <CheckIcon
@@ -163,7 +223,7 @@ export default function DashboardUI() {
                 weight={iconSpecifications.weight as any}
                 className="mr-1"
               />
-              status = "Completed"
+              Based on total orders
             </div>
           </div>
         </div>
@@ -239,6 +299,63 @@ export default function DashboardUI() {
         </div>
       </div>
 
+      {/* //? <---- Insights ----> */}
+      <div className="flex flex-col gap-4 mb-10">
+        <h1 className="text-md font-bold md:text-lg uppercase">Insights</h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 p-4">
+            <h2 className="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
+              Next Due Order
+            </h2>
+            {nextDueOrder ? (
+              <div>
+                <p className="text-sm text-gray-900 dark:text-white font-medium">
+                  {nextDueOrder.id}
+                </p>
+                <p className="text-xs text-gray-600 dark:text-gray-300">
+                  {getCustomerName(nextDueOrder.customer_id)}
+                </p>
+                <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                  Due{" "}
+                  {nextDueOrder.due_date
+                    ? new Date(nextDueOrder.due_date).toLocaleDateString()
+                    : "-"}
+                </p>
+              </div>
+            ) : (
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                No upcoming due orders.
+              </p>
+            )}
+          </div>
+
+          <div className="border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 p-4">
+            <h2 className="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
+              Top Customers by Orders
+            </h2>
+            {topCustomers.length === 0 ? (
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                Not enough data yet.
+              </p>
+            ) : (
+              <ul className="space-y-1">
+                {topCustomers.map((c) => (
+                  <li
+                    key={c.customerId}
+                    className="flex items-center justify-between text-xs text-gray-800 dark:text-gray-100"
+                  >
+                    <span className="truncate">{c.name}</span>
+                    <span className="ml-2 text-gray-500 dark:text-gray-400">
+                      {c.count} orders
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
+      </div>
+
       {/* //? <---- Quick Actions ----> */}
       <div className="flex flex-col gap-4 mb-4">
         <h1 className="text-md font-bold md:text-lg uppercase">
@@ -247,7 +364,10 @@ export default function DashboardUI() {
 
         <div className="grid grid-cols-2 gap-4">
           {/* Action 1 */}
-          <button className="flex items-center justify-center gap-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-700 px-4 py-3 text-sm font-medium text-gray-800 dark:text-stone-200 hover:bg-stone-200 dark:hover:bg-gray-800 transition">
+          <button
+            onClick={onAddWorkOrder}
+            className="flex items-center justify-center gap-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-700 px-4 py-3 text-sm font-medium text-gray-800 dark:text-stone-200 hover:bg-stone-200 dark:hover:bg-gray-800 transition"
+          >
             <PlusIcon
               size={18}
               color={iconSpecifications.colour}
@@ -257,7 +377,10 @@ export default function DashboardUI() {
           </button>
 
           {/* Action 2 */}
-          <button className="flex items-center justify-center gap-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-700 px-4 py-3 text-sm font-medium text-gray-800 dark:text-stone-200 hover:bg-stone-200 dark:hover:bg-gray-800 transition">
+          <button
+            onClick={onAddCustomer}
+            className="flex items-center justify-center gap-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-700 px-4 py-3 text-sm font-medium text-gray-800 dark:text-stone-200 hover:bg-stone-200 dark:hover:bg-gray-800 transition"
+          >
             <PlusIcon
               size={18}
               color={iconSpecifications.colour}
@@ -267,7 +390,10 @@ export default function DashboardUI() {
           </button>
 
           {/* Action 3 */}
-          <button className="flex items-center justify-center gap-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-700 px-4 py-3 text-sm font-medium text-gray-800 dark:text-stone-200 hover:bg-stone-200 dark:hover:bg-gray-800 transition">
+          <button
+            onClick={onAddJobWorker}
+            className="flex items-center justify-center gap-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-700 px-4 py-3 text-sm font-medium text-gray-800 dark:text-stone-200 hover:bg-stone-200 dark:hover:bg-gray-800 transition"
+          >
             <PlusIcon
               size={18}
               color={iconSpecifications.colour}
@@ -277,7 +403,10 @@ export default function DashboardUI() {
           </button>
 
           {/* Action 4 */}
-          <button className="flex items-center justify-center gap-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-700 px-4 py-3 text-sm font-medium text-gray-800 dark:text-stone-200 hover:bg-stone-200 dark:hover:bg-gray-800 transition">
+          <button
+            onClick={onViewSettings}
+            className="flex items-center justify-center gap-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-700 px-4 py-3 text-sm font-medium text-gray-800 dark:text-stone-200 hover:bg-stone-200 dark:hover:bg-gray-800 transition"
+          >
             <PlusIcon
               size={18}
               color={iconSpecifications.colour}
