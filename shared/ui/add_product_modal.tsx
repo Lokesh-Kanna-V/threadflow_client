@@ -29,6 +29,7 @@ type ItemDetail = {
   colour: string;
   quantity: string;
   qty_unit: string;
+  due_date: string;
   stages: StageDetails[];
   remarks: string;
 };
@@ -68,6 +69,7 @@ export default function AddEditProductModal({
     colour: "",
     quantity: "",
     qty_unit: "",
+    due_date: "",
     stages: [
       {
         id: "",
@@ -147,6 +149,7 @@ export default function AddEditProductModal({
         colour: "",
         quantity: "",
         qty_unit: "",
+        due_date: "",
         stages: [
           {
             id: "",
@@ -424,6 +427,33 @@ export default function AddEditProductModal({
                   required
                 />
               </div>
+              {/* //? Due Date */}
+              <div className="col-span-2 sm:col-span-1">
+                <label
+                  htmlFor="due_date"
+                  className="block mb-2.5 text-sm font-medium text-heading"
+                >
+                  Due Date
+                </label>
+                <input
+                  type="date"
+                  name="due_date"
+                  id="due_date"
+                  value={
+                    typeof index === "number"
+                      ? itemDetails[index]?.due_date ?? ""
+                      : newItemDetails.due_date
+                  }
+                  onChange={(e) => {
+                    if (typeof index === "number") {
+                      handleItemDetailsChange(index, "due_date", e.target.value);
+                    } else {
+                      handleNewItemDetails("due_date", e.target.value);
+                    }
+                  }}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                />
+              </div>
               {/* //? Stage */}
               <div className="col-span-2 sm:col-span-1">
                 <label
@@ -591,6 +621,7 @@ export default function AddEditProductModal({
                     colour: "",
                     quantity: "",
                     qty_unit: "",
+                    due_date: "",
                     stages: [
                       {
                         id: "",

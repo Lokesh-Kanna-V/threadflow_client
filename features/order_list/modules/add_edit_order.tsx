@@ -45,7 +45,6 @@ export default function AddEditOrder({
 }: AddEditOrderTypes) {
   const { user } = useAuth();
 
-  const [date, setDate] = useState("");
   const [showAddItemModal, setShowAddItemModal] = useState(false);
   const [addItemClick, setAddItemClick] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState<number>();
@@ -69,6 +68,7 @@ export default function AddEditOrder({
       colour: "",
       quantity: "",
       qty_unit: "",
+      due_date: "",
       stages: [
         {
           id: "",
@@ -93,11 +93,21 @@ export default function AddEditOrder({
     setItemDetails((prev) => prev.filter((_, i) => i !== index));
   };
 
+  const getOrderDueDateFromItems = () => {
+    const itemDueDates = itemDetails
+      .slice(1)
+      .map((i) => i.due_date)
+      .filter(Boolean);
+    if (itemDueDates.length === 0) return "";
+    return itemDueDates.sort().reverse()[0];
+  };
+
   const createOrder = async (e: any) => {
     e.preventDefault();
 
+    const orderDueDate = getOrderDueDateFromItems();
     const consolidatedItemDetails = {
-      orderDetails,
+      orderDetails: { ...orderDetails, due_date: orderDueDate },
       itemDetails: itemDetails.slice(1),
     };
 
@@ -125,6 +135,7 @@ export default function AddEditOrder({
           colour: "",
           quantity: "",
           qty_unit: "",
+          due_date: "",
           stages: [
             {
               id: "",
@@ -154,9 +165,10 @@ export default function AddEditOrder({
     e.preventDefault();
     if (!editOrderId) return;
 
+    const orderDueDate = getOrderDueDateFromItems();
     const payload = {
       id: editOrderId,
-      orderDetails,
+      orderDetails: { ...orderDetails, due_date: orderDueDate },
       itemDetails: itemDetails.slice(1),
     };
 
@@ -185,6 +197,7 @@ export default function AddEditOrder({
           colour: "",
           quantity: "",
           qty_unit: "",
+          due_date: "",
           stages: [
             {
               id: "",
@@ -228,6 +241,7 @@ export default function AddEditOrder({
         colour: "",
         quantity: "",
         qty_unit: "",
+        due_date: "",
         stages: [
           {
             id: "",
@@ -271,10 +285,6 @@ export default function AddEditOrder({
                 status: order.status || "",
                 remarks: order.remarks || "",
               });
-              if (order.due_date) {
-                const dateObj = new Date(order.due_date);
-                setDate(dateObj.toISOString().split("T")[0]);
-              }
               if (order.items && order.items.length > 0) {
                 setItemDetails([
                   {
@@ -284,6 +294,7 @@ export default function AddEditOrder({
                     colour: "",
                     quantity: "",
                     qty_unit: "",
+                    due_date: "",
                     stages: [
                       {
                         id: "",
@@ -302,6 +313,7 @@ export default function AddEditOrder({
                     colour: item.colour || "",
                     quantity: item.quantity || "",
                     qty_unit: item.qty_unit || "",
+                    due_date: item.due_date || "",
                     stages: item.stages || [
                       {
                         id: "",
@@ -384,12 +396,9 @@ export default function AddEditOrder({
                     type="date"
                     name="due_date"
                     id="due_date"
-                    value={date}
-                    onChange={(e) => {
-                      setDate(e.target.value);
-                      handleOrderDetailsChange("due_date", e.target.value);
-                    }}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-whitedark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    value={getOrderDueDateFromItems()}
+                    readOnly
+                    className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white cursor-not-allowed"
                   />
                 </div>
 
@@ -454,6 +463,7 @@ export default function AddEditOrder({
                       <th className="px-6 py-4 font-semibold">Qty</th>
                       <th className="px-6 py-4 font-semibold">Size</th>
                       <th className="px-6 py-4 font-semibold">Colour</th>
+                      <th className="px-6 py-4 font-semibold">Due Date</th>
                       <th className="px-6 py-4 font-semibold"></th>
                     </tr>
                   </thead>
@@ -511,6 +521,14 @@ export default function AddEditOrder({
                               className="px-6 py-4 font-medium text-heading whitespace-nowrap"
                             >
                               {item.colour}
+                            </th>
+                            <th
+                              scope="row"
+                              className="px-6 py-4 font-medium text-heading whitespace-nowrap"
+                            >
+                              {item.due_date
+                                ? new Date(item.due_date).toLocaleDateString()
+                                : "-"}
                             </th>
                             <td className="px-6 py-4 text-center">
                               <div className="flex">
