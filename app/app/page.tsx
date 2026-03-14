@@ -18,6 +18,7 @@ import ProductManagementUI from "@/features/product_management/ui/product_manage
 import JobWorkerManagementUI from "@/features/job_worker_management/ui/job_worker_management_ui";
 import CustomerManagementUI from "@/features/customer_management/ui/customer_management_ui";
 import OrderTrackingUI from "@/features/order_tracking/ui/order_tracking_ui";
+import CompanyDetailsUI from "@/features/company_details/ui/company_details_ui";
 
 
 //? NPM UI Imports
@@ -561,6 +562,10 @@ export default function ThreadFlow() {
             <li>
               <a
                 href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleSidebarClick(6);
+                }}
                 className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
               >
                 <GearIcon
@@ -580,10 +585,7 @@ export default function ThreadFlow() {
           onAddWorkOrder={() => handleSidebarClick(1)}
           onAddCustomer={() => handleSidebarClick(5)}
           onAddJobWorker={() => handleSidebarClick(4)}
-          onViewSettings={() => {
-            // Placeholder: keep user on dashboard, can be wired to settings page later
-            closeSidebar();
-          }}
+          onViewSettings={() => handleSidebarClick(6)}
         />
       ) : selectedTab == 1 ? (
         <OrderListUI />
@@ -595,6 +597,8 @@ export default function ThreadFlow() {
         <JobWorkerManagementUI />
       ) : selectedTab == 5 ? (
         <CustomerManagementUI />
+      ) : selectedTab == 6 ? (
+        <CompanyDetailsUI />
       ) : (
         <></>
       )}
