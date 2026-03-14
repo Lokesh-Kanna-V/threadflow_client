@@ -22,6 +22,9 @@ type Stage = {
   description: string;
   status: string;
   assigned_to: string;
+  start_date?: string;
+  end_date?: string;
+  estimated_completion_date?: string;
 };
 
 type WorkOrderItem = {
@@ -381,6 +384,42 @@ export default function OrderTrackingDetails({ woId }: OrderTrackingDetailsProps
                                     </span>
                                   </span>
                                 </div>
+
+                                {(selectedStageData.stage.start_date ||
+                                  selectedStageData.stage.end_date ||
+                                  selectedStageData.stage.estimated_completion_date) && (
+                                  <div className="space-y-1">
+                                    <p className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase">
+                                      Dates
+                                    </p>
+                                    <div className="flex flex-wrap gap-2 text-sm text-gray-800 dark:text-gray-200">
+                                      {selectedStageData.stage.start_date && (
+                                        <span>
+                                          Start:{" "}
+                                          {new Date(
+                                            selectedStageData.stage.start_date
+                                          ).toLocaleString()}
+                                        </span>
+                                      )}
+                                      {selectedStageData.stage.estimated_completion_date && (
+                                        <span>
+                                          Est. completion:{" "}
+                                          {new Date(
+                                            selectedStageData.stage.estimated_completion_date
+                                          ).toLocaleDateString()}
+                                        </span>
+                                      )}
+                                      {selectedStageData.stage.end_date && (
+                                        <span>
+                                          End:{" "}
+                                          {new Date(
+                                            selectedStageData.stage.end_date
+                                          ).toLocaleString()}
+                                        </span>
+                                      )}
+                                    </div>
+                                  </div>
+                                )}
 
                                 {selectedStageData.stage.description && (
                                   <div>

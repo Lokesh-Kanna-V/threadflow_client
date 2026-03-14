@@ -26,6 +26,9 @@ type Stage = {
   description: string;
   status: string;
   assigned_to: string;
+  start_date?: string;
+  end_date?: string;
+  estimated_completion_date?: string;
 };
 
 type WorkOrderItem = {
@@ -129,13 +132,43 @@ export default function WorkerUpdateUI({ woId }: WorkerUpdatePageProps) {
     stageId: string,
     status: string
   ) => {
+    const now = new Date().toISOString();
+    setItems((prev) =>
+      prev.map((item) =>
+        item.id === itemId
+          ? {
+              ...item,
+              stages: (item.stages || []).map((stage) => {
+                if (stage.id !== stageId) return stage;
+                const next = { ...stage, status };
+                if (status === "In Progress") {
+                  next.start_date = next.start_date || now;
+                }
+                if (status === "Completed") {
+                  next.end_date = now;
+                }
+                return next;
+              }),
+            }
+          : item
+      )
+    );
+  };
+
+  const handleStageEstimatedCompletionDate = (
+    itemId: string,
+    stageId: string,
+    value: string
+  ) => {
     setItems((prev) =>
       prev.map((item) =>
         item.id === itemId
           ? {
               ...item,
               stages: (item.stages || []).map((stage) =>
-                stage.id === stageId ? { ...stage, status } : stage
+                stage.id === stageId
+                  ? { ...stage, estimated_completion_date: value || undefined }
+                  : stage
               ),
             }
           : item
@@ -339,6 +372,29 @@ export default function WorkerUpdateUI({ woId }: WorkerUpdatePageProps) {
                                   <option value="Completed">Completed</option>
                                   <option value="On Hold">On Hold</option>
                                 </select>
+                                {stage.status === "In Progress" && (
+                                  <div className="flex flex-col min-w-0">
+                                    <label
+                                      htmlFor={`est-${item.id}-${stage.id}`}
+                                      className="text-xs text-gray-600 dark:text-gray-400 mb-0.5"
+                                    >
+                                      Est. completion
+                                    </label>
+                                    <input
+                                      type="date"
+                                      id={`est-${item.id}-${stage.id}`}
+                                      value={stage.estimated_completion_date || ""}
+                                      onChange={(e) =>
+                                        handleStageEstimatedCompletionDate(
+                                          item.id,
+                                          stage.id,
+                                          e.target.value
+                                        )
+                                      }
+                                      className="bg-gray-50 border border-gray-300 text-gray-900 text-xs md:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                    />
+                                  </div>
+                                )}
                               </div>
                             </div>
                           ))}
