@@ -6,8 +6,15 @@ import { useAuth } from "../context/AuthContext";
 export const useApi = () => {
   const { accessToken, setAccessToken } = useAuth();
 
+  const baseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
+  if (!baseURL) {
+    throw new Error(
+      "Missing NEXT_PUBLIC_BACKEND_URL. Set it in your .env (client) before making API requests."
+    );
+  }
+
   const api = axios.create({
-    baseURL: "http://localhost:9000",
+    baseURL,
     withCredentials: true, // <-- sends refresh cookie automatically
   });
 
@@ -33,11 +40,7 @@ export const useApi = () => {
 
         try {
           // call refresh endpoint
-          const refreshResponse = await axios.post(
-            "http://localhost:9000/user/refresh",
-            {},
-            { withCredentials: true }
-          );
+          const refreshResponse = await api.post("/user/refresh", {});
 
           const newToken = refreshResponse.data.accessToken;
 

@@ -2,8 +2,13 @@ import axios from "axios";
 
 export const jobStageApi = async () => {
   try {
+    const baseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
+    if (!baseURL) {
+      throw new Error("Missing NEXT_PUBLIC_BACKEND_URL");
+    }
+
     const response = await axios.get(
-      "http://localhost:9000/jobStage/getAllStages",
+      `${baseURL}/jobStage/getAllStages`,
       {
         withCredentials: true, // <--- VERY IMPORTANT FOR SECURITY
         headers: {
@@ -18,12 +23,14 @@ export const jobStageApi = async () => {
         stages: response.data.stages,
       },
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.log(error);
 
     return {
       success: false,
-      error: error.response?.data?.error || "Network error",
+      error: axios.isAxiosError(error)
+        ? error.response?.data?.error || "Network error"
+        : "Network error",
     };
   }
 };

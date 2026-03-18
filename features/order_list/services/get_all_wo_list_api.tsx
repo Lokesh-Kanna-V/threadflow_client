@@ -8,8 +8,13 @@ export const GetAllWoListAPI = async ({ company_id }: GetAllWoListType) => {
   // setLoading(true);
 
   try {
+    const baseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
+    if (!baseURL) {
+      throw new Error("Missing NEXT_PUBLIC_BACKEND_URL");
+    }
+
     const response = await axios.post(
-      "http://localhost:9000/workOrder/getAllWorkOrders",
+      `${baseURL}/workOrder/getAllWorkOrders`,
       { company_id },
       {
         withCredentials: true, // <--- VERY IMPORTANT FOR SECURITY
@@ -26,15 +31,18 @@ export const GetAllWoListAPI = async ({ company_id }: GetAllWoListType) => {
       success: true,
       data: response.data,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     // setLoading(false);
     console.log(error);
     // setShowAlert({ status: "error", message: error.code });
-    console.error("Failed to fetch all work orders:", error.code);
+    const errorCode = axios.isAxiosError(error) ? error.code : undefined;
+    console.error("Failed to fetch all work orders:", errorCode);
 
     return {
       success: false,
-      error: error.response?.data?.error || "Network error",
+      error: axios.isAxiosError(error)
+        ? error.response?.data?.error || "Network error"
+        : "Network error",
     };
   }
 };

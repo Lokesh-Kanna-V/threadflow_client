@@ -6,8 +6,13 @@ type CreateUserType = {
 
 export const createUser = async ({ userData }: CreateUserType) => {
   try {
+    const baseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
+    if (!baseURL) {
+      throw new Error("Missing NEXT_PUBLIC_BACKEND_URL");
+    }
+
     const response = await axios.post(
-      "http://localhost:9000/user/postUser",
+      `${baseURL}/user/postUser`,
       userData,
       {
         headers: {
@@ -20,12 +25,14 @@ export const createUser = async ({ userData }: CreateUserType) => {
       success: true,
       data: response.data,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Company Not Created:", error);
 
     return {
       success: false,
-      error: error.response?.data?.error || "Network error",
+      error: axios.isAxiosError(error)
+        ? error.response?.data?.error || "Network error"
+        : "Network error",
     };
   }
 };

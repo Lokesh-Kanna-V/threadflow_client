@@ -8,8 +8,13 @@ export const CreateJobWorkerAPI = async ({
   job_worker_details,
 }: CreateJobWorkerType) => {
   try {
+    const baseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
+    if (!baseURL) {
+      throw new Error("Missing NEXT_PUBLIC_BACKEND_URL");
+    }
+
     const response = await axios.post(
-      "http://localhost:9000/jobWorker/postJobWorker",
+      `${baseURL}/jobWorker/postJobWorker`,
       { job_worker_details },
       {
         withCredentials: true, // <--- VERY IMPORTANT FOR SECURITY
@@ -23,13 +28,16 @@ export const CreateJobWorkerAPI = async ({
       success: true,
       data: response.data,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.log(error);
-    console.error("Failed to create job worker:", error.code);
+    const errorCode = axios.isAxiosError(error) ? error.code : undefined;
+    console.error("Failed to create job worker:", errorCode);
 
     return {
       success: false,
-      error: error.response?.data?.error || "Network error",
+      error: axios.isAxiosError(error)
+        ? error.response?.data?.error || "Network error"
+        : "Network error",
     };
   }
 };

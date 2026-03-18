@@ -21,8 +21,13 @@ export const UserLogin = async ({
 }: UserLoginType) => {
   setLoading(true);
   try {
+    const baseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
+    if (!baseURL) {
+      throw new Error("Missing NEXT_PUBLIC_BACKEND_URL");
+    }
+
     const response = await axios.post(
-      "http://localhost:9000/user/login",
+      `${baseURL}/user/login`,
       { email, password },
       {
         withCredentials: true, // <--- VERY IMPORTANT FOR SECURITY
@@ -48,15 +53,22 @@ export const UserLogin = async ({
         user: response.data.user,
       },
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     setLoading(false);
     console.log(error);
-    setShowAlert({ status: "error", message: error.code });
-    console.error("Company Not Created:", error.code);
+    const errorMessage = axios.isAxiosError(error)
+      ? error.code ?? "Request failed"
+      : error instanceof Error
+        ? error.message
+        : "Request failed";
+    setShowAlert({ status: "error", message: errorMessage });
+    console.error("Company Not Created:", errorMessage);
 
     return {
       success: false,
-      error: error.response?.data?.error || "Network error",
+      error: axios.isAxiosError(error)
+        ? error.response?.data?.error || "Network error"
+        : "Network error",
     };
   }
 };

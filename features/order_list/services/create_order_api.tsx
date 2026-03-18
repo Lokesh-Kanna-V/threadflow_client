@@ -11,8 +11,13 @@ export const CreateOrderApi = async (
   console.log("Consolidated item details:", consolidatedItemDetails);
   // setLoading(true);
   try {
+    const baseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
+    if (!baseURL) {
+      throw new Error("Missing NEXT_PUBLIC_BACKEND_URL");
+    }
+
     const response = await axios.post(
-      "http://localhost:9000/workOrder/postWorkOrder",
+      `${baseURL}/workOrder/postWorkOrder`,
       consolidatedItemDetails,
       {
         withCredentials: true, // <--- VERY IMPORTANT FOR SECURITY
@@ -31,15 +36,18 @@ export const CreateOrderApi = async (
         dta: response.data,
       },
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     // setLoading(false);
     console.log(error);
     // setShowAlert({ status: "error", message: error.code });
-    console.error("Company Not Created:", error.code);
+    const errorCode = axios.isAxiosError(error) ? error.code : undefined;
+    console.error("Company Not Created:", errorCode);
 
     return {
       success: false,
-      error: error.response?.data?.error || "Network error",
+      error: axios.isAxiosError(error)
+        ? error.response?.data?.error || "Network error"
+        : "Network error",
     };
   }
 };
