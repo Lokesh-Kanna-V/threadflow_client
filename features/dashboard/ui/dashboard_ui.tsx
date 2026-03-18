@@ -145,6 +145,15 @@ export default function DashboardUI({
       }));
   })();
 
+  const StatValue = ({ value }: { value: string | number }) => {
+    if (loading) {
+      return (
+        <div className="h-10 w-20 rounded-md bg-black/10 dark:bg-white/10 animate-pulse mb-2" />
+      );
+    }
+    return <>{value}</>;
+  };
+
   return (
     <main className="p-4 md:ml-64 h-auto pt-20">
       {/* //? <---- Statistics ----> */}
@@ -154,7 +163,7 @@ export default function DashboardUI({
           {/* //? Total orders */}
           <div className="flex flex-col justify-center items-center border-2 rounded-lg border-gray-300 dark:border-gray-600 h-48 md:h-72 bg-emerald-100 dark:bg-gray-800 shadow-sm p-4">
             <div className="text-4xl font-extrabold text-emerald-700 mb-2">
-              {totalOrders}
+              <StatValue value={totalOrders} />
             </div>
             <div className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
               Total Orders
@@ -173,7 +182,7 @@ export default function DashboardUI({
           {/* //? Active orders */}
           <div className="flex flex-col justify-center items-center border-2 rounded-lg border-gray-300 dark:border-gray-600 h-48 md:h-72 bg-amber-100 dark:bg-gray-800 shadow-sm p-4">
             <div className="text-4xl font-extrabold text-amber-700 mb-2">
-              {ordersThisWeek}
+              <StatValue value={ordersThisWeek} />
             </div>
             <div className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
               Orders This Week
@@ -192,7 +201,7 @@ export default function DashboardUI({
           {/* //? Overdue orders */}
           <div className="flex flex-col justify-center items-center border-2 rounded-lg border-gray-300 dark:border-gray-600 h-48 md:h-72 bg-red-100 dark:bg-gray-800 shadow-sm p-4">
             <div className="text-4xl font-extrabold text-red-700 mb-2">
-              {overdueOrders}
+              <StatValue value={overdueOrders} />
             </div>
             <div className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
               Overdue Orders
@@ -211,7 +220,7 @@ export default function DashboardUI({
           {/* //? Completed orders */}
           <div className="flex flex-col justify-center items-center border-2 rounded-lg border-gray-300 dark:border-gray-600 h-48 md:h-72 bg-emerald-100 dark:bg-gray-800 shadow-sm p-4">
             <div className="text-4xl font-extrabold text-emerald-700 mb-2">
-              {completionRate}%
+              {loading ? <StatValue value="" /> : `${completionRate}%`}
             </div>
             <div className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
               Completion Rate
@@ -307,7 +316,13 @@ export default function DashboardUI({
             <h2 className="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
               Next Due Order
             </h2>
-            {nextDueOrder ? (
+            {loading ? (
+              <div className="space-y-2">
+                <div className="h-4 w-28 rounded bg-black/10 dark:bg-white/10 animate-pulse" />
+                <div className="h-3 w-40 rounded bg-black/10 dark:bg-white/10 animate-pulse" />
+                <div className="h-3 w-24 rounded bg-black/10 dark:bg-white/10 animate-pulse" />
+              </div>
+            ) : nextDueOrder ? (
               <div>
                 <p className="text-sm text-gray-900 dark:text-white font-medium">
                   {nextDueOrder.id}
@@ -333,7 +348,13 @@ export default function DashboardUI({
             <h2 className="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
               Top Customers by Orders
             </h2>
-            {topCustomers.length === 0 ? (
+            {loading ? (
+              <div className="space-y-2">
+                <div className="h-3 w-56 rounded bg-black/10 dark:bg-white/10 animate-pulse" />
+                <div className="h-3 w-48 rounded bg-black/10 dark:bg-white/10 animate-pulse" />
+                <div className="h-3 w-52 rounded bg-black/10 dark:bg-white/10 animate-pulse" />
+              </div>
+            ) : topCustomers.length === 0 ? (
               <p className="text-xs text-gray-500 dark:text-gray-400">
                 Not enough data yet.
               </p>
