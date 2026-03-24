@@ -19,6 +19,7 @@ import JobWorkerManagementUI from "@/features/job_worker_management/ui/job_worke
 import CustomerManagementUI from "@/features/customer_management/ui/customer_management_ui";
 import OrderTrackingUI from "@/features/order_tracking/ui/order_tracking_ui";
 import CompanyDetailsUI from "@/features/company_details/ui/company_details_ui";
+import LoadingSpinner from "@/shared/ui/spinner";
 
 
 //? NPM UI Imports
@@ -44,6 +45,7 @@ export default function ThreadFlow() {
   const { accessToken } = useAuth();
 
   const [selectedTab, setSelectedTab] = useState(0);
+  const [isAuthValidated, setIsAuthValidated] = useState(false);
 
   const closeSidebar = () => {
     // Close the drawer on mobile devices
@@ -88,20 +90,33 @@ export default function ThreadFlow() {
   };
 
   useEffect(() => {
-    if (!accessToken) {
-      return;
-    }
+    let isMounted = true;
 
     const validateUser = async () => {
       try {
         await api.get("/user/me");
+        if (isMounted) {
+          setIsAuthValidated(true);
+        }
       } catch (err: any) {
         router.replace("/login");
       }
     };
 
     validateUser();
-  }, [accessToken]);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [accessToken, api, router]);
+
+  if (!isAuthValidated) {
+    return (
+      <div className="min-h-screen w-full flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <LoadingSpinner />
+      </div>
+    );
+  }
 
   return (
     <div className="antialiased bg-gray-50 dark:bg-gray-900">
